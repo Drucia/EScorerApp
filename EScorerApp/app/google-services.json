@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "885811946610",
+    "firebase_url": "https://e-scorer.firebaseio.com",
+    "project_id": "e-scorer",
+    "storage_bucket": "e-scorer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885811946610:android:61e7d1be3a3e1bcd0e0eeb",
+        "android_client_info": {
+          "package_name": "com.druciak.escorerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "885811946610-313qo8ie50i1s5m5obcr9c60g844qs1l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.druciak.escorerapp",
+            "certificate_hash": "bd9b03257c10e012f8dc82bc17e50a54ccc0a0b6"
+          }
+        },
+        {
+          "client_id": "885811946610-87s22d0l2vtan4osffr5eu8dn63as3jt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT7Yj1XrJIOa9N7M1hET-5nznyTpnWCLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "885811946610-87s22d0l2vtan4osffr5eu8dn63as3jt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
