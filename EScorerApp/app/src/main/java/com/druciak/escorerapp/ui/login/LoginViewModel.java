@@ -49,6 +49,16 @@ public class LoginViewModel extends ViewModel implements OnLoginListener {
         }
     }
 
+    public boolean isLoggedIn()
+    {
+        return loginRepository.isLoggedIn();
+    }
+
+    public void logout()
+    {
+        loginRepository.logout();
+    }
+
     // A placeholder username validation check
     private boolean isUserNameValid(String username) {
         if (username == null) {
@@ -66,10 +76,6 @@ public class LoginViewModel extends ViewModel implements OnLoginListener {
         return password != null && password.trim().length() > 5;
     }
 
-    public void logout()
-    {
-        loginRepository.logout();
-    }
     @Override
     public void onLoginEventComplete(Result<LoggedInUser> result) {
         if (result instanceof Result.Success) {

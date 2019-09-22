@@ -15,4 +15,8 @@
 
     <string name="button_login">Zaloguj</string>
     <string name="button_signin">Zarejestruj</string>
+    <string name="AppName">E-Scorer</string>
+    <string name="text_view_forgot_pwd">Nie pamiętasz hasła?</string>
+    <string name="text_view_create_account">Nie masz jeszcze konta?</string>
+    <string name="text_view_or">LUB</string>
 </resources>

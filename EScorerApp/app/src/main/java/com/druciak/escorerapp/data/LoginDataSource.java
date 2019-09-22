@@ -25,8 +25,8 @@ public class LoginDataSource {
 
     private FirebaseAuth userAuth = FirebaseAuth.getInstance();
 
-    public void login(final LoginRepository loginRepository, Context context, String username, String password) {
-
+    public void login(final LoginRepository loginRepository, Context context, String username, String password)
+    {
         userAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -45,8 +45,8 @@ public class LoginDataSource {
                 });
     }
 
-    public void signin(final LoginRepository loginRepository, Context context, String username, String password) {
-
+    public void signin(final LoginRepository loginRepository, Context context, String username, String password)
+    {
         userAuth.createUserWithEmailAndPassword(username, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -63,6 +63,16 @@ public class LoginDataSource {
                         }
                     }
                 });
+    }
+
+    public Result<LoggedInUser> isLoggedIn()
+    {
+        FirebaseUser user = userAuth.getCurrentUser();
+
+        if (user != null)
+            return new Result.Success<>(new LoggedInUser(user));
+        else
+            return new Result.Error(new IOException("No user log in"));
     }
 
     public void logout() {

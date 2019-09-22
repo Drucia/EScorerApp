@@ -34,6 +34,11 @@ public class LoginRepository implements OnLoginListener {
     }
 
     public boolean isLoggedIn() {
+        Result result = dataSource.isLoggedIn();
+        if (result instanceof Result.Success)
+        {
+            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+        }
         return user != null;
     }
 
