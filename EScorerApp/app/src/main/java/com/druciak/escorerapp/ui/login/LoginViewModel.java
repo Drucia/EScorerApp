@@ -1,18 +1,19 @@
 package com.druciak.escorerapp.ui.login;
 
+import android.content.Context;
+import android.util.Patterns;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.content.Context;
-import android.util.Patterns;
-
+import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.data.LoginRepository;
 import com.druciak.escorerapp.data.Result;
 import com.druciak.escorerapp.data.model.LoggedInUser;
-import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.ui.interfaces.OnLoginListener;
 
-public class LoginViewModel extends ViewModel {
+public class LoginViewModel extends ViewModel implements OnLoginListener {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
@@ -31,27 +32,11 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(Context context, String username, String password) {
-        // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(context, username, password);
-
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
+        loginRepository.login(this, context, username, password);
     }
 
     public void signin(Context context, String username, String password) {
-        // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.signin(context, username, password);
-
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
+        loginRepository.signin(this, context, username, password);
     }
 
     public void loginDataChanged(String username, String password) {
@@ -79,5 +64,19 @@ public class LoginViewModel extends ViewModel {
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
+    }
+
+    public void logout()
+    {
+        loginRepository.logout();
+    }
+    @Override
+    public void onLoginEventComplete(Result<LoggedInUser> result) {
+        if (result instanceof Result.Success) {
+            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+        } else {
+            loginResult.setValue(new LoginResult(R.string.login_failed));
+        }
     }
 }

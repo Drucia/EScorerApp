@@ -7,13 +7,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.druciak.escorerapp.data.model.LoggedInUser;
+import com.druciak.escorerapp.ui.interfaces.OnLoginListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -23,10 +24,8 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class LoginDataSource {
 
     private FirebaseAuth userAuth = FirebaseAuth.getInstance();
-    private boolean isLogged = false;
-    private boolean isSignedIn = false;
 
-    public Result<LoggedInUser> login(Context context, String username, String password) {
+    public void login(final LoginRepository loginRepository, Context context, String username, String password) {
 
         userAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -35,20 +34,18 @@ public class LoginDataSource {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            isLogged = true;
+                            FirebaseUser user = userAuth.getCurrentUser();
+                            ((OnLoginListener) loginRepository).onLoginEventComplete(new Result.Success<>(new LoggedInUser(user)));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            isLogged = false;
+                            ((OnLoginListener) loginRepository).onLoginEventComplete(new Result.Error(new IOException("Error logging in")));
                         }
                     }
                 });
-
-        return isLogged ? new Result.Success<>(new LoggedInUser(userAuth.getCurrentUser()))
-                : new Result.Error(new IOException("Error logging in"));
     }
 
-    public Result<LoggedInUser> signin(Context context, String username, String password) {
+    public void signin(final LoginRepository loginRepository, Context context, String username, String password) {
 
         userAuth.createUserWithEmailAndPassword(username, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -57,17 +54,15 @@ public class LoginDataSource {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            isSignedIn = isLogged = true;
+                            FirebaseUser user = userAuth.getCurrentUser();
+                            ((OnLoginListener) loginRepository).onLoginEventComplete(new Result.Success<>(new LoggedInUser(user)));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            isSignedIn = isLogged = false;
+                            ((OnLoginListener) loginRepository).onLoginEventComplete(new Result.Error(new IOException("Error logging in")));
                         }
                     }
                 });
-
-        return isSignedIn ? new Result.Success<>(new LoggedInUser(userAuth.getCurrentUser()))
-                : new Result.Error(new IOException("Error signing in"));
     }
 
     public void logout() {

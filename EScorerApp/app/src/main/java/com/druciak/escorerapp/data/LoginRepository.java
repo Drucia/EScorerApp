@@ -3,16 +3,19 @@ package com.druciak.escorerapp.data;
 import android.content.Context;
 
 import com.druciak.escorerapp.data.model.LoggedInUser;
+import com.druciak.escorerapp.ui.interfaces.OnLoginListener;
+import com.druciak.escorerapp.ui.login.LoginViewModel;
 
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
  */
-public class LoginRepository {
+public class LoginRepository implements OnLoginListener {
 
     private static volatile LoginRepository instance;
 
     private LoginDataSource dataSource;
+    private OnLoginListener onLoginListener;
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
@@ -45,21 +48,23 @@ public class LoginRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public Result<LoggedInUser> login(Context context, String username, String password) {
+    public void login(LoginViewModel loginViewModel, Context context, String username, String password) {
         // handle login
-        Result<LoggedInUser> result = dataSource.login(context, username, password);
-        if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
-        }
-        return result;
+        dataSource.login(this, context, username, password);
+        onLoginListener = loginViewModel;
     }
 
-    public Result<LoggedInUser> signin(Context context, String username, String password) {
+    public void signin(LoginViewModel loginViewModel, Context context, String username, String password) {
         // handle signin
-        Result<LoggedInUser> result = dataSource.signin(context, username, password);
+        dataSource.signin(this, context, username, password);
+        onLoginListener = loginViewModel;
+    }
+
+    @Override
+    public void onLoginEventComplete(Result<LoggedInUser> result) {
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
         }
-        return result;
+        onLoginListener.onLoginEventComplete(result);
     }
 }

@@ -1,16 +1,7 @@
 package com.druciak.escorerapp.ui.login;
 
 import android.app.Activity;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -19,6 +10,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.druciak.escorerapp.R;
 import com.google.android.material.button.MaterialButton;
@@ -94,8 +91,8 @@ public class LoginActivity extends AppCompatActivity {
                         passwordEditText.getEditText().getText().toString());
             }
         };
-        usernameEditText.getEditText().addTextChangedListener(afterTextChangedListener);
-        passwordEditText.getEditText().addTextChangedListener(afterTextChangedListener);
+//        usernameEditText.getEditText().addTextChangedListener(afterTextChangedListener);
+//        passwordEditText.getEditText().addTextChangedListener(afterTextChangedListener);
         passwordEditText.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
@@ -135,5 +132,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        loginViewModel.logout();
     }
 }
