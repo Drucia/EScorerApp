@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,8 +38,8 @@ public class GoodbyeActivity extends AppCompatActivity {
      */
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
-    private View mImageView;
-    private View mText;
+    private ImageView mImageView;
+    private TextView mTextView;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -51,17 +55,6 @@ public class GoodbyeActivity extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
-    };
-
-    private final Runnable mShowImageRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (mImageView.getAlpha()-0.1f == 0)
-                finish();
-
-            mImageView.setAlpha(mImageView.getAlpha()-0.1f);
-            mText.setAlpha(mText.getAlpha()+0.1f);
         }
     };
 //    private final Runnable mShowPart2Runnable = new Runnable() {
@@ -105,6 +98,7 @@ public class GoodbyeActivity extends AppCompatActivity {
 
         mVisible = true;
         mImageView = findViewById(R.id.fullscreen_image);
+        mTextView = findViewById(R.id.fullscreen_goodbye);
 
 
         // Set up the user interaction to manually show or hide the system UI.
@@ -114,12 +108,31 @@ public class GoodbyeActivity extends AppCompatActivity {
                 toggle();
             }
         });
+        Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
+        Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        fadeIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                finish();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        mImageView.startAnimation(fadeOut);
+        mTextView.startAnimation(fadeIn);
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        mShowImageRunnable.run();
     }
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
