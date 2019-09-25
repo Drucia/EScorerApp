@@ -19,4 +19,25 @@
     <string name="text_view_forgot_pwd">Nie pamiętasz hasła?</string>
     <string name="text_view_create_account">Nie masz jeszcze konta?</string>
     <string name="text_view_or">LUB</string>
+
+    <string name="title_activity_main_panel">MainPanelActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Panel Głowny</string>
+    <string name="menu_user_data">Moje dane</string>
+    <string name="menu_matches">Moje mecze</string>
+    <string name="menu_tools">Ustawienia</string>
+    <string name="menu_logout">Wyloguj</string>
+    <string name="menu_exit">Wyjście</string>
+    <string name="menu_title">Systemowe</string>
+
+    <string name="title_activity_goodbye">GoodbyeActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="text_goodbay">Dozobaczenia :)</string>
 </resources>

@@ -55,6 +55,8 @@
         android:layout_marginRight="24dp"
         android:hint="@string/hint_password"
         android:textColorHint="#CCFFFFFF"
+        app:endIconMode="password_toggle"
+        app:endIconDrawable="@drawable/remove_eye_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

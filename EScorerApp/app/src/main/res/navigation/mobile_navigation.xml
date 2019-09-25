@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.druciak.escorerapp.activities.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_user_data"
+        android:name="com.druciak.escorerapp.activities.ui.tools.ToolsFragment"
+        android:label="@string/menu_user_data"
+        tools:layout="@layout/fragment_user_data" />
+
+    <fragment
+        android:id="@+id/nav_matches"
+        android:name="com.druciak.escorerapp.activities.ui.tools.ToolsFragment"
+        android:label="@string/menu_matches"
+        tools:layout="@layout/fragment_matches" />
+
+    <fragment
+        android:id="@+id/nav_tools"
+        android:name="com.druciak.escorerapp.activities.ui.tools.ToolsFragment"
+        android:label="@string/menu_tools"
+        tools:layout="@layout/fragment_tools" />
+
+    <fragment
+        android:id="@+id/nav_exit"
+        android:name="com.druciak.escorerapp.activities.ui.tools.ToolsFragment"
+        android:label="@string/menu_exit"
+        tools:layout="@layout/fragment_exit" />
+
+</navigation>
