@@ -3,9 +3,10 @@ package com.druciak.escorerapp.ui.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.activities.CreateAccountActivity;
 import com.druciak.escorerapp.activities.MainPanelActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
@@ -33,11 +35,15 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final TextInputLayout usernameEditText = findViewById(R.id.username);
-        final TextInputLayout passwordEditText = findViewById(R.id.password);
+        final TextInputLayout usernameEditTextLayout = findViewById(R.id.usernameLayout);
+        final TextInputLayout passwordEditTextLayout = findViewById(R.id.passwordLayout);
+        final TextInputEditText usernameEditText = findViewById(R.id.usernameInput);
+        final TextInputEditText passwordEditText = findViewById(R.id.passwordInput);
         final MaterialButton loginButton = findViewById(R.id.login);
         final TextView forgotPassword = findViewById(R.id.forgotPassword);
         final TextView createAccount = findViewById(R.id.createAccount);
+        final TextView googleText = findViewById(R.id.googleText);
+        final ImageView googleImage = findViewById(R.id.googleImage);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
@@ -48,10 +54,17 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 loginButton.setEnabled(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
+                    usernameEditTextLayout.setError(getString(loginFormState.getUsernameError()));
+                } else
+                {
+                    usernameEditTextLayout.setError(null);
                 }
                 if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
+                    passwordEditTextLayout.setError(getString(loginFormState.getPasswordError()));
+                }
+                else
+                {
+                    passwordEditTextLayout.setError(null);
                 }
             }
         });
@@ -76,34 +89,36 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-//        TextWatcher afterTextChangedListener = new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                // ignore
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                // ignore
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                loginViewModel.loginDataChanged(usernameEditText.getEditText().getText().toString(),
-//                        passwordEditText.getEditText().getText().toString());
-//            }
-//        };
-//        usernameEditText.getEditText().addTextChangedListener(afterTextChangedListener);
-//        passwordEditText.getEditText().addTextChangedListener(afterTextChangedListener);
-        passwordEditText.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        usernameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
 
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(LoginActivity.this, usernameEditText.getEditText().getText().toString(),
-                            passwordEditText.getEditText().getText().toString());
-                }
-                return false;
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                loginViewModel.usernameDataChanged(usernameEditText.getText().toString());
+            }
+        });
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                loginViewModel.passwordDataChanged(passwordEditText.getText().toString());
             }
         });
 
@@ -111,8 +126,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(LoginActivity.this, usernameEditText.getEditText().getText().toString(),
-                        passwordEditText.getEditText().getText().toString());
+                loginViewModel.login(LoginActivity.this, usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString());
             }
         });
 
@@ -134,6 +149,16 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        View.OnClickListener googleLoginListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO google login
+            }
+        };
+
+        googleText.setOnClickListener(googleLoginListener);
+        googleImage.setOnClickListener(googleLoginListener);
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
