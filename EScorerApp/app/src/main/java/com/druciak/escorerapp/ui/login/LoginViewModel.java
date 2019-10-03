@@ -39,18 +39,13 @@ public class LoginViewModel extends ViewModel implements OnLoginListener {
         loginRepository.signin(this, context, username, password);
     }
 
-    public void usernameDataChanged(String username) {
+    public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
-        } else {
-            loginFormState.setValue(new LoginFormState(true));
-        }
-    }
-
-    public void passwordDataChanged(String password) {
-        if (!isPasswordValid(password)) {
+        } else if (!isPasswordValid(password)) {
             loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
-        } else {
+        }
+        else {
             loginFormState.setValue(new LoginFormState(true));
         }
     }

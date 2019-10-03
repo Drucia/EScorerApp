@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        usernameEditText.addTextChangedListener(new TextWatcher() {
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -102,25 +102,12 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                loginViewModel.usernameDataChanged(usernameEditText.getText().toString());
+                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString());
             }
-        });
-        passwordEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                loginViewModel.passwordDataChanged(passwordEditText.getText().toString());
-            }
-        });
+        };
+        usernameEditText.addTextChangedListener(textWatcher);
+        passwordEditText.addTextChangedListener(textWatcher);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

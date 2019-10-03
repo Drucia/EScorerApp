@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">E-Scorer</string>
+    <string name="title_activity_main_panel">MainPanelActivity</string>
+    <string name="title_activity_goodbye">GoodbyeActivity</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Hasło</string>
@@ -20,7 +22,6 @@
     <string name="text_view_create_account">Nie masz jeszcze konta?</string>
     <string name="text_view_or">LUB</string>
 
-    <string name="title_activity_main_panel">MainPanelActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -36,9 +37,13 @@
     <string name="menu_exit">Wyjście</string>
     <string name="menu_title">Systemowe</string>
 
-    <string name="title_activity_goodbye">GoodbyeActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="text_goodbay">Dozobaczenia :)</string>
     <string name="text_login_google">Zaloguj za pomocą google</string>
+    <string name="title_activity_create_account">Rejestracja</string>
+    <string name="app_full_name">electronic scorer sheet</string>
+    <string name="app_name_electronic">elektroniczny</string>
+    <string name="app_name_scoresheet">protokół</string>
+    <string name="app_name_referee">sędziowski</string>
 </resources>
