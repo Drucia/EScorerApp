@@ -5,6 +5,8 @@ import android.content.Context;
 import com.druciak.escorerapp.data.model.LoggedInUser;
 import com.druciak.escorerapp.ui.interfaces.OnLoginListener;
 import com.druciak.escorerapp.ui.login.LoginViewModel;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -20,6 +22,7 @@ public class LoginRepository implements OnLoginListener {
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
     private LoggedInUser user = null;
+    private GoogleSignInClient googleSignInClient = null;
 
     // private constructor : singleton access
     private LoginRepository(LoginDataSource dataSource) {
@@ -31,6 +34,16 @@ public class LoginRepository implements OnLoginListener {
             instance = new LoginRepository(dataSource);
         }
         return instance;
+    }
+
+    public GoogleSignInClient getGoogleSignInClient()
+    {
+        return googleSignInClient;
+    }
+
+    public void setGoogleSignInClient(GoogleSignInClient client)
+    {
+        googleSignInClient = client;
     }
 
     public boolean isLoggedIn() {
@@ -71,5 +84,14 @@ public class LoginRepository implements OnLoginListener {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
         }
         onLoginListener.onLoginEventComplete(result);
+    }
+
+    public void loginWithGoogle(LoginViewModel loginViewModel, Context context, GoogleSignInAccount account) {
+        dataSource.loginWithGoogle(this, context, account);
+        onLoginListener = loginViewModel;
+    }
+
+    public void setGoogleSignInOptions(Context context) {
+        dataSource.setGoogleSignInOptions(this, context);
     }
 }

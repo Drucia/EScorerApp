@@ -1,111 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@mipmap/background"
-    android:padding="8dp"
-    tools:context=".activities.CreateAccountActivity">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/amatourCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="8dp"
-        android:layout_weight="1"
-        android:minHeight="100dp"
-        android:visibility="invisible"
-        app:cardBackgroundColor="@color/black_overlay"
-        app:cardCornerRadius="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <!-- Main content -->
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="243dp"
+        android:layout_height="98dp"
+        android:layout_margin="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="403dp"
+        android:layout_marginRight="403dp"
+        android:text="SĘDZIA"
+        android:textSize="24sp"
+        app:icon="@mipmap/referee"
+        app:layout_anchorGravity="bottom|right|end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/refereeCard"
-        app:layout_constraintVertical_bias="0.17000002"
-        tools:visibility="invisible">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="8dp"
-        android:layout_weight="1"
-        android:minHeight="100dp"
-        app:cardCornerRadius="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/refereeCard"
-        app:layout_constraintVertical_bias="0.17000002">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/referee"
-            android:padding="8dp"/>
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/refereeCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="8dp"
-        android:layout_weight="1"
-        android:maxHeight="100dp"
-        app:cardBackgroundColor="#ffffff"
-        app:cardCornerRadius="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/amatourCard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.33999997">
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@mipmap/amateur">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="8dp"
-        android:layout_weight="1"
-        android:minHeight="100dp"
-        android:visibility="invisible"
-        app:cardCornerRadius="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/refereeCard"
-        app:layout_constraintVertical_bias="0.17000002">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:visibility="invisible">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

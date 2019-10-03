@@ -20,13 +20,20 @@ import androidx.lifecycle.ViewModelProviders;
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.activities.CreateAccountActivity;
 import com.druciak.escorerapp.activities.MainPanelActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final int SIGN_IN_BY_GOOGLE_REQ = 0;
     private LoginViewModel loginViewModel;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         final TextView googleText = findViewById(R.id.googleText);
         final ImageView googleImage = findViewById(R.id.googleImage);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+
+        loginViewModel.setGoogleSignInOptions(this);
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -140,12 +149,30 @@ public class LoginActivity extends AppCompatActivity {
         View.OnClickListener googleLoginListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO google login
+                Intent signInIntent = loginViewModel.getGoogleSignInClient().getSignInIntent();
+                startActivityForResult(signInIntent, SIGN_IN_BY_GOOGLE_REQ);
             }
         };
 
         googleText.setOnClickListener(googleLoginListener);
         googleImage.setOnClickListener(googleLoginListener);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == SIGN_IN_BY_GOOGLE_REQ) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                loginViewModel.loginByGoogle(this, account);
+            } catch (ApiException e) {
+
+            }
+        }
     }
 
     private void updateUiWithUser(LoggedInUserView model) {

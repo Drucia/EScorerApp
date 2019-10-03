@@ -12,6 +12,8 @@ import com.druciak.escorerapp.data.LoginRepository;
 import com.druciak.escorerapp.data.Result;
 import com.druciak.escorerapp.data.model.LoggedInUser;
 import com.druciak.escorerapp.ui.interfaces.OnLoginListener;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
 public class LoginViewModel extends ViewModel implements OnLoginListener {
 
@@ -85,5 +87,17 @@ public class LoginViewModel extends ViewModel implements OnLoginListener {
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
+    }
+
+    public void loginByGoogle(Context context, GoogleSignInAccount account) {
+        loginRepository.loginWithGoogle(this, context, account);
+    }
+
+    public GoogleSignInClient getGoogleSignInClient() {
+        return loginRepository.getGoogleSignInClient();
+    }
+
+    public void setGoogleSignInOptions(Context context) {
+        loginRepository.setGoogleSignInOptions(context);
     }
 }
