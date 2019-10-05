@@ -3,19 +3,21 @@ package com.druciak.escorerapp.ui.login;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.druciak.escorerapp.data.model.LoggedInUser;
+
 /**
  * Class exposing authenticated user details to the UI.
  */
 class LoggedInUserView implements Parcelable {
-    private String displayName;
+    private String fullName;
     //... other data fields that may be accessible to the UI
 
-    LoggedInUserView(String displayName) {
-        this.displayName = displayName;
+    LoggedInUserView(LoggedInUser loginUser) {
+        this.fullName = loginUser.getFullName();
     }
 
     protected LoggedInUserView(Parcel in) {
-        displayName = in.readString();
+        fullName = in.readString();
     }
 
     public static final Creator<LoggedInUserView> CREATOR = new Creator<LoggedInUserView>() {
@@ -30,8 +32,8 @@ class LoggedInUserView implements Parcelable {
         }
     };
 
-    String getDisplayName() {
-        return displayName;
+    String getFullName() {
+        return fullName;
     }
 
     @Override
@@ -41,6 +43,6 @@ class LoggedInUserView implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(displayName);
+        parcel.writeString(fullName);
     }
 }

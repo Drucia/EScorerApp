@@ -16,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.data.model.LoggedInUser;
 import com.druciak.escorerapp.ui.login.LoginActivity;
 import com.druciak.escorerapp.ui.login.LoginViewModel;
 import com.druciak.escorerapp.ui.login.LoginViewModelFactory;
@@ -25,6 +26,7 @@ public class MainPanelActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private LoginViewModel loginViewModel;
+    private LoggedInUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,8 @@ public class MainPanelActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
     }
 
     @Override

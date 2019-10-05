@@ -46,4 +46,5 @@
     <string name="app_name_electronic">elektroniczny</string>
     <string name="app_name_scoresheet">protokół</string>
     <string name="app_name_referee">sędziowski</string>
+    <string name="goodbye_msg">Do zobaczenia ;)</string>
 </resources>

@@ -83,7 +83,7 @@ public class LoginViewModel extends ViewModel implements OnLoginListener {
     public void onLoginEventComplete(Result<LoggedInUser> result) {
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+            loginResult.setValue(new LoginResult(new LoggedInUserView(data)));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
