@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.ui.login;
+package com.druciak.escorerapp.view.ui.login;
 
 import android.content.Context;
 import android.util.Patterns;
@@ -8,10 +8,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.data.LoginRepository;
-import com.druciak.escorerapp.data.Result;
-import com.druciak.escorerapp.data.model.LoggedInUser;
-import com.druciak.escorerapp.ui.interfaces.OnLoginListener;
+import com.druciak.escorerapp.viewModel.LoginRepository;
+import com.druciak.escorerapp.viewModel.Result;
+import com.druciak.escorerapp.viewModel.model.LoggedInUser;
+import com.druciak.escorerapp.view.ui.interfaces.OnLoginListener;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 

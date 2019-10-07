@@ -1,9 +1,9 @@
-package com.druciak.escorerapp.ui.login;
+package com.druciak.escorerapp.view.ui.login;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.druciak.escorerapp.data.model.LoggedInUser;
+import com.druciak.escorerapp.viewModel.model.LoggedInUser;
 
 /**
  * Class exposing authenticated user details to the UI.

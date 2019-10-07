@@ -1,11 +1,11 @@
-package com.druciak.escorerapp.ui.login;
+package com.druciak.escorerapp.view.ui.login;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
-import com.druciak.escorerapp.data.LoginDataSource;
-import com.druciak.escorerapp.data.LoginRepository;
+import com.druciak.escorerapp.viewModel.LoginDataSource;
+import com.druciak.escorerapp.viewModel.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

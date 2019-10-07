@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.activities.ui.matches;
+package com.druciak.escorerapp.view.ui.matches;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

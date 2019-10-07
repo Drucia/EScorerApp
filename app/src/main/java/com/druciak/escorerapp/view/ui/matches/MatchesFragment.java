@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.activities.ui.matches;
+package com.druciak.escorerapp.view.ui.matches;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.ui.login;
+package com.druciak.escorerapp.view.ui.login;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,11 +18,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.activities.CreateAccountActivity;
-import com.druciak.escorerapp.activities.MainPanelActivity;
+import com.druciak.escorerapp.view.CreateAccountActivity;
+import com.druciak.escorerapp.view.MainPanelActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -33,7 +32,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int SIGN_IN_BY_GOOGLE_REQ = 0;
     private LoginViewModel loginViewModel;
-    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

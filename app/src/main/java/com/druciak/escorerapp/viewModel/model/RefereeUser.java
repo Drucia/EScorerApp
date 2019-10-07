@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.data.model;
+package com.druciak.escorerapp.viewModel.model;
 
 import com.google.firebase.auth.FirebaseUser;
 

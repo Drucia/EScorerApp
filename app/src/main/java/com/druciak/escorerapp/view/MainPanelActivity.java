@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.activities;
+package com.druciak.escorerapp.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,10 +16,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.data.model.LoggedInUser;
-import com.druciak.escorerapp.ui.login.LoginActivity;
-import com.druciak.escorerapp.ui.login.LoginViewModel;
-import com.druciak.escorerapp.ui.login.LoginViewModelFactory;
+import com.druciak.escorerapp.viewModel.model.LoggedInUser;
+import com.druciak.escorerapp.view.ui.login.LoginActivity;
+import com.druciak.escorerapp.view.ui.login.LoginViewModel;
+import com.druciak.escorerapp.view.ui.login.LoginViewModelFactory;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainPanelActivity extends AppCompatActivity {

@@ -1,10 +1,10 @@
-package com.druciak.escorerapp.data;
+package com.druciak.escorerapp.viewModel;
 
 import android.content.Context;
 
-import com.druciak.escorerapp.data.model.LoggedInUser;
-import com.druciak.escorerapp.ui.interfaces.OnLoginListener;
-import com.druciak.escorerapp.ui.login.LoginViewModel;
+import com.druciak.escorerapp.viewModel.model.LoggedInUser;
+import com.druciak.escorerapp.view.ui.interfaces.OnLoginListener;
+import com.druciak.escorerapp.view.ui.login.LoginViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 

@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.ui.login;
+package com.druciak.escorerapp.view.ui.login;
 
 import androidx.annotation.Nullable;
 

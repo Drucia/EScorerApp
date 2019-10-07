@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.activities;
+package com.druciak.escorerapp.view;
 
 import android.os.Bundle;
 

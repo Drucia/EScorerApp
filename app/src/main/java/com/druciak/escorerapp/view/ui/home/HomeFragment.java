@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.activities.ui.home;
+package com.druciak.escorerapp.view.ui.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

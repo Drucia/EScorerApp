@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.activities.ui.tools;
+package com.druciak.escorerapp.view.ui.tools;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
