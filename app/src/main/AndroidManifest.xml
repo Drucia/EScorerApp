@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".view.MatchSettingsActivity"
+            android:parentActivityName=".view.MainPanelActivity"
+            android:label="@string/title_activity_match_settings"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name=".view.ui.login.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/FullscreenTheme">
@@ -33,6 +38,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.CreateAccountActivity"
+            android:parentActivityName=".view.ui.login.LoginActivity"
             android:label="@string/title_activity_create_account" />
         <activity
             android:name=".view.ui.login.LoginActivity"

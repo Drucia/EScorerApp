@@ -16,17 +16,18 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.viewModel.model.LoggedInUser;
+import com.druciak.escorerapp.view.ui.home.HomeFragment;
+import com.druciak.escorerapp.view.ui.interfaces.FragmentCommunicator;
 import com.druciak.escorerapp.view.ui.login.LoginActivity;
 import com.druciak.escorerapp.view.ui.login.LoginViewModel;
 import com.druciak.escorerapp.view.ui.login.LoginViewModelFactory;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainPanelActivity extends AppCompatActivity {
+public class MainPanelActivity extends AppCompatActivity implements FragmentCommunicator {
+    public static final int MATCH_SETTINGS_REQ = 1;
 
     private AppBarConfiguration mAppBarConfiguration;
     private LoginViewModel loginViewModel;
-    private LoggedInUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,5 +90,12 @@ public class MainPanelActivity extends AppCompatActivity {
         loginViewModel.logout();
         startActivity(new Intent(this, GoodbyeActivity.class));
         finish();
+    }
+
+    @Override
+    public void onCardClicked(int cardId) {
+        Intent intent = new Intent(this, MatchSettingsActivity.class);
+        intent.putExtra("kind", cardId);
+        startActivityForResult(intent, MATCH_SETTINGS_REQ);
     }
 }

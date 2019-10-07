@@ -3,6 +3,7 @@
     <color name="colorPrimary">#ffd900</color>
     <color name="colorPrimaryDark">#E7D538</color>
     <color name="colorAccent">#b29700</color>
+    <color name="colorActionBar">#8F141414</color>
 
     <color name="black_overlay">#66000000</color>
     <color name="line_light">#E6FFFFFF</color>

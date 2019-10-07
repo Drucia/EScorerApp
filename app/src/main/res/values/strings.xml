@@ -29,7 +29,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Panel Głowny</string>
+    <string name="menu_home">Panel Główny</string>
     <string name="menu_user_data">Moje dane</string>
     <string name="menu_matches">Moje mecze</string>
     <string name="menu_tools">Ustawienia</string>
@@ -47,4 +47,7 @@
     <string name="app_name_scoresheet">protokół</string>
     <string name="app_name_referee">sędziowski</string>
     <string name="goodbye_msg">Do zobaczenia ;)</string>
+    <string name="title_activity_match_settings">MatchSettingsActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>
