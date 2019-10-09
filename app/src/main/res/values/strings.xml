@@ -15,6 +15,9 @@
     <string name="hint_login">Wprowadź e-mail</string>
     <string name="hint_password">Wprowadź hasło</string>
 
+    <string name="volleyball_card">PIŁKA HALOWA</string>
+    <string name="bvolleyball_card">PIŁKA PLAŻOWA</string>
+
     <string name="button_login">Zaloguj</string>
     <string name="button_signin">Zarejestruj</string>
     <string name="AppName">E-Scorer</string>
