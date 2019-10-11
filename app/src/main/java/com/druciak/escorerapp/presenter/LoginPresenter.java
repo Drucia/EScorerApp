@@ -4,19 +4,17 @@ import android.content.Context;
 import android.util.Patterns;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.interfaces.ILoginMVP;
+import com.druciak.escorerapp.model.entities.LoggedInUser;
 import com.druciak.escorerapp.model.firebaseService.LoginManager;
 import com.druciak.escorerapp.model.firebaseService.Result;
-import com.druciak.escorerapp.model.login.LoggedInUser;
-import com.druciak.escorerapp.presenter.interfaces.ILoginPresenter;
-import com.druciak.escorerapp.presenter.interfaces.ILoginPresenterForManager;
-import com.druciak.escorerapp.view.login.ILoginView;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
-public class LoginPresenter implements ILoginPresenter, ILoginPresenterForManager {
-    private ILoginView view;
-    private LoginManager loginManager;
+public class LoginPresenter implements ILoginMVP.IPresenter {
+    private ILoginMVP.IView view;
+    private ILoginMVP.IModel loginManager;
 
-    public LoginPresenter(ILoginView view)
+    public LoginPresenter(ILoginMVP.IView view)
     {
         this.view = view;
         loginManager = new LoginManager(this);
@@ -31,13 +29,13 @@ public class LoginPresenter implements ILoginPresenter, ILoginPresenterForManage
     }
 
     @Override
-    public void login(Context context, String username, String password) {
-        loginManager.login(context, username, password);
+    public void login(String username, String password) {
+        loginManager.login(username, password);
     }
 
     @Override
-    public void loginWithGoogle(Context context, GoogleSignInAccount account) {
-        loginManager.loginWithGoogle(context, account);
+    public void loginWithGoogle(GoogleSignInAccount account) {
+        loginManager.loginWithGoogle(account);
     }
 
     @Override
@@ -81,7 +79,7 @@ public class LoginPresenter implements ILoginPresenter, ILoginPresenterForManage
     }
 
     @Override
-    public void signIn(Context context, String username, String password) {
+    public void signIn(String username, String password) {
         // TODO
     }
 }

@@ -3,25 +3,26 @@ package com.druciak.escorerapp.service.mainPanel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.model.interfaces.GameTypesClickCallback;
-import com.druciak.escorerapp.model.mainPanel.GameType;
+import com.druciak.escorerapp.interfaces.IMainPanelMVP;
+import com.druciak.escorerapp.model.entities.GameType;
 
 import java.util.List;
 
 public class GameTypesAdapter extends RecyclerView.Adapter<GameTypesAdapter.ViewHolder> {
     private List<GameType> listItems;
-    private GameTypesClickCallback gameTypesClickCallback;
+    private IMainPanelMVP.IView gameTypesCallback;
 
-    public GameTypesAdapter(GameTypesClickCallback gameTypesClickCallback, List<GameType> listItems) {
+    public GameTypesAdapter(IMainPanelMVP.IView gameTypesCallback, List<GameType> listItems) {
         this.listItems = listItems;
-        this.gameTypesClickCallback = gameTypesClickCallback;
+        this.gameTypesCallback = gameTypesCallback;
     }
 
     @NonNull
@@ -33,6 +34,7 @@ public class GameTypesAdapter extends RecyclerView.Adapter<GameTypesAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull GameTypesAdapter.ViewHolder holder, int position) {
+        holder.card.setAlpha((float) (listItems.get(position).isAvailable() ? 1 : 0.5));
         holder.background.setBackgroundResource(listItems.get(position).getImageId());
         holder.title.setText(listItems.get(position).getName());
     }
@@ -43,11 +45,13 @@ public class GameTypesAdapter extends RecyclerView.Adapter<GameTypesAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ConstraintLayout background;
+        public CardView card;
+        public RelativeLayout background;
         public TextView title;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            card = itemView.findViewById(R.id.cardView);
             background = itemView.findViewById(R.id.cardLayout);
             title = itemView.findViewById(R.id.cardTitle);
             background.setOnClickListener(this);
@@ -55,7 +59,7 @@ public class GameTypesAdapter extends RecyclerView.Adapter<GameTypesAdapter.View
 
         @Override
         public void onClick(View view) {
-            gameTypesClickCallback.onClick(listItems.get(getAdapterPosition()).getId());
+            gameTypesCallback.onClick(listItems.get(getAdapterPosition()).getId());
         }
     }
 }

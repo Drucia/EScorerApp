@@ -1,14 +1,13 @@
 package com.druciak.escorerapp.presenter;
 
+import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.model.firebaseService.LoginManager;
-import com.druciak.escorerapp.presenter.interfaces.IMainPanelPresenter;
-import com.druciak.escorerapp.view.mainPanel.IMainPanelView;
 
-public class MainPanelPresenter implements IMainPanelPresenter {
-    private IMainPanelView view;
+public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
+    private IMainPanelMVP.IView view;
     private LoginManager loginManager;
 
-    public MainPanelPresenter(IMainPanelView view) {
+    public MainPanelPresenter(IMainPanelMVP.IView view) {
         this.view = view;
         loginManager = new LoginManager();
     }

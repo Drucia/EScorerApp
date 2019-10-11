@@ -7,7 +7,7 @@
 //import androidx.annotation.NonNull;
 //
 //import com.druciak.escorerapp.R;
-//import com.druciak.escorerapp.model.login.LoggedInUser;
+//import com.druciak.escorerapp.model.entities.LoggedInUser;
 //import com.druciak.escorerapp.view.login.ILoginView;
 //import com.google.android.gms.auth.api.signin.GoogleSignIn;
 //import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

@@ -2,7 +2,7 @@ package com.druciak.escorerapp.view.login;
 
 import androidx.annotation.Nullable;
 
-import com.druciak.escorerapp.model.login.LoggedInUser;
+import com.druciak.escorerapp.model.entities.LoggedInUser;
 
 /**
  * Authentication result : success (user details) or error message.

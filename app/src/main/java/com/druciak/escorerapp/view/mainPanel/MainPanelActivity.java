@@ -15,19 +15,18 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.model.interfaces.GameTypesClickCallback;
-import com.druciak.escorerapp.presenter.interfaces.IMainPanelPresenter;
+import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.presenter.MainPanelPresenter;
 import com.druciak.escorerapp.view.GoodbyeActivity;
 import com.druciak.escorerapp.view.login.LoginActivity;
 import com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainPanelActivity extends AppCompatActivity implements IMainPanelView, GameTypesClickCallback {
+public class MainPanelActivity extends AppCompatActivity implements IMainPanelMVP.IView {
     public static final int MATCH_SETTINGS_REQ = 1;
 
     private AppBarConfiguration mAppBarConfiguration;
-    private IMainPanelPresenter presenter;
+    private IMainPanelMVP.IPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

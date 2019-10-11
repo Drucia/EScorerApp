@@ -2,7 +2,7 @@
 //
 //import android.content.Context;
 //
-//import com.druciak.escorerapp.model.login.LoggedInUser;
+//import com.druciak.escorerapp.model.entities.LoggedInUser;
 //import com.druciak.escorerapp.view.login.ILoginView;
 //import com.druciak.escorerapp.view.login.LoginViewModel;
 //import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

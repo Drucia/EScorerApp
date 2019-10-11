@@ -1,7 +1,7 @@
 package com.druciak.escorerapp.service.mainPanel;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.model.mainPanel.GameType;
+import com.druciak.escorerapp.model.entities.GameType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +15,8 @@ public abstract class GameTypesRepository {
     {
         return new ArrayList<GameType>(){
             {
-                add(new GameType(VOLLEYBALL_ID, "PIŁKA HALOWA", R.drawable.volleyball));
-                add(new GameType(BEACH_VOLLEYBALL_ID, "PIŁKA PLAŻOWA", R.drawable.beach_volleyball));
+                add(new GameType(VOLLEYBALL_ID, "PIŁKA HALOWA", R.drawable.volleyball, false));
+                add(new GameType(BEACH_VOLLEYBALL_ID, "PIŁKA PLAŻOWA", R.drawable.beach_volleyball, false));
             }
         };
     }
@@ -24,7 +24,7 @@ public abstract class GameTypesRepository {
     public static List<GameType> getGameTypesListForReferee()
     {
         ArrayList<GameType> list = (ArrayList<GameType>) getGameTypesListForOrganizer();
-        list.add(new GameType(DZPS_VOLLEYBALL_ID, "", R.drawable.logo_dzps));
+        list.add(new GameType(DZPS_VOLLEYBALL_ID, "", R.drawable.logo_dzps, true));
         return list;
     }
 }

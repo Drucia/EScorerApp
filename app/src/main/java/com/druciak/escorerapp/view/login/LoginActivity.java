@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.presenter.interfaces.ILoginPresenter;
+import com.druciak.escorerapp.interfaces.ILoginMVP;
 import com.druciak.escorerapp.presenter.LoginFormState;
 import com.druciak.escorerapp.presenter.LoginPresenter;
 import com.druciak.escorerapp.view.createAccount.CreateAccountActivity;
@@ -26,11 +26,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class LoginActivity extends AppCompatActivity implements ILoginView{
+public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView {
 
     private static final int SIGN_IN_BY_GOOGLE_REQ = 0;
 
-    private ILoginPresenter presenter;
+    private ILoginMVP.IPresenter presenter;
 
     private MaterialButton loginButton;
     private TextInputLayout usernameEditTextLayout;
@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView{
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                presenter.login(LoginActivity.this, usernameEditText.getText().toString(),
+                presenter.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
         });
@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView{
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                presenter.loginWithGoogle(this, account);
+                presenter.loginWithGoogle(account);
             } catch (ApiException e) {
 
             }

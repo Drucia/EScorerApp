@@ -1,14 +1,13 @@
 package com.druciak.escorerapp.model.firebaseService;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.model.login.LoggedInUser;
-import com.druciak.escorerapp.presenter.interfaces.ILoginPresenterForManager;
+import com.druciak.escorerapp.interfaces.ILoginMVP;
+import com.druciak.escorerapp.model.entities.LoggedInUser;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -25,12 +24,12 @@ import java.io.IOException;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class LoginManager {
-    private final ILoginPresenterForManager loginPresenter;
+public class LoginManager implements ILoginMVP.IModel {
+    private final ILoginMVP.IPresenter loginPresenter;
     private FirebaseAuth userAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
-    public LoginManager(ILoginPresenterForManager loginPresenter)
+    public LoginManager(ILoginMVP.IPresenter loginPresenter)
     {
         this.loginPresenter = loginPresenter;
         userAuth = FirebaseAuth.getInstance();
@@ -42,6 +41,7 @@ public class LoginManager {
         userAuth = FirebaseAuth.getInstance();
     }
 
+    @Override
     public void initializeGoogleService(Context context){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(context.getString(R.string.default_web_client_id))
@@ -50,10 +50,11 @@ public class LoginManager {
         mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
     }
 
-    public void login(Context context, String username, String password)
+    @Override
+    public void login(String username, String password)
     {
         userAuth.signInWithEmailAndPassword(username, password)
-                .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -70,10 +71,11 @@ public class LoginManager {
                 });
     }
 
-    public void signin(Context context, String username, String password)
+    @Override
+    public void signin(String username, String password)
     {
         userAuth.createUserWithEmailAndPassword(username, password)
-                .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -90,6 +92,7 @@ public class LoginManager {
                 });
     }
 
+    @Override
     public Result<LoggedInUser> getLoggedIn()
     {
         FirebaseUser user = userAuth.getCurrentUser();
@@ -100,14 +103,20 @@ public class LoginManager {
             return new Result.Error(new IOException("No user log in"));
     }
 
+    @Override
     public void logout() {
         userAuth.signOut();
+        if (mGoogleSignInClient != null) {
+            mGoogleSignInClient.signOut();
+            mGoogleSignInClient.revokeAccess();
+        }
     }
 
-    public void loginWithGoogle(Context context, GoogleSignInAccount account) {
+    @Override
+    public void loginWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         userAuth.signInWithCredential(credential)
-                .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -124,6 +133,7 @@ public class LoginManager {
                 });
     }
 
+    @Override
     public GoogleSignInClient getGoogleClient() {
         return mGoogleSignInClient;
     }
