@@ -6,7 +6,7 @@ import android.util.Patterns;
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
 import com.druciak.escorerapp.model.entities.LoggedInUser;
-import com.druciak.escorerapp.model.firebaseService.LoginManager;
+import com.druciak.escorerapp.model.firebaseService.FirebaseManager;
 import com.druciak.escorerapp.model.firebaseService.Result;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
@@ -17,13 +17,13 @@ public class LoginPresenter implements ILoginMVP.IPresenter {
     public LoginPresenter(ILoginMVP.IView view)
     {
         this.view = view;
-        loginManager = new LoginManager(this);
+        loginManager = new FirebaseManager(this);
     }
 
     @Override
     public void onLoginEventComplete(Result<LoggedInUser> result) {
         if (result instanceof Result.Success)
-            view.onLoginEventCompleteSuccessfully(((Result.Success) result).getData());
+            view.onLoginEventCompleteSuccessfully(((Result.Success<LoggedInUser>) result).getData());
         else
             view.onLoginEventCompleteError(((Result.Error) result).getError());
     }
@@ -60,7 +60,7 @@ public class LoginPresenter implements ILoginMVP.IPresenter {
     public void activityIsStarted() {
         Result<LoggedInUser> result = loginManager.getLoggedIn();
         if (result instanceof Result.Success)
-            view.onLoginEventCompleteSuccessfully(((Result.Success) result).getData());
+            view.onLoginEventCompleteSuccessfully(((Result.Success<LoggedInUser>) result).getData());
     }
 
     private boolean isUserNameValid(String username){
@@ -76,10 +76,5 @@ public class LoginPresenter implements ILoginMVP.IPresenter {
 
     private boolean isPasswordValid(String password){
         return password != null && password.trim().length() > 5;
-    }
-
-    @Override
-    public void signIn(String username, String password) {
-        // TODO
     }
 }

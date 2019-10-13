@@ -1,20 +1,25 @@
 package com.druciak.escorerapp.presenter;
 
+import android.os.Parcelable;
+
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
-import com.druciak.escorerapp.model.firebaseService.LoginManager;
+import com.druciak.escorerapp.model.entities.LoggedInUser;
+import com.druciak.escorerapp.model.firebaseService.FirebaseManager;
 
 public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
     private IMainPanelMVP.IView view;
-    private LoginManager loginManager;
+    private FirebaseManager firebaseManager;
+    private LoggedInUser user;
 
-    public MainPanelPresenter(IMainPanelMVP.IView view) {
+    public MainPanelPresenter(IMainPanelMVP.IView view, Parcelable user) {
         this.view = view;
-        loginManager = new LoginManager();
+        firebaseManager = new FirebaseManager();
+        this.user =
     }
 
     @Override
     public void logout() {
-        loginManager.logout();
+        firebaseManager.logout();
         view.onLogoutCompleted();
     }
 }

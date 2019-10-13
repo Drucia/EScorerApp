@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
-import com.druciak.escorerapp.service.mainPanel.GameTypesAdapter;
-import com.druciak.escorerapp.service.mainPanel.GameTypesRepository;
+import com.druciak.escorerapp.presenter.GameTypesAdapter;
+import com.druciak.escorerapp.presenter.GameTypesRepository;
 
 public class HomeFragment extends Fragment {
 

@@ -12,7 +12,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 public interface ILoginMVP {
     interface IPresenter{
         void login(String username, String password);
-        void signIn(String username, String password); // TODO make user login entity
         void loginWithGoogle(GoogleSignInAccount account);
         void isDataValid(String username, String password);
         void clickedLoginWithGoogle(Context context);
@@ -22,7 +21,7 @@ public interface ILoginMVP {
 
     interface IView{
         void onDataValidChecked(LoginFormState loginFormState);
-        void onLoginEventCompleteSuccessfully(Object data);
+        void onLoginEventCompleteSuccessfully(LoggedInUser data);
         void onLoginEventCompleteError(Exception error);
         void startGoogleLoginPopUp(Intent signInIntent);
     }
@@ -30,7 +29,6 @@ public interface ILoginMVP {
     interface IModel{
         void initializeGoogleService(Context context);
         void login(String username, String password);
-        void signin(String username, String password);
         Result<LoggedInUser> getLoggedIn();
         void logout();
         void loginWithGoogle(GoogleSignInAccount account);

@@ -1,35 +1,42 @@
 <resources>
+    <!-- app and activities names -->
     <string name="app_name">E-Scorer</string>
     <string name="title_activity_main_panel">MainPanelActivity</string>
     <string name="title_activity_goodbye">GoodbyeActivity</string>
+    <string name="title_activity_create_account">Rejestracja</string>
+    <string name="title_activity_match_settings">MatchSettingsActivity</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Hasło</string>
     <string name="action_sign_in">Zaloguj lub zarejestruj</string>
     <string name="action_sign_in_short">Zaloguj</string>
-    <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Niepoprawny login</string>
     <string name="invalid_password">Hasło musi mieć > 5 znaków</string>
     <string name="login_failed">"Błędne hasło lub login"</string>
-
-    <string name="hint_login">Wprowadź e-mail</string>
-    <string name="hint_password">Wprowadź hasło</string>
-
-    <string name="volleyball_card">PIŁKA HALOWA</string>
-    <string name="bvolleyball_card">PIŁKA PLAŻOWA</string>
-
+    <string name="hint_login">E-mail</string>
+    <string name="hint_password">Hasło</string>
     <string name="button_login">Zaloguj</string>
     <string name="button_signin">Zarejestruj</string>
-    <string name="AppName">E-Scorer</string>
     <string name="text_view_forgot_pwd">Nie pamiętasz hasła?</string>
     <string name="text_view_create_account">Nie masz jeszcze konta?</string>
     <string name="text_view_or">LUB</string>
+    <string name="text_login_google">Zaloguj za pomocą google</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <!-- Strings related to registration -->
+    <string name="registration_text">Rejestracja</string>
+    <string name="radio_text_account_referee">Konto sędziego</string>
+    <string name="radio_text_account_organizer">Konto organizatora</string>
+    <string name="hint_name">Imię</string>
+    <string name="hint_surname">Nazwisko</string>
+    <string name="hint_password_again">Powtórz hasło</string>
+    <string name="hint_certificate">Numer certyfikatu</string>
+    <string name="referee_classes_label">Klasa sędziowska</string>
+    <string name="button_create_account">Utwórz</string>
+
+    <!-- Strings related to main panel -->
+    <string name="volleyball_card">PIŁKA HALOWA</string>
+    <string name="bvolleyball_card">PIŁKA PLAŻOWA</string>
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Panel Główny</string>
@@ -40,17 +47,18 @@
     <string name="menu_exit">Wyjście</string>
     <string name="menu_title">Systemowe</string>
 
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="text_goodbay">Dozobaczenia :)</string>
-    <string name="text_login_google">Zaloguj za pomocą google</string>
-    <string name="title_activity_create_account">Rejestracja</string>
+    <!-- Strings related to goodbye  -->
+    <string name="goodbye_msg">Do zobaczenia ;)</string>
+
+    <!-- Strings related to welcome  -->
     <string name="app_full_name">electronic scorer sheet</string>
     <string name="app_name_electronic">elektroniczny</string>
     <string name="app_name_scoresheet">protokół</string>
     <string name="app_name_referee">sędziowski</string>
-    <string name="goodbye_msg">Do zobaczenia ;)</string>
-    <string name="title_activity_match_settings">MatchSettingsActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+
+    <!-- Strings related to match settings  -->
+    <string name="tab_text_host">Gospodarz</string>
+    <string name="tab_text_guest">Gość</string>
+    <string name="tab_text_rest">Pozostałe</string>
+
 </resources>

@@ -36,7 +36,6 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        presenter = new MainPanelPresenter(this);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -48,7 +47,8 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        Intent intent = getIntent(); // TODO get loggin in user
+        Intent intent = getIntent();
+        presenter = new MainPanelPresenter(this, intent.getParcelableExtra("user"));
     }
 
     @Override

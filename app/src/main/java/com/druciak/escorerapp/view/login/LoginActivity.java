@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
+import com.druciak.escorerapp.model.entities.LoggedInUser;
 import com.druciak.escorerapp.presenter.LoginFormState;
 import com.druciak.escorerapp.presenter.LoginPresenter;
 import com.druciak.escorerapp.view.createAccount.CreateAccountActivity;
@@ -154,9 +155,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
     }
 
     @Override
-    public void onLoginEventCompleteSuccessfully(Object data) {
+    public void onLoginEventCompleteSuccessfully(LoggedInUser data) {
         Intent intent = new Intent(this, MainPanelActivity.class);
-//        //intent.putExtra("user", model); // TODO forward user to activity
+        intent.putExtra("user", data);
         startActivity(intent);
         finish();
     }

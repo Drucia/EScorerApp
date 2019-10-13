@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.service.mainPanel;
+package com.druciak.escorerapp.presenter;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.model.entities.GameType;

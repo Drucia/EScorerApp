@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.service.mainPanel;
+package com.druciak.escorerapp.presenter;
 
 import android.view.LayoutInflater;
 import android.view.View;

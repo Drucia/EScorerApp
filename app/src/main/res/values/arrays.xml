@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="refereeClasses">
+        <item>K</item>
+        <item>III</item>
+        <item>II</item>
+        <item>I</item>
+        <item>SC</item>
+        <item>M</item>
+    </string-array>
+</resources>

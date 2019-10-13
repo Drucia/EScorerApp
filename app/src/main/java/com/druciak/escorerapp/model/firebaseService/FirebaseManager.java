@@ -6,8 +6,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.interfaces.ICreateAccountMVP;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
 import com.druciak.escorerapp.model.entities.LoggedInUser;
+import com.druciak.escorerapp.model.entities.NewUser;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -19,23 +21,31 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class LoginManager implements ILoginMVP.IModel {
-    private final ILoginMVP.IPresenter loginPresenter;
+public class FirebaseManager implements ILoginMVP.IModel, ICreateAccountMVP.IModel {
+    private ILoginMVP.IPresenter loginPresenter;
+    private ICreateAccountMVP.IPresenter createPresenter;
     private FirebaseAuth userAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
-    public LoginManager(ILoginMVP.IPresenter loginPresenter)
+    public FirebaseManager(ILoginMVP.IPresenter loginPresenter)
     {
         this.loginPresenter = loginPresenter;
         userAuth = FirebaseAuth.getInstance();
     }
 
-    public LoginManager()
+    public FirebaseManager(ICreateAccountMVP.IPresenter createPresenter)
+    {
+        this.createPresenter = createPresenter;
+        userAuth = FirebaseAuth.getInstance();
+    }
+
+    public FirebaseManager()
     {
         loginPresenter = null;
         userAuth = FirebaseAuth.getInstance();
@@ -72,9 +82,9 @@ public class LoginManager implements ILoginMVP.IModel {
     }
 
     @Override
-    public void signin(String username, String password)
+    public void signIn(final NewUser newUser)
     {
-        userAuth.createUserWithEmailAndPassword(username, password)
+        userAuth.createUserWithEmailAndPassword(newUser.getEmail(), newUser.getPassword())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -82,11 +92,14 @@ public class LoginManager implements ILoginMVP.IModel {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = userAuth.getCurrentUser();
-                            loginPresenter.onLoginEventComplete(new Result.Success<>(new LoggedInUser(user)));
+                            FirebaseDatabase.getInstance().getReference("Users")
+                                    .child(user.getUid())
+                                    .setValue(newUser);
+                            createPresenter.onCreateAccountEventComplete(new Result.Success<>(new LoggedInUser(user)));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            loginPresenter.onLoginEventComplete(new Result.Error(new IOException("Error logging in")));
+                            createPresenter.onCreateAccountEventComplete(new Result.Error(new IOException("Error logging in")));
                         }
                     }
                 });
