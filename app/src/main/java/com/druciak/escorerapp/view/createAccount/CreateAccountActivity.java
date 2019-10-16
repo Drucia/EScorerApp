@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -31,6 +32,7 @@ public class CreateAccountActivity extends AppCompatActivity implements ICreateA
     private TextView refereeClassLabel;
     private TextInputLayout refereeCer;
     private Spinner refereeClass;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class CreateAccountActivity extends AppCompatActivity implements ICreateA
         refereeClassLabel = findViewById(R.id.labelRefereeClass);
         refereeCer = findViewById(R.id.textInputRefereeCer);
         refereeClass = findViewById(R.id.spinnerRefereeClass);
+        progressBar = findViewById(R.id.progressBar);
 
         final TextInputLayout nameLayout = findViewById(R.id.textInputName);
         final TextInputLayout surnameLayout = findViewById(R.id.textInputSurname);
@@ -71,24 +74,27 @@ public class CreateAccountActivity extends AppCompatActivity implements ICreateA
             }
         });
 
-        MaterialButton button = findViewById(R.id.createAccount);
+        MaterialButton button = findViewById(R.id.createAccountLabel);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (radioButtonReferee.isChecked())
+                progressBar.setVisibility(View.VISIBLE);
+                if (radioButtonReferee.isChecked()) {
                     presenter.clickedCreateAccount(
-                        nameLayout.getEditText().getText().toString(),
-                        surnameLayout.getEditText().getText().toString(),
-                        emailLayout.getEditText().getText().toString(),
-                        passwordLayout.getEditText().getText().toString(),
-                        refereeCer.getEditText().getText().toString(),
-                        refereeClass.getSelectedItem().toString());
-                else
+                            nameLayout.getEditText().getText().toString(),
+                            surnameLayout.getEditText().getText().toString(),
+                            emailLayout.getEditText().getText().toString(),
+                            passwordLayout.getEditText().getText().toString(),
+                            refereeCer.getEditText().getText().toString(),
+                            refereeClass.getSelectedItem().toString());
+                }
+                else {
                     presenter.clickedCreateAccount(
                             nameLayout.getEditText().getText().toString(),
                             surnameLayout.getEditText().getText().toString(),
                             emailLayout.getEditText().getText().toString(),
                             passwordLayout.getEditText().getText().toString());
+                }
             }
         });
 
@@ -131,14 +137,15 @@ public class CreateAccountActivity extends AppCompatActivity implements ICreateA
 
     @Override
     public void onCreateAccountSuccess(LoggedInUser data) {
+        progressBar.setVisibility(View.GONE);
         Intent intent = new Intent(this, MainPanelActivity.class);
-        intent.putExtra("user", data);
         startActivity(intent);
         finish();
     }
 
     @Override
     public void onCreateAccountFailed(String error) {
+        progressBar.setVisibility(View.GONE);
         Toast.makeText(this, error, Toast.LENGTH_LONG);
     }
 }

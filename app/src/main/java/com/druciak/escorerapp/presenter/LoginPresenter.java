@@ -5,10 +5,10 @@ import android.util.Patterns;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
-import com.druciak.escorerapp.model.entities.LoggedInUser;
 import com.druciak.escorerapp.model.firebaseService.FirebaseManager;
 import com.druciak.escorerapp.model.firebaseService.Result;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginPresenter implements ILoginMVP.IPresenter {
     private ILoginMVP.IView view;
@@ -21,9 +21,9 @@ public class LoginPresenter implements ILoginMVP.IPresenter {
     }
 
     @Override
-    public void onLoginEventComplete(Result<LoggedInUser> result) {
+    public void onLoginEventComplete(Result<FirebaseUser> result) {
         if (result instanceof Result.Success)
-            view.onLoginEventCompleteSuccessfully(((Result.Success<LoggedInUser>) result).getData());
+            view.onLoginEventCompleteSuccessfully(((Result.Success<FirebaseUser>) result).getData());
         else
             view.onLoginEventCompleteError(((Result.Error) result).getError());
     }
@@ -58,9 +58,9 @@ public class LoginPresenter implements ILoginMVP.IPresenter {
 
     @Override
     public void activityIsStarted() {
-        Result<LoggedInUser> result = loginManager.getLoggedIn();
+        Result<FirebaseUser> result = loginManager.getLoggedIn();
         if (result instanceof Result.Success)
-            view.onLoginEventCompleteSuccessfully(((Result.Success<LoggedInUser>) result).getData());
+            view.onLoginEventCompleteSuccessfully(((Result.Success<FirebaseUser>) result).getData());
     }
 
     private boolean isUserNameValid(String username){

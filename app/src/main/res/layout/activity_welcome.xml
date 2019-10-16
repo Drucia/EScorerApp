@@ -5,7 +5,7 @@
     android:id="@+id/fullscreenContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/welcome_background"
+    android:background="@drawable/side_nav_bar"
     tools:context=".view.WelcomeActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view

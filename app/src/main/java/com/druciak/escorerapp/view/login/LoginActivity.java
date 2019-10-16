@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
-import com.druciak.escorerapp.model.entities.LoggedInUser;
 import com.druciak.escorerapp.presenter.LoginFormState;
 import com.druciak.escorerapp.presenter.LoginPresenter;
 import com.druciak.escorerapp.view.createAccount.CreateAccountActivity;
@@ -26,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView {
 
@@ -155,7 +155,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
     }
 
     @Override
-    public void onLoginEventCompleteSuccessfully(LoggedInUser data) {
+    public void onLoginEventCompleteSuccessfully(FirebaseUser data) {
         Intent intent = new Intent(this, MainPanelActivity.class);
         intent.putExtra("user", data);
         startActivity(intent);

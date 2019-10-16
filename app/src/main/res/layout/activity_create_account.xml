@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -43,8 +43,10 @@
             android:id="@+id/radioGroupAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp">
+            android:layout_below="@+id/imageRow"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center">
 
             <RadioButton
                 android:id="@+id/radioButtonReferee"
@@ -69,6 +71,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
+            android:layout_below="@id/radioGroupAccount"
             android:hint="@string/hint_name">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -87,6 +90,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
+            android:layout_below="@id/textInputName"
             android:hint="@string/hint_surname">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -105,6 +109,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
+            android:layout_below="@id/textInputSurname"
             android:hint="@string/hint_login">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -123,6 +128,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
+            android:layout_below="@id/textInputEmail"
             android:hint="@string/hint_password"
             app:endIconMode="password_toggle">
 
@@ -144,6 +150,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:hint="@string/hint_password_again"
+            android:layout_below="@+id/textInputPassword"
             app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -158,13 +165,14 @@
             android:id="@+id/textInputRefereeCer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textInputPasswordAgain"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:hint="@string/hint_certificate"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textRefereeCer"
@@ -178,36 +186,49 @@
             android:id="@+id/labelRefereeClass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textInputRefereeCer"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:text="@string/referee_classes_label"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <Spinner
             android:id="@+id/spinnerRefereeClass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/labelRefereeClass"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:entries="@array/refereeClasses"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/createAccount"
+            android:id="@+id/createAccountLabel"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/spinnerRefereeClass"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
             android:enabled="true"
             android:text="@string/button_create_account"
             android:textSize="24sp" />
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 </ScrollView>

@@ -1,51 +1,45 @@
 package com.druciak.escorerapp.model.entities;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.google.firebase.auth.FirebaseUser;
-
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository
  */
-public class LoggedInUser implements Parcelable {
+public class LoggedInUser {
     private String userId;
-    private String fullName;
+    private String name;
+    private String surname;
     private String email;
-    private String photo;
+    private Boolean isReferee;
 
-    public LoggedInUser(FirebaseUser firebaseUser)
-    {
-        userId = firebaseUser.getUid();
-        fullName = firebaseUser.getDisplayName();
-        email = firebaseUser.getEmail();
+    public LoggedInUser(NewUser user, String email){
+        userId = user.getId();
+        name = user.getName();
+        surname = user.getSurname();
+        this.email = email;
+        isReferee = user.getIsReferee();
     }
 
-    protected LoggedInUser(Parcel in) {
-        userId = in.readString();
-        fullName = in.readString();
-        email = in.readString();
-        photo = in.readString();
+    public String getUserId() {
+        return userId;
     }
 
-    public static final Creator<LoggedInUser> CREATOR = new Creator<LoggedInUser>() {
-        @Override
-        public LoggedInUser createFromParcel(Parcel in) {
-            return new LoggedInUser(in);
-        }
-
-        @Override
-        public LoggedInUser[] newArray(int size) {
-            return new LoggedInUser[size];
-        }
-    };
-
-    public String getFullName() {
-        return fullName;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getEmail() {
@@ -56,24 +50,11 @@ public class LoggedInUser implements Parcelable {
         this.email = email;
     }
 
-    public String getPhoto() {
-        return photo;
+    public Boolean getReferee() {
+        return isReferee;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(userId);
-        parcel.writeString(fullName);
-        parcel.writeString(email);
-        parcel.writeString(photo);
+    public String getFullName() {
+        return name + " " + surname;
     }
 }

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +29,8 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
 
     private AppBarConfiguration mAppBarConfiguration;
     private IMainPanelMVP.IPresenter presenter;
+    private TextView fullName;
+    private TextView email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -43,12 +48,14 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
                 R.id.nav_tools)
                 .setDrawerLayout(drawer)
                 .build();
+        fullName = headerView.findViewById(R.id.userName);
+        email = headerView.findViewById(R.id.userEmail);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        Intent intent = getIntent();
-        presenter = new MainPanelPresenter(this, intent.getParcelableExtra("user"));
+        presenter = new MainPanelPresenter(this);
+        presenter.createdActivity();
     }
 
     @Override
@@ -101,5 +108,11 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         startActivity(new Intent(this, LoginActivity.class));
         Toast.makeText(this, "Nastąpiło wylogowanie", Toast.LENGTH_LONG).show();
         finish();
+    }
+
+    @Override
+    public void setLoggedInUserFields(String fullName, String email) {
+        this.fullName.setText(fullName);
+        this.email.setText(email);
     }
 }

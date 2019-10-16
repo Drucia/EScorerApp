@@ -33,6 +33,7 @@
     <string name="hint_certificate">Numer certyfikatu</string>
     <string name="referee_classes_label">Klasa sędziowska</string>
     <string name="button_create_account">Utwórz</string>
+    <string name="regis_text">Zarejestruj się</string>
 
     <!-- Strings related to main panel -->
     <string name="volleyball_card">PIŁKA HALOWA</string>
@@ -60,5 +61,8 @@
     <string name="tab_text_host">Gospodarz</string>
     <string name="tab_text_guest">Gość</string>
     <string name="tab_text_rest">Pozostałe</string>
+
+    <!-- ERRORS  -->
+    <string name="get_user_info_error">Nie udało się pobrać danych użytkownika</string>
 
 </resources>

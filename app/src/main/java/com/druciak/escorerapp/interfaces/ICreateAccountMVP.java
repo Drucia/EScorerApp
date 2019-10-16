@@ -9,7 +9,7 @@ public interface ICreateAccountMVP {
         void clickedCreateAccount(String name, String surname, String email, String password,
                                   String certificate, String class_);
         void clickedCreateAccount(String name, String surname, String email, String password);
-        void onCreateAccountEventComplete(Result loggedInUserSuccess);
+        void onCreateAccountEventComplete(Result<LoggedInUser> loggedInUserSuccess);
     }
 
     interface IView{
@@ -17,7 +17,12 @@ public interface ICreateAccountMVP {
         void onCreateAccountFailed(String error);
     }
 
-    interface IModel{
-        void signIn(NewUser newUser);
+    interface IFirebaseModel{
+        void signIn(String name, String surname, String email, String password,
+                    String certificate, String class_);
+        void signIn(String name, String surname, String email, String password);
+    }
+    interface IModel {
+        void createUser(NewUser user, String email);
     }
 }

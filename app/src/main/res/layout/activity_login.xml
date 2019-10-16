@@ -6,7 +6,6 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/background"
         tools:context=".view.login.LoginActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -79,14 +78,14 @@
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="18dp"
                 android:enabled="false"
                 android:text="@string/button_login"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/forgotPassword" />
 
             <ProgressBar
                 android:id="@+id/loading"
@@ -116,8 +115,8 @@
                 android:id="@+id/leftLine"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginLeft="24dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginLeft="40dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginRight="15dp"
@@ -133,8 +132,8 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
                 android:background="@color/line_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView2"
@@ -157,55 +156,37 @@
                 app:layout_constraintTop_toBottomOf="@+id/login" />
 
             <TextView
-                android:id="@+id/createAccount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginBottom="16dp"
-                android:text="@string/text_view_create_account"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
                 android:id="@+id/forgotPassword"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginLeft="24dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginLeft="28dp"
                 android:text="@string/text_view_forgot_pwd"
+                android:textColor="@color/colorAccent"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/createAccount"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
 
             <TextView
                 android:id="@+id/googleText"
                 android:layout_width="222dp"
                 android:layout_height="26dp"
-                android:layout_marginTop="36dp"
-                android:layout_marginBottom="110dp"
+                android:layout_marginTop="25dp"
                 android:text="@string/text_login_google"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/forgotPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.61"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2"
-                app:layout_constraintVertical_bias="0.00999999" />
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
             <ImageView
                 android:id="@+id/googleImage"
                 android:layout_width="30dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="23dp"
                 app:layout_constraintBottom_toTopOf="@+id/forgotPassword"
                 app:layout_constraintEnd_toStartOf="@+id/googleText"
                 app:layout_constraintHorizontal_bias="0.89"
@@ -213,5 +194,33 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
                 app:layout_constraintVertical_bias="0.011"
                 app:srcCompat="@drawable/googleg_standard_color_18" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/googleText">
+
+                <TextView
+                    android:id="@+id/createAccountLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_create_account"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/createAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/regis_text"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

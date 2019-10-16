@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.model.apiService;
+package com.druciak.escorerapp.model.externalApiService;
 
 import com.druciak.escorerapp.model.entities.Team;
 

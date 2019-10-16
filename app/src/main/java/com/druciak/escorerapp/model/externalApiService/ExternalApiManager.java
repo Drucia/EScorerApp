@@ -1,8 +1,8 @@
-package com.druciak.escorerapp.model.apiService;
+package com.druciak.escorerapp.model.externalApiService;
 
 import retrofit2.Retrofit;
 
-public class ApiManager {
+public class ExternalApiManager {
     private static final String BASE_DZPS_SERVER_URL = "";
 
     private Retrofit retrofit;

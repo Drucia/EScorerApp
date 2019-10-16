@@ -8,8 +8,9 @@ import androidx.annotation.NonNull;
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.ICreateAccountMVP;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
-import com.druciak.escorerapp.model.entities.LoggedInUser;
+import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.model.entities.NewUser;
+import com.druciak.escorerapp.model.internalApiService.InternalApiManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,17 +22,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class FirebaseManager implements ILoginMVP.IModel, ICreateAccountMVP.IModel {
+public class FirebaseManager implements ILoginMVP.IModel, ICreateAccountMVP.IFirebaseModel{
     private ILoginMVP.IPresenter loginPresenter;
     private ICreateAccountMVP.IPresenter createPresenter;
+    private IMainPanelMVP.IPresenter mainPanelPresenter;
     private FirebaseAuth userAuth;
     private GoogleSignInClient mGoogleSignInClient;
+    private InternalApiManager internalApiManager;
 
     public FirebaseManager(ILoginMVP.IPresenter loginPresenter)
     {
@@ -43,11 +45,12 @@ public class FirebaseManager implements ILoginMVP.IModel, ICreateAccountMVP.IMod
     {
         this.createPresenter = createPresenter;
         userAuth = FirebaseAuth.getInstance();
+        internalApiManager = new InternalApiManager(createPresenter);
     }
 
-    public FirebaseManager()
+    public FirebaseManager(IMainPanelMVP.IPresenter mainPanelPresenter)
     {
-        loginPresenter = null;
+        this.mainPanelPresenter = mainPanelPresenter;
         userAuth = FirebaseAuth.getInstance();
     }
 
@@ -71,7 +74,7 @@ public class FirebaseManager implements ILoginMVP.IModel, ICreateAccountMVP.IMod
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = userAuth.getCurrentUser();
-                            loginPresenter.onLoginEventComplete(new Result.Success<>(new LoggedInUser(user)));
+                            loginPresenter.onLoginEventComplete(new Result.Success<>(user));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -82,20 +85,20 @@ public class FirebaseManager implements ILoginMVP.IModel, ICreateAccountMVP.IMod
     }
 
     @Override
-    public void signIn(final NewUser newUser)
+    public void signIn(final String name, final String surname, final String email, String password,
+                       final String certificate, final String class_)
     {
-        userAuth.createUserWithEmailAndPassword(newUser.getEmail(), newUser.getPassword())
+        userAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = userAuth.getCurrentUser();
-                            FirebaseDatabase.getInstance().getReference("Users")
-                                    .child(user.getUid())
-                                    .setValue(newUser);
-                            createPresenter.onCreateAccountEventComplete(new Result.Success<>(new LoggedInUser(user)));
+                            final FirebaseUser firebaseUser = userAuth.getCurrentUser();
+                            NewUser user = new NewUser(firebaseUser.getUid(), name,
+                                surname, certificate, class_);
+                            internalApiManager.createUser(user, email);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -106,12 +109,34 @@ public class FirebaseManager implements ILoginMVP.IModel, ICreateAccountMVP.IMod
     }
 
     @Override
-    public Result<LoggedInUser> getLoggedIn()
+    public void signIn(final String name, final String surname, final String email, String password)
+    {
+        userAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            final FirebaseUser firebaseUser = userAuth.getCurrentUser();
+                            NewUser user = new NewUser(firebaseUser.getUid(), name, surname);
+                            internalApiManager.createUser(user, email);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            createPresenter.onCreateAccountEventComplete(new Result.Error(new IOException("Error logging in")));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public Result<FirebaseUser> getLoggedIn()
     {
         FirebaseUser user = userAuth.getCurrentUser();
 
         if (user != null)
-            return new Result.Success<>(new LoggedInUser(user));
+            return new Result.Success<>(user);
         else
             return new Result.Error(new IOException("No user log in"));
     }
@@ -119,10 +144,8 @@ public class FirebaseManager implements ILoginMVP.IModel, ICreateAccountMVP.IMod
     @Override
     public void logout() {
         userAuth.signOut();
-        if (mGoogleSignInClient != null) {
+        if (mGoogleSignInClient != null )
             mGoogleSignInClient.signOut();
-            mGoogleSignInClient.revokeAccess();
-        }
     }
 
     @Override
@@ -136,7 +159,7 @@ public class FirebaseManager implements ILoginMVP.IModel, ICreateAccountMVP.IMod
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithGoogle:success");
                             FirebaseUser user = userAuth.getCurrentUser();
-                            loginPresenter.onLoginEventComplete(new Result.Success<>(new LoggedInUser(user)));
+                            loginPresenter.onLoginEventComplete(new Result.Success<>(user));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
