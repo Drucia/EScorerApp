@@ -15,4 +15,10 @@ public class Team {
     @SerializedName("shortName")
     @Expose
     public String shortName;
+
+    public Team(int id, String fullName, String shortName) {
+        this.id = id;
+        this.fullName = fullName;
+        this.shortName = shortName;
+    }
 }

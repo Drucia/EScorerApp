@@ -7,11 +7,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
+import com.druciak.escorerapp.model.entities.Player;
+import com.druciak.escorerapp.model.entities.Team;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-public class MatchSettingsActivity extends AppCompatActivity {
+import java.util.List;
+
+public class MatchSettingsActivity extends AppCompatActivity implements IMatchSettingsMVP.IView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,5 +36,30 @@ public class MatchSettingsActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    @Override
+    public void onPlayerClicked(Player player, int adapterPosition) {
+
+    }
+
+    @Override
+    public void onPrepareTeamListEventSucceeded(List<Team> teams) {
+
+    }
+
+    @Override
+    public void onPrepareTeamListEventFailed(String error) {
+
+    }
+
+    @Override
+    public void onPreparePlayerListEventSucceeded(List<Player> teams) {
+
+    }
+
+    @Override
+    public void onPreparePlayerListEventFailed(String error) {
+
     }
 }
