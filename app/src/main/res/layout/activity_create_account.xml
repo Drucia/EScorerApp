@@ -66,12 +66,12 @@
             android:id="@+id/textInputName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/radioGroupAccount"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="7dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
-            android:layout_below="@id/radioGroupAccount"
             android:hint="@string/hint_name">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -217,6 +217,7 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:enabled="true"
             android:text="@string/button_create_account"
             android:textSize="24sp" />

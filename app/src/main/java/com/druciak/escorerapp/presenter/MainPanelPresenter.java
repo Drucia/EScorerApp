@@ -3,6 +3,7 @@ package com.druciak.escorerapp.presenter;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.model.entities.LoggedInUser;
+import com.druciak.escorerapp.model.entities.NewUser;
 import com.druciak.escorerapp.model.firebaseService.FirebaseManager;
 import com.druciak.escorerapp.model.firebaseService.Result;
 import com.druciak.escorerapp.model.internalApiService.InternalApiManager;
@@ -30,7 +31,7 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
 
     @Override
     public void createdActivity() {
-        userManager.getUserInformations(user);
+        userManager.getUserInformation(user);
     }
 
     @Override
@@ -39,5 +40,17 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
             loggedInUser = ((Result.Success<LoggedInUser>) user).getData();
             view.setLoggedInUserFields(loggedInUser.getFullName(), loggedInUser.getEmail());
         }
+        else
+            view.showPopUpWithSetUserFields();
+    }
+
+    @Override
+    public void onCustomUserFieldsSaveClicked(String name, String surname, String certificate, String class_) {
+        userManager.setUserInformation(user, new NewUser(user.getUid(), name, surname, certificate, class_));
+    }
+
+    @Override
+    public void onCustomUserFieldsSaveClicked(String name, String surname) {
+        userManager.setUserInformation(user, new NewUser(user.getUid(), name, surname));
     }
 }

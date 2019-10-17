@@ -9,6 +9,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
+import com.druciak.escorerapp.model.entities.Player;
+import com.druciak.escorerapp.model.entities.Team;
+
+import java.util.List;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -20,6 +25,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_host, R.string.tab_text_guest,
             R.string.tab_text_rest};
     private final Context mContext;
+    private List<Team> teams;
+    private List<Player> players;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
@@ -30,7 +37,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        int layout = R.layout.fragment_match_settings;
+        switch(position)
+        {
+            case 0:
+            case 1:
+                return new TeamSettingsFragment(position, (IMatchSettingsMVP.IView) mContext);
+            case 2:
+                return PlaceholderFragment.newInstance(layout);
+        }
+        return PlaceholderFragment.newInstance(layout);
     }
 
     @Nullable

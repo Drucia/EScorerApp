@@ -17,8 +17,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelMVP.ILoggedInUserModel {
-    private static final String BASE_APP_SERVER_URL = "https://e-scorer-service.herokuapp.com/";
-//    private static final String BASE_APP_SERVER_URL = "http://192.168.43.115:8080/";
+//    private static final String BASE_APP_SERVER_URL = "https://e-scorer-service.herokuapp.com/";
+    private static final String BASE_APP_SERVER_URL = "http://192.168.1.10:8080/";
 
     private Retrofit retrofit;
     private ICreateAccountMVP.IPresenter createAccountPresenter;
@@ -55,7 +55,7 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
 
     @Override
     public void createUser(NewUser user, final String email) {
-        getLoginService().addUser(user).enqueue(new Callback<NewUser>() {
+        getLoginService().updateUser(user).enqueue(new Callback<NewUser>() {
             @Override
             public void onResponse(Call<NewUser> call, Response<NewUser> response) {
                 NewUser responseUser = response.body();
@@ -83,8 +83,37 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
     }
 
     @Override
-    public void getUserInformations(final FirebaseUser firebaseUser) {
+    public void getUserInformation(final FirebaseUser firebaseUser) {
         getLoginService().getUser(firebaseUser.getUid()).enqueue(new Callback<NewUser>() {
+            @Override
+            public void onResponse(Call<NewUser> call, Response<NewUser> response) {
+                NewUser userInfo = response.body();
+                if (userInfo != null)
+                {
+                    if (userInfo.getIsReferee())
+                    {
+                        RefereeUser refereeUser = new RefereeUser(userInfo, firebaseUser.getEmail());
+                        mainPanelPresenter.onGetUserEventComplete(new Result.Success(refereeUser));
+                    } else
+                    {
+                        LoggedInUser user = new LoggedInUser(userInfo, firebaseUser.getEmail());
+                        mainPanelPresenter.onGetUserEventComplete(new Result.Success(user));
+                    }
+                }
+                else
+                    mainPanelPresenter.onGetUserEventComplete(new Result.Error(new Exception(response.message())));
+            }
+
+            @Override
+            public void onFailure(Call<NewUser> call, Throwable t) {
+                mainPanelPresenter.onGetUserEventComplete(new Result.Error(new Exception(t.getMessage())));
+            }
+        });
+    }
+
+    @Override
+    public void setUserInformation(final FirebaseUser firebaseUser, NewUser user) {
+        getLoginService().updateUser(user).enqueue(new Callback<NewUser>() {
             @Override
             public void onResponse(Call<NewUser> call, Response<NewUser> response) {
                 NewUser userInfo = response.body();

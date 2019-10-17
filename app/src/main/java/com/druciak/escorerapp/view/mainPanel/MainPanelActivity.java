@@ -1,10 +1,15 @@
 package com.druciak.escorerapp.view.mainPanel;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +28,7 @@ import com.druciak.escorerapp.view.GoodbyeActivity;
 import com.druciak.escorerapp.view.login.LoginActivity;
 import com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class MainPanelActivity extends AppCompatActivity implements IMainPanelMVP.IView {
     public static final int MATCH_SETTINGS_REQ = 1;
@@ -114,5 +120,62 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
     public void setLoggedInUserFields(String fullName, String email) {
         this.fullName.setText(fullName);
         this.email.setText(email);
+    }
+
+    @Override
+    public void showPopUpWithSetUserFields() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.user_fields_pop_up_window, null);
+        dialogBuilder.setView(view);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setTitle("Uzupełnij dane konta");
+        final RadioButton radioButtonReferee = view.findViewById(R.id.radioButtonRefereePopUp);
+        final TextInputLayout refereeCer = view.findViewById(R.id.textInputRefereeCerPopUp);
+        final Spinner refereeClass = view.findViewById(R.id.spinnerRefereeClassPopUp);
+        final TextView refereeClassLabel = view.findViewById(R.id.labelRefereeClassPopUp);
+
+        final TextInputLayout nameLayout = view.findViewById(R.id.textInputNamePopUp);
+        final TextInputLayout surnameLayout = view.findViewById(R.id.textInputSurnamePopUp);
+
+        RadioGroup radioGroup = view.findViewById(R.id.radioGroupAccountPopUp);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int id) {
+                switch(id)
+                {
+                    case R.id.radioButtonRefereePopUp:
+                        refereeClassLabel.setVisibility(View.VISIBLE);
+                        refereeClass.setVisibility(View.VISIBLE);
+                        refereeCer.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.radioButtonOrganizerPopUp:
+                        refereeClassLabel.setVisibility(View.GONE);
+                        refereeClass.setVisibility(View.GONE);
+                        refereeCer.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+        dialogBuilder.setPositiveButton("Zatwierdź", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (radioButtonReferee.isChecked()) {
+                    presenter.onCustomUserFieldsSaveClicked(
+                            nameLayout.getEditText().getText().toString(),
+                            surnameLayout.getEditText().getText().toString(),
+                            refereeCer.getEditText().getText().toString(),
+                            refereeClass.getSelectedItem().toString());
+                }
+                else {
+                    presenter.onCustomUserFieldsSaveClicked(
+                            nameLayout.getEditText().getText().toString(),
+                            surnameLayout.getEditText().getText().toString());
+                }
+                dialogInterface.dismiss();
+            }
+        });
+
+        final AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
     }
 }
