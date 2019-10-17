@@ -23,6 +23,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
+import com.druciak.escorerapp.model.entities.Match;
+import com.druciak.escorerapp.presenter.GameTypesRepository;
 import com.druciak.escorerapp.presenter.MainPanelPresenter;
 import com.druciak.escorerapp.view.GoodbyeActivity;
 import com.druciak.escorerapp.view.login.LoginActivity;
@@ -30,9 +32,10 @@ import com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class MainPanelActivity extends AppCompatActivity implements IMainPanelMVP.IView {
-    public static final int MATCH_SETTINGS_REQ = 1;
+import java.util.List;
+import java.util.stream.Collectors;
 
+public class MainPanelActivity extends AppCompatActivity implements IMainPanelMVP.IView {
     private AppBarConfiguration mAppBarConfiguration;
     private IMainPanelMVP.IPresenter presenter;
     private TextView fullName;
@@ -104,9 +107,9 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
 
     @Override
     public void onClick(int gameId) {
-        Intent intent = new Intent(this, MatchSettingsActivity.class);
-        intent.putExtra("kind", gameId);
-        startActivityForResult(intent, MATCH_SETTINGS_REQ);
+        if (gameId == GameTypesRepository.DZPS_VOLLEYBALL_ID) {
+            presenter.clickOnDZPSMatch();
+        }
     }
 
     @Override
@@ -177,5 +180,20 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
 
         final AlertDialog dialog = dialogBuilder.create();
         dialog.show();
+    }
+
+    @Override
+    public void showPopUpWithMatchToChoose(List<Match> matches) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Wybierz mecz");
+        List<String> names = matches.stream().map(Match::getName).collect(Collectors.toList());
+        CharSequence[] items = names.toArray(new CharSequence[names.size()]);
+        builder.setItems(items, (dialogInterface, i) -> {
+            Intent intent = new Intent(this, MatchSettingsActivity.class);
+            intent.putExtra("kind", GameTypesRepository.DZPS_VOLLEYBALL_ID);
+            intent.putExtra("match", matches.get(i));
+            startActivity(intent);
+        });
+        builder.create().show();
     }
 }

@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GameTypesRepository {
-    private static final int DZPS_VOLLEYBALL_ID = 1;
-    private static final int VOLLEYBALL_ID = 2;
-    private static final int BEACH_VOLLEYBALL_ID = 3;
+    public static final int DZPS_VOLLEYBALL_ID = 1;
+    public static final int VOLLEYBALL_ID = 2;
+    public static final int BEACH_VOLLEYBALL_ID = 3;
 
     public static List<GameType> getGameTypesListForOrganizer()
     {

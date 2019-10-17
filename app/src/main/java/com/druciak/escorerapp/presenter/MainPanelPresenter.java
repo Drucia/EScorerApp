@@ -3,11 +3,15 @@ package com.druciak.escorerapp.presenter;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.model.entities.LoggedInUser;
+import com.druciak.escorerapp.model.entities.Match;
 import com.druciak.escorerapp.model.entities.NewUser;
+import com.druciak.escorerapp.model.externalApiService.ExternalApiManager;
 import com.druciak.escorerapp.model.firebaseService.FirebaseManager;
 import com.druciak.escorerapp.model.firebaseService.Result;
 import com.druciak.escorerapp.model.internalApiService.InternalApiManager;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
 
 public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
     private IMainPanelMVP.IView view;
@@ -15,10 +19,12 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
     private LoggedInUser loggedInUser;
     private ILoginMVP.IModel firebaseManager;
     private IMainPanelMVP.ILoggedInUserModel userManager;
+    private IMainPanelMVP.IMatchModel externalManager;
 
     public MainPanelPresenter(IMainPanelMVP.IView view) {
         firebaseManager = new FirebaseManager(this);
         userManager = new InternalApiManager(this);
+        externalManager = new ExternalApiManager(this);
         this.view = view;
         this.user = ((Result.Success<FirebaseUser>) firebaseManager.getLoggedIn()).getData();
     }
@@ -52,5 +58,17 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
     @Override
     public void onCustomUserFieldsSaveClicked(String name, String surname) {
         userManager.setUserInformation(user, new NewUser(user.getUid(), name, surname));
+    }
+
+    @Override
+    public void clickOnDZPSMatch() {
+        externalManager.getMatchedForReferee(user.getUid());
+    }
+
+    @Override
+    public void onPrepareMatchesListCompleted(Result<List<Match>> result) {
+        if (result instanceof Result.Success) {
+            view.showPopUpWithMatchToChoose(((Result.Success<List<Match>>) result).getData());
+        }
     }
 }

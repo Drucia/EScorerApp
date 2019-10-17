@@ -1,9 +1,12 @@
 package com.druciak.escorerapp.interfaces;
 
 import com.druciak.escorerapp.model.entities.LoggedInUser;
+import com.druciak.escorerapp.model.entities.Match;
 import com.druciak.escorerapp.model.entities.NewUser;
 import com.druciak.escorerapp.model.firebaseService.Result;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
 
 public interface IMainPanelMVP {
     interface IPresenter{
@@ -13,18 +16,24 @@ public interface IMainPanelMVP {
         void onCustomUserFieldsSaveClicked(String name, String surname, String certificate,
                                            String class_);
         void onCustomUserFieldsSaveClicked(String name, String surname);
+        void clickOnDZPSMatch();
+        void onPrepareMatchesListCompleted(Result<List<Match>> result);
     }
 
     interface IView{
         void onClick(int gameId);
         void onLogoutCompleted();
         void setLoggedInUserFields(String fullName, String email);
-
         void showPopUpWithSetUserFields();
+        void showPopUpWithMatchToChoose(List<Match> matches);
     }
 
     interface ILoggedInUserModel{
         void getUserInformation(FirebaseUser firebaseUser);
         void setUserInformation(FirebaseUser firebaseUser, NewUser user);
+    }
+
+    interface IMatchModel{
+        void getMatchedForReferee(String refereeId);
     }
 }
