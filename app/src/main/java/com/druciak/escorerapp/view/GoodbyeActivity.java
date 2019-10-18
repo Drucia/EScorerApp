@@ -94,7 +94,6 @@ public class GoodbyeActivity extends AppCompatActivity {
         fadeIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
             }
 
             @Override

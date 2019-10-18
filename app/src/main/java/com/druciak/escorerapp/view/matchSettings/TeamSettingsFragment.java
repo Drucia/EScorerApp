@@ -66,7 +66,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                         .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.black_overlay, getActivity().getTheme()))
                         .create());
         speedDialView.addActionItem(
-                new SpeedDialActionItem.Builder(R.id.couachFab, R.drawable.coach)
+                new SpeedDialActionItem.Builder(R.id.coachFab, R.drawable.coach)
                         .setLabel("Trener")
                         .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.black_overlay, getActivity().getTheme()))
                         .create());
@@ -80,9 +80,9 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                 case R.id.playerFab:
                     showPopUpWithAddedPlayerFields();
                     break;
-                case R.id.couachFab:
+                case R.id.coachFab:
                     if (chipCoachCounter < MAX_NUMBER_OF_COACH)
-                        showPopUpWithAddedTeamMemberFields(actionItem.getId());
+                        showPopUpWithAddedTeamMemberFields(actionItem.getId(), "", -1);
                     else {
                         Toast.makeText(getActivity(), "Maksymalna liczba trenerów",
                                 Toast.LENGTH_SHORT).show();
@@ -90,7 +90,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                     break;
                 case R.id.medicineFab:
                     if (chipMedicineCounter < MAX_NUMBER_OF_MEDICINE)
-                        showPopUpWithAddedTeamMemberFields(actionItem.getId());
+                        showPopUpWithAddedTeamMemberFields(actionItem.getId(), "", -1);
                     else {
                         Toast.makeText(getActivity(), "Maksymalna liczba masażystów/lekarzy",
                                 Toast.LENGTH_SHORT).show();
@@ -108,9 +108,12 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
 
     }
 
-    void showPopUpWithAddedTeamMemberFields(int id)
+    void showPopUpWithAddedTeamMemberFields(int id, String data, int chipId)
     {
-        String title = id == R.id.couachFab ? "Trener" : "Masażysta";
+        boolean isCoach = id == R.id.coachFab;
+        boolean isNew = data.equals("");
+
+        String title = isCoach ? "Trener" : "Masażysta";
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         View view = getLayoutInflater().inflate(R.layout.pop_up_add_new_team_member, null);
@@ -120,32 +123,54 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         final TextInputLayout nameLayout = view.findViewById(R.id.textInputNameAdditionalMember);
         final TextInputLayout surnameLayout = view.findViewById(R.id.textInputSurnameAdditionalMember);
 
-        dialogBuilder.setPositiveButton("Dodaj", (dialogInterface, i) -> {
+        if (!isNew)
+        {
+            String[] splitted = data.split(" ");
+            nameLayout.getEditText().setText(splitted[0]);
+            surnameLayout.getEditText().setText(splitted[1]);
+        }
+
+        dialogBuilder.setPositiveButton(isNew ? "Dodaj" : "Zmień", (dialogInterface, i) -> {
             String name = nameLayout.getEditText().getText().toString();
             String surname = surnameLayout.getEditText().getText().toString();
-            Chip chip = new Chip(R.id.couachFab == id ? coachChipGroup.getContext() : medicineChipGroup.getContext());
-            chip.setText(name + " " + surname);
-            chip.setChipBackgroundColorResource(R.color.chip_background);
-            chip.setOnCloseIconClickListener(chipView -> {
-                if (R.id.couachFab == id)
-                    coachChipGroup.removeView(chipView);
-                else
-                    medicineChipGroup.removeView(chipView);
-            });
-            chip.setOnClickListener(chipView -> showPopUpWithAddedTeamMemberFields(id));
-            if (R.id.couachFab == id){
-                coachChipGroup.addView(chip);
-                chipCoachCounter++;
+            if (isNew) {
+                Chip chip = new Chip(isCoach ? coachChipGroup.getContext() : medicineChipGroup.getContext());
+                chip.setText(name + " " + surname);
+                chip.setChipBackgroundColorResource(R.color.colorPrimary);
+                chip.setCloseIconVisible(true);
+                chip.setOnCloseIconClickListener(chipView -> {
+                    if (R.id.coachFab == id) {
+                        coachChipGroup.removeView(chipView);
+                        chipCoachCounter--;
+                    }
+                    else {
+                        medicineChipGroup.removeView(chipView);
+                        chipMedicineCounter--;
+                    }
+                });
+
+                chip.setOnClickListener(chipView -> showPopUpWithAddedTeamMemberFields(id,
+                        name + " " + surname, chipView.getId()));
+
+                if (R.id.coachFab == id) {
+                    coachChipGroup.addView(chip);
+                    chipCoachCounter++;
+                } else {
+                    medicineChipGroup.addView(chip);
+                    chipMedicineCounter++;
+                }
+            } else {
+                Chip chip = isCoach ? coachChipGroup.findViewById(chipId)
+                        : medicineChipGroup.findViewById(chipId);
+                chip.setText(name + " " + surname);
             }
-            else{
-                medicineChipGroup.addView(chip);
-                chipMedicineCounter++;
-            }
+
             dialogInterface.dismiss();
         });
 
-        final AlertDialog dialog = dialogBuilder.create();
-        dialog.show();
+        dialogBuilder.setNegativeButton("Anuluj", (dialogInterface, i) -> dialogInterface.cancel());
+
+        dialogBuilder.create().show();
     }
 
     public void updatePlayersAdapter(List<Player> players)
@@ -156,6 +181,45 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
 
     @Override
     public void onPlayerClicked(Player player, int adapterPosition) {
-        // todo
+        showPopUpForPlayer(player);
+    }
+
+    public void showPopUpForPlayer(Player player)
+    {
+        boolean isNew = player == null;
+
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        View view = getLayoutInflater().inflate(R.layout.pop_up_add_new_team_member, null);
+        dialogBuilder.setView(view);
+        dialogBuilder.setTitle("Zawodnik");
+        dialogBuilder.setCancelable(true);
+        dialogBuilder.setPositiveButton(isNew ? "Dodaj" : "Zmień", (dialogInterface, i) -> {
+            if (isNew)
+            {
+                // todo make new player
+            } else
+            {
+                // todo update player
+            }
+            dialogInterface.dismiss();
+        });
+
+        if (!isNew)
+        {
+            dialogBuilder.setNegativeButton("Usuń", (dialogInterface, i) -> {
+                final AlertDialog.Builder db = new AlertDialog.Builder(getActivity());
+                db.setTitle("Usuwanie");
+                db.setMessage("Jesteś pewny?");
+                db.setNegativeButton("NIE", (dialogInterface1, i1) -> dialogInterface.dismiss());
+                db.setPositiveButton("TAK", (dialogInterface1, i1) -> {
+                    // todo delete player
+                    dialogInterface.dismiss();
+                });
+                db.create().show();
+                dialogInterface.dismiss();
+            });
+        }
+
+        dialogBuilder.create().show();
     }
 }

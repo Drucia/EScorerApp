@@ -150,13 +150,13 @@
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/coachChips"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="120dp"
                 android:layout_below="@id/coachLabel"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="7dp"
                 android:layout_marginRight="20dp"
                 android:minHeight="50dp"
-                app:chipSpacingVertical="2dp"/>
+                app:chipSpacingVertical="2dp" />
 
             <TextView
                 android:id="@+id/medicineLabel"
