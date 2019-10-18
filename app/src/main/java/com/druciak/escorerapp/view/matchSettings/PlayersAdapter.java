@@ -20,9 +20,9 @@ import java.util.List;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHolder> {
     private List<Player> listItems = new ArrayList<>();
-    private IMatchSettingsMVP.IView callback;
+    private IMatchSettingsMVP.IFragmentView callback;
 
-    public PlayersAdapter(IMatchSettingsMVP.IView view) {
+    public PlayersAdapter(IMatchSettingsMVP.IFragmentView view) {
         this.callback = view;
     }
 
@@ -54,8 +54,6 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
         holder.number.setText(player.getNumber() == 0 ? "" : String.valueOf(player.getNumber()));
     }
 
-
-
     @Override
     public int getItemCount() {
         return listItems.size();
@@ -75,12 +73,8 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
             number = itemView.findViewById(R.id.numberTextView);
             shirt = itemView.findViewById(R.id.shirtImageView);
             playerContent = itemView.findViewById(R.id.playerLayout);
-            playerContent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    callback.onPlayerClicked(listItems.get(getAdapterPosition()), getAdapterPosition());
-                }
-            });
+            playerContent.setOnClickListener(view ->
+                    callback.onPlayerClicked(listItems.get(getAdapterPosition()), getAdapterPosition()));
         }
     }
 }

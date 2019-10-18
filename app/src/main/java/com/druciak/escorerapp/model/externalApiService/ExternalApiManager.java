@@ -35,26 +35,28 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
 
         // prepare players
         ArrayList<Player> poloniaPlayers = new ArrayList<>();
-        poloniaPlayers.add(new Player(1, "Aleksandra", "Druciak", 'K', 2));
-        poloniaPlayers.add(new Player(2, "Aleksandra", "Nowak", 'K', 2));
-        poloniaPlayers.add(new Player(3, "Aleksandra", "Kowalska", 'K', 2));
-        poloniaPlayers.add(new Player(4, "Aleksandra", "Drucia", 'K', 2));
-        poloniaPlayers.add(new Player(5, "Paulina", "Druciak", 'K', 2));
-        poloniaPlayers.add(new Player(6, "Karolina", "Druciak", 'K', 2));
+        poloniaPlayers.add(new Player(1, "Aleksandra", "Druciak", 'K', teams.get(1)));
+        poloniaPlayers.add(new Player(2, "Aleksandra", "Nowak", 'K', teams.get(1)));
+        poloniaPlayers.add(new Player(3, "Aleksandra", "Kowalska", 'K', teams.get(1)));
+        poloniaPlayers.add(new Player(4, "Aleksandra", "Drucia", 'K', teams.get(1)));
+        poloniaPlayers.add(new Player(5, "Paulina", "Druciak", 'K', teams.get(1)));
+        poloniaPlayers.add(new Player(6, "Karolina", "Druciak", 'K', teams.get(1)));
 
         // prepare players
         ArrayList<Player> chelmiecPlayers = new ArrayList<>();
-        poloniaPlayers.add(new Player(7, "Aleksandra", "Druciak", 'K', 1));
-        poloniaPlayers.add(new Player(8, "Aleksandra", "Nowak", 'K', 1));
-        poloniaPlayers.add(new Player(9, "Aleksandra", "Kowalska", 'K', 1));
-        poloniaPlayers.add(new Player(10, "Aleksandra", "Drucia", 'K', 1));
-        poloniaPlayers.add(new Player(11, "Paulina", "Druciak", 'K', 1));
-        poloniaPlayers.add(new Player(12, "Karolina", "Druciak", 'K', 1));
-        poloniaPlayers.add(new Player(13, "Kar", "Druci", 'K', 1));
-        poloniaPlayers.add(new Player(14, "Karo", "Druciak", 'K', 1));
+        chelmiecPlayers.add(new Player(7, "Aleksandra", "Druciak", 'K', teams.get(0)));
+        chelmiecPlayers.add(new Player(8, "Aleksandra", "Nowak", 'K', teams.get(0)));
+        chelmiecPlayers.add(new Player(9, "Aleksandra", "Kowalska", 'K', teams.get(0)));
+        chelmiecPlayers.add(new Player(10, "Aleksandra", "Drucia", 'K', teams.get(0)));
+        chelmiecPlayers.add(new Player(11, "Paulina", "Druciak", 'K', teams.get(0)));
+        chelmiecPlayers.add(new Player(12, "Karolina", "Druciak", 'K', teams.get(0)));
+        chelmiecPlayers.add(new Player(13, "Kar", "Druci", 'K', teams.get(0)));
+        chelmiecPlayers.add(new Player(14, "Karo", "Druciak", 'K', teams.get(0)));
 
         playersOfTeams.put(1, poloniaPlayers);
         playersOfTeams.put(2, chelmiecPlayers);
+        playersOfTeams.put(3, chelmiecPlayers);
+        playersOfTeams.put(4, poloniaPlayers);
     }
 
     public ExternalApiManager(MainPanelPresenter mainPanelPresenter) {
@@ -118,13 +120,10 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
 //                presenter.onPrepareTeamListEventCompleted(new Result.Error(new Exception("Team Connection error")));
 //            }
 //        });
-
-        // TODO mock server!!!
-        presenter.onPrepareTeamListEventCompleted(new Result.Success<>(teams));
     }
 
     @Override
-    public void getAllPlayersOfTeam(int teamId) {
+    public void getAllPlayersOfTeams(int hostId, int guestId) {
 //        this.getPlayerService().getPlayersOfTeam(teamId).enqueue(new Callback<List<Player>>() {
 //            @Override
 //            public void onResponse(Call<List<Player>> call, Response<List<Player>> response) {
@@ -140,8 +139,11 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
 //                presenter.onPrepareTeamListEventCompleted(new Result.Error(new Exception("Player Connection error")));
 //            }
 //        });
-        // TODO mock server!!!
-        presenter.onPreparePlayersListEventCompleted(new Result.Success<>(playersOfTeams.get(teamId)));
+        // TODO mock server
+        List<Player> players = playersOfTeams.get(hostId);
+        players.addAll(playersOfTeams.get(guestId));
+        presenter.onPreparePlayersListEventCompleted(
+                new Result.Success<>(players));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

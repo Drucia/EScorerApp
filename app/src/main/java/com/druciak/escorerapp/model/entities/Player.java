@@ -22,7 +22,7 @@ public class Player {
 
     @SerializedName("teamId")
     @Expose
-    private int teamId;
+    private Team team;
 
     private boolean isLibero;
     private boolean isCaptain;
@@ -31,12 +31,12 @@ public class Player {
     public Player() {
     }
 
-    public Player(int id, String name, String surname, char sex, int teamId) {
+    public Player(int id, String name, String surname, char sex, Team team) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.sex = sex;
-        this.teamId = teamId;
+        this.team = team;
     }
 
     public int getId() {
@@ -71,12 +71,12 @@ public class Player {
         this.sex = sex;
     }
 
-    public int getTeamId() {
-        return teamId;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeamId(int teamId) {
-        this.teamId = teamId;
+    public void setTeam(Team teamId) {
+        this.team = team;
     }
 
     public boolean isLibero() {

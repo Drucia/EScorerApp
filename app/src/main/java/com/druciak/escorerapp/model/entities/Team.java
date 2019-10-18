@@ -9,17 +9,17 @@ import com.google.gson.annotations.SerializedName;
 public class Team implements Parcelable {
     @SerializedName("id")
     @Expose
-    public int id;
+    private int id;
 
     @SerializedName("fullName")
     @Expose
-    public String fullName;
+    private String fullName;
 
     @SerializedName("shortName")
     @Expose
-    public String shortName;
+    private String shortName;
 
-    public Team(int id, String fullName, String shortName) {
+    public Team(int id, String shortName, String fullName) {
         this.id = id;
         this.fullName = fullName;
         this.shortName = shortName;
@@ -42,6 +42,30 @@ public class Team implements Parcelable {
             return new Team[size];
         }
     };
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
 
     @Override
     public int describeContents() {

@@ -18,7 +18,7 @@ public class Match implements Parcelable {
         this.hostTeam = hostTeam;
         this.guestTeam = guestTeam;
         this.refereeId = refereeId;
-        this.name = hostTeam.shortName + " vs " + guestTeam.shortName;
+        this.name = hostTeam.getShortName() + " vs " + guestTeam.getShortName();
     }
 
     public Match(int id, Team hostTeam, Team guestTeam, String refereeId) {
@@ -27,7 +27,7 @@ public class Match implements Parcelable {
         this.hostTeam = hostTeam;
         this.guestTeam = guestTeam;
         this.refereeId = refereeId;
-        this.name = hostTeam.shortName + " vs " + guestTeam.shortName;
+        this.name = hostTeam.getShortName() + " vs " + guestTeam.getShortName();
     }
 
     protected Match(Parcel in) {
@@ -65,7 +65,7 @@ public class Match implements Parcelable {
     };
 
     public String getName() {
-        return hostTeam.shortName + " " + guestTeam.shortName;
+        return hostTeam.getFullName() + " vs " + guestTeam.getFullName();
     }
 
     public Team getHostTeam() {

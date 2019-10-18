@@ -1,7 +1,6 @@
 package com.druciak.escorerapp.interfaces;
 
 import com.druciak.escorerapp.model.entities.Player;
-import com.druciak.escorerapp.model.entities.Team;
 import com.druciak.escorerapp.model.firebaseService.Result;
 
 import java.util.List;
@@ -9,21 +8,20 @@ import java.util.List;
 public interface IMatchSettingsMVP {
     interface IModel{
         void getAllTeams();
-        void getAllPlayersOfTeam(int teamId);
+        void getAllPlayersOfTeams(int hostId, int guestId);
     }
 
     interface IView{
-        void onPlayerClicked(Player player, int adapterPosition);
-        void onPrepareTeamListEventSucceeded(List<Team> teams);
-        void onPrepareTeamListEventFailed(String error);
-        void onPreparePlayerListEventSucceeded(List<Player> teams);
+        void onPreparePlayerListsEventSucceeded(List<Player> players);
         void onPreparePlayerListEventFailed(String error);
     }
 
+    interface IFragmentView {
+        void onPlayerClicked(Player player, int adapterPosition);
+    }
+
     interface IPresenter{
-        void setPlayersList(int teamId);
-        void prepareTeamList();
-        void onPrepareTeamListEventCompleted(Result<List<Team>> result);
         void onPreparePlayersListEventCompleted(Result<List<Player>> result);
+        void preparePlayersOfTeams(int hostId, int guestId);
     }
 }

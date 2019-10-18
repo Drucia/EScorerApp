@@ -10,10 +10,11 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
+import com.druciak.escorerapp.model.entities.Match;
 import com.druciak.escorerapp.model.entities.Player;
-import com.druciak.escorerapp.model.entities.Team;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -25,12 +26,21 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_host, R.string.tab_text_guest,
             R.string.tab_text_rest};
     private final Context mContext;
-    private List<Team> teams;
     private List<Player> players;
+    private Match match;
+    private Fragment currentFragment;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+    public SectionsPagerAdapter(Context context, FragmentManager fm, Match match) {
         super(fm);
         mContext = context;
+        this.match = match;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        if (currentFragment instanceof TeamSettingsFragment)
+            ((TeamSettingsFragment) currentFragment).updatePlayersAdapter(players);
     }
 
     @Override
@@ -41,10 +51,22 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch(position)
         {
             case 0:
+                List<Player> playersOfHost = players.stream()
+                        .filter(player -> player.getTeam().getId() == match.getHostTeam().getId())
+                        .collect(Collectors.toList());
+                currentFragment = new TeamSettingsFragment((IMatchSettingsMVP.IView) mContext,
+                        match.getHostTeam().getFullName(), playersOfHost);
+                return currentFragment;
             case 1:
-                return new TeamSettingsFragment(position, (IMatchSettingsMVP.IView) mContext);
+                List<Player> playersOfGuest = players.stream()
+                        .filter(player -> player.getTeam().getId() == match.getGuestTeam().getId())
+                        .collect(Collectors.toList());
+                currentFragment = new TeamSettingsFragment((IMatchSettingsMVP.IView) mContext,
+                        match.getGuestTeam().getFullName(), playersOfGuest);
+                return currentFragment;
             case 2:
-                return PlaceholderFragment.newInstance(layout);
+                currentFragment = PlaceholderFragment.newInstance(layout);
+                return currentFragment;
         }
         return PlaceholderFragment.newInstance(layout);
     }
@@ -59,5 +81,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         // Show 3 total pages.
         return 3;
+    }
+
+    public void setPlayersOfTeams(List<Player> players) {
+        this.players = players;
     }
 }
