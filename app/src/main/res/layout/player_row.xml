@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/playerLayout"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="7dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -13,8 +14,8 @@
 
         <ImageView
             android:id="@+id/shirtImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             app:srcCompat="@drawable/player_shirt" />
 
         <TextView
@@ -31,12 +32,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Aleksandra" />
+        android:text="Aleksandra"
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/surnameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Druciak" />
+        android:text="Druciak"
+        android:textSize="13sp" />
 </LinearLayout>

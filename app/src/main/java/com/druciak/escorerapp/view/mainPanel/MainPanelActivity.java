@@ -1,7 +1,6 @@
 package com.druciak.escorerapp.view.mainPanel;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -128,7 +127,7 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
     @Override
     public void showPopUpWithSetUserFields() {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        View view = getLayoutInflater().inflate(R.layout.user_fields_pop_up_window, null);
+        View view = getLayoutInflater().inflate(R.layout.pop_up_user_fields, null);
         dialogBuilder.setView(view);
         dialogBuilder.setCancelable(false);
         dialogBuilder.setTitle("Uzupełnij dane konta");
@@ -141,41 +140,35 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         final TextInputLayout surnameLayout = view.findViewById(R.id.textInputSurnamePopUp);
 
         RadioGroup radioGroup = view.findViewById(R.id.radioGroupAccountPopUp);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int id) {
-                switch(id)
-                {
-                    case R.id.radioButtonRefereePopUp:
-                        refereeClassLabel.setVisibility(View.VISIBLE);
-                        refereeClass.setVisibility(View.VISIBLE);
-                        refereeCer.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.radioButtonOrganizerPopUp:
-                        refereeClassLabel.setVisibility(View.GONE);
-                        refereeClass.setVisibility(View.GONE);
-                        refereeCer.setVisibility(View.GONE);
-                        break;
-                }
+        radioGroup.setOnCheckedChangeListener((radioGroup1, id) -> {
+            switch(id)
+            {
+                case R.id.radioButtonRefereePopUp:
+                    refereeClassLabel.setVisibility(View.VISIBLE);
+                    refereeClass.setVisibility(View.VISIBLE);
+                    refereeCer.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.radioButtonOrganizerPopUp:
+                    refereeClassLabel.setVisibility(View.GONE);
+                    refereeClass.setVisibility(View.GONE);
+                    refereeCer.setVisibility(View.GONE);
+                    break;
             }
         });
-        dialogBuilder.setPositiveButton("Zatwierdź", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (radioButtonReferee.isChecked()) {
-                    presenter.onCustomUserFieldsSaveClicked(
-                            nameLayout.getEditText().getText().toString(),
-                            surnameLayout.getEditText().getText().toString(),
-                            refereeCer.getEditText().getText().toString(),
-                            refereeClass.getSelectedItem().toString());
-                }
-                else {
-                    presenter.onCustomUserFieldsSaveClicked(
-                            nameLayout.getEditText().getText().toString(),
-                            surnameLayout.getEditText().getText().toString());
-                }
-                dialogInterface.dismiss();
+        dialogBuilder.setPositiveButton("Zatwierdź", (dialogInterface, i) -> {
+            if (radioButtonReferee.isChecked()) {
+                presenter.onCustomUserFieldsSaveClicked(
+                        nameLayout.getEditText().getText().toString(),
+                        surnameLayout.getEditText().getText().toString(),
+                        refereeCer.getEditText().getText().toString(),
+                        refereeClass.getSelectedItem().toString());
             }
+            else {
+                presenter.onCustomUserFieldsSaveClicked(
+                        nameLayout.getEditText().getText().toString(),
+                        surnameLayout.getEditText().getText().toString());
+            }
+            dialogInterface.dismiss();
         });
 
         final AlertDialog dialog = dialogBuilder.create();

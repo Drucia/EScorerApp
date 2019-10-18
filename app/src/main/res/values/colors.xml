@@ -8,4 +8,5 @@
     <color name="black_overlay">#66000000</color>
     <color name="line_light">#E6FFFFFF</color>
     <color name="line_dark">#66000000</color>
+    <color name="chip_background">#FFEB3B</color>
 </resources>
