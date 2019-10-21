@@ -68,5 +68,6 @@
     <string name="medicine_list_label">Masażyści</string>
     <string name="captain_label">Kapitan</string>
     <string name="libero_label">Libero</string>
+    <string name="hint_player_number">Numer koszulki</string>
 
 </resources>

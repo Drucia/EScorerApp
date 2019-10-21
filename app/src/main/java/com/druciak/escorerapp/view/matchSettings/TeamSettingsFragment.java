@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.model.entities.Player;
+import com.druciak.escorerapp.model.entities.Team;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
@@ -28,25 +30,31 @@ import java.util.List;
 public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.IFragmentView{
     private static final int MAX_NUMBER_OF_COACH = 3;
     private static final int MAX_NUMBER_OF_MEDICINE = 2;
+    private static final int MAX_NUMBER_OF_LIBERO = 2;
+    private static final int MAX_NUMBER_OF_PLAYERS = 14;
+    private static final int MAX_NUMBER_OF_PLAYERS_WITH_ONE_LIBERO = 12;
+    private static final int MIN_NUMBER_OF_PLAYERS_FOR_LIBERO = 6;
 
     private int chipCoachCounter = 0;
     private int chipMedicineCounter = 0;
+    private int liberoCounter = 0;
+    private boolean isCaptainChosen = false;
 
     private PlayersAdapter playersAdapter;
+    private List<Player> players;
     private RecyclerView playerRecycler;
-    private IMatchSettingsMVP.IView context;
+    private IMatchSettingsMVP.IView matchSettingsView;
     private SpeedDialView speedDialView;
     private ChipGroup coachChipGroup;
     private ChipGroup medicineChipGroup;
-    private String teamName;
+    private Team team;
 
-    public TeamSettingsFragment(IMatchSettingsMVP.IView mContext, String fullName,
+    public TeamSettingsFragment(IMatchSettingsMVP.IView mContext, Team team,
                                 List<Player> playersOfHost) {
-        context = mContext;
-        teamName = fullName;
-        playersAdapter = new PlayersAdapter(this);
-        playersAdapter.setListItems(playersOfHost);
-        playersAdapter.notifyDataSetChanged();
+        matchSettingsView = mContext;
+        this.team = team;
+        players = playersOfHost;
+        playersAdapter = new PlayersAdapter(this, players);
     }
 
     @Override
@@ -78,7 +86,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         speedDialView.setOnActionSelectedListener(actionItem -> {
             switch (actionItem.getId()){
                 case R.id.playerFab:
-                    showPopUpWithAddedPlayerFields();
+                    showPopUpForPlayer(null, -1);
                     break;
                 case R.id.coachFab:
                     if (chipCoachCounter < MAX_NUMBER_OF_COACH)
@@ -99,13 +107,8 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
             }
             return false;
         });
-        ((TextView) root.findViewById(R.id.teamName)).setText(teamName);
+        ((TextView) root.findViewById(R.id.teamName)).setText(team.getFullName());
         return root;
-    }
-
-    void showPopUpWithAddedPlayerFields()
-    {
-
     }
 
     void showPopUpWithAddedTeamMemberFields(int id, String data, int chipId)
@@ -173,33 +176,92 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         dialogBuilder.create().show();
     }
 
-    public void updatePlayersAdapter(List<Player> players)
-    {
-        playersAdapter.setListItems(players);
-        playersAdapter.notifyDataSetChanged();
-    }
-
     @Override
     public void onPlayerClicked(Player player, int adapterPosition) {
-        showPopUpForPlayer(player);
+        showPopUpForPlayer(player, adapterPosition);
     }
 
-    public void showPopUpForPlayer(Player player)
+    public void showPopUpForPlayer(Player player, int adapterPosition)
     {
         boolean isNew = player == null;
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        View view = getLayoutInflater().inflate(R.layout.pop_up_add_new_team_member, null);
+        View view = getLayoutInflater().inflate(R.layout.pop_up_player_fields, null);
         dialogBuilder.setView(view);
         dialogBuilder.setTitle("Zawodnik");
         dialogBuilder.setCancelable(true);
+        TextInputLayout name = view.findViewById(R.id.textInputNamePlayer);
+        TextInputLayout surname = view.findViewById(R.id.textInputSurnamePLayer);
+        TextInputLayout number = view.findViewById(R.id.textInputNumberPlayer);
+        SwitchMaterial captain = view.findViewById(R.id.switchCaptain);
+        SwitchMaterial libero = view.findViewById(R.id.switchLibero);
+
+        if (!isNew)
+        {
+            name.getEditText().setText(player.getName());
+            surname.getEditText().setText(player.getSurname());
+            number.getEditText().setText(player.getNumber() == 0 ? "" : String.valueOf(player.getNumber()));
+            captain.setChecked(player.isCaptain());
+            libero.setChecked(player.isLibero());
+        }
+
+        captain.setOnCheckedChangeListener((compoundButton, isOn) -> {
+            if (isOn && isCaptainChosen) {
+                Toast.makeText(getContext(), "Wybrano już kapitana", Toast.LENGTH_SHORT).show();
+                captain.setChecked(false);
+            } else if (isOn){
+                if (libero.isChecked()) {
+                    libero.setChecked(false);
+                    liberoCounter--;
+                }
+                isCaptainChosen = true;
+            } else {
+                isCaptainChosen = false;
+            }
+        });
+
+        libero.setOnCheckedChangeListener((compoundButton, isOn) -> {
+            if (isOn && liberoCounter < MAX_NUMBER_OF_LIBERO) {
+                libero.setChecked(true);
+                liberoCounter++;
+                if (captain.isChecked()) {
+                    captain.setChecked(false);
+                    isCaptainChosen = false;
+                }
+            } else if (isOn) {
+                libero.setChecked(false);
+                Toast.makeText(getContext(), "Masz za dużo libero", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         dialogBuilder.setPositiveButton(isNew ? "Dodaj" : "Zmień", (dialogInterface, i) -> {
+            String sName = name.getEditText().getText().toString();
+            String sSurname = surname.getEditText().getText().toString();
+            boolean bLibero = libero.isChecked();
+            boolean bCaptain = captain.isChecked();
+            String sNumber = number.getEditText().getText().toString();
+            int iNumber = sNumber.equals("") ? 0 : Integer.valueOf(sNumber);
+
+            // todo make check for empty values
+
+            Player p;
+
             if (isNew)
             {
-                // todo make new player
+                p = new Player(sName, sSurname, team, bLibero, bCaptain, iNumber);
+                int position = players.size();
+                players.add(p);
+                playersAdapter.notifyItemInserted(position);
+                matchSettingsView.addPlayer(p);
             } else
             {
-                // todo update player
+                p = players.get(adapterPosition);
+                p.setName(sName);
+                p.setSurname(sSurname);
+                p.setLibero(bLibero);
+                p.setCaptain(bCaptain);
+                p.setNumber(iNumber);
+                playersAdapter.notifyItemChanged(adapterPosition);
             }
             dialogInterface.dismiss();
         });
@@ -210,16 +272,22 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                 final AlertDialog.Builder db = new AlertDialog.Builder(getActivity());
                 db.setTitle("Usuwanie");
                 db.setMessage("Jesteś pewny?");
-                db.setNegativeButton("NIE", (dialogInterface1, i1) -> dialogInterface.dismiss());
+                db.setNegativeButton("NIE", (dialogInterface1, i1) -> {dialogInterface1.cancel(); showPopUpForPlayer(player, adapterPosition);});
                 db.setPositiveButton("TAK", (dialogInterface1, i1) -> {
-                    // todo delete player
-                    dialogInterface.dismiss();
+                    players.remove(adapterPosition);
+                    playersAdapter.notifyItemRemoved(adapterPosition);
+                    matchSettingsView.removePlayer(player);
+                    dialogInterface1.dismiss();
                 });
                 db.create().show();
-                dialogInterface.dismiss();
             });
         }
-
         dialogBuilder.create().show();
+    }
+
+    public void updatePlayersAdapter(List<Player> players) {
+        int size = playersAdapter.getItemCount();
+        this.players.addAll(players);
+        playersAdapter.notifyItemRangeChanged(size, players.size());
     }
 }

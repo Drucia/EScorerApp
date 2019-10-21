@@ -14,6 +14,8 @@ public interface IMatchSettingsMVP {
     interface IView{
         void onPreparePlayerListsEventSucceeded(List<Player> players);
         void onPreparePlayerListEventFailed(String error);
+        void addPlayer(Player player);
+        void removePlayer(Player player);
     }
 
     interface IFragmentView {
@@ -23,5 +25,7 @@ public interface IMatchSettingsMVP {
     interface IPresenter{
         void onPreparePlayersListEventCompleted(Result<List<Player>> result);
         void preparePlayersOfTeams(int hostId, int guestId);
+        void addPlayer(Player player);
+        void removePlayer(Player player);
     }
 }

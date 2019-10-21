@@ -20,13 +20,13 @@ public class Player {
     @Expose
     private char sex;
 
-    @SerializedName("teamId")
+    @SerializedName("team")
     @Expose
     private Team team;
 
     private boolean isLibero;
     private boolean isCaptain;
-    private int number;
+    private int number = 0;
 
     public Player() {
     }
@@ -37,6 +37,16 @@ public class Player {
         this.surname = surname;
         this.sex = sex;
         this.team = team;
+    }
+
+    public Player(String name, String surname, Team team, boolean isLibero, boolean isCaptain, int number) {
+        this.name = name;
+        this.surname = surname;
+        this.team = team;
+        this.isLibero = isLibero;
+        this.isCaptain = isCaptain;
+        this.number = number;
+        this.id = -1;
     }
 
     public int getId() {

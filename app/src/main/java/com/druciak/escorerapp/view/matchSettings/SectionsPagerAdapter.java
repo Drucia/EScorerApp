@@ -55,14 +55,14 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                         .filter(player -> player.getTeam().getId() == match.getHostTeam().getId())
                         .collect(Collectors.toList());
                 currentFragment = new TeamSettingsFragment((IMatchSettingsMVP.IView) mContext,
-                        match.getHostTeam().getFullName(), playersOfHost);
+                        match.getHostTeam(), playersOfHost);
                 return currentFragment;
             case 1:
                 List<Player> playersOfGuest = players.stream()
                         .filter(player -> player.getTeam().getId() == match.getGuestTeam().getId())
                         .collect(Collectors.toList());
                 currentFragment = new TeamSettingsFragment((IMatchSettingsMVP.IView) mContext,
-                        match.getGuestTeam().getFullName(), playersOfGuest);
+                        match.getGuestTeam(), playersOfGuest);
                 return currentFragment;
             case 2:
                 currentFragment = PlaceholderFragment.newInstance(layout);

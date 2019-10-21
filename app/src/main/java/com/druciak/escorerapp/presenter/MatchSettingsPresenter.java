@@ -11,6 +11,8 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     private IMatchSettingsMVP.IModel externalManager;
     private IMatchSettingsMVP.IView view;
 
+    private List<Player> players;
+
     public MatchSettingsPresenter(IMatchSettingsMVP.IView view) {
         this.externalManager = new ExternalApiManager(this);
         this.view = view;
@@ -19,7 +21,8 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     @Override
     public void onPreparePlayersListEventCompleted(Result<List<Player>> result) {
         if (result instanceof Result.Success) {
-            view.onPreparePlayerListsEventSucceeded(((Result.Success<List<Player>>) result).getData());
+            players = ((Result.Success<List<Player>>) result).getData();
+            view.onPreparePlayerListsEventSucceeded(players);
         }
         else
             view.onPreparePlayerListEventFailed(((Result.Error) result).getError().getMessage());
@@ -28,5 +31,15 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     @Override
     public void preparePlayersOfTeams(int hostId, int guestId) {
         externalManager.getAllPlayersOfTeams(hostId, guestId);
+    }
+
+    @Override
+    public void addPlayer(Player player) {
+        players.add(player);
+    }
+
+    @Override
+    public void removePlayer(Player player) {
+        players.remove(player);
     }
 }

@@ -48,4 +48,14 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     public void onPreparePlayerListEventFailed(String error) {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void addPlayer(Player player) {
+        presenter.addPlayer(player);
+    }
+
+    @Override
+    public void removePlayer(Player player) {
+        presenter.removePlayer(player);
+    }
 }

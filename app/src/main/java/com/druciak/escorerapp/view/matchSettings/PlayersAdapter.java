@@ -1,6 +1,6 @@
 package com.druciak.escorerapp.view.matchSettings;
 
-import android.graphics.Typeface;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,24 +15,15 @@ import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.model.entities.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHolder> {
-    private List<Player> listItems = new ArrayList<>();
+    private List<Player> listItems;
     private IMatchSettingsMVP.IFragmentView callback;
 
-    public PlayersAdapter(IMatchSettingsMVP.IFragmentView view) {
+    public PlayersAdapter(IMatchSettingsMVP.IFragmentView view, List<Player> players) {
         this.callback = view;
-    }
-
-    public List<Player> getListItems() {
-        return listItems;
-    }
-
-    public void setListItems(List<Player> listItems) {
-        this.listItems = listItems;
-        this.notifyDataSetChanged();
+        this.listItems = players;
     }
 
     @NonNull
@@ -47,11 +38,18 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
         Player player = listItems.get(position);
         holder.name.setText(player.getName());
         holder.surname.setText(player.getSurname());
+
         if (player.isCaptain())
-            holder.number.setTypeface(holder.number.getTypeface(), Typeface.BOLD);
+            holder.number.setPaintFlags(holder.number.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         else
-            holder.number.setTypeface(holder.number.getTypeface(), Typeface.NORMAL);
+            holder.number.setPaintFlags(holder.number.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
+
         holder.number.setText(player.getNumber() == 0 ? "" : String.valueOf(player.getNumber()));
+
+        if (player.isLibero())
+            holder.shirt.setImageResource(R.drawable.libero_shirt);
+        else
+            holder.shirt.setImageResource(R.drawable.player_shirt);
     }
 
     @Override
