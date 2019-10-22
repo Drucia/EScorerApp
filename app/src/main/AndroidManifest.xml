@@ -16,6 +16,7 @@
             android:name=".view.matchSettings.MatchSettingsActivity"
             android:parentActivityName=".view.mainPanel.MainPanelActivity"
             android:label="@string/title_activity_match_settings"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".view.WelcomeActivity"

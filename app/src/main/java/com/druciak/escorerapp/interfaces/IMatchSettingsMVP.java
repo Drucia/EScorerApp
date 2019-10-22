@@ -16,6 +16,10 @@ public interface IMatchSettingsMVP {
         void onPreparePlayerListEventFailed(String error);
         void addPlayer(Player player);
         void removePlayer(Player player);
+        void removeCoach(String toString);
+        void removeMedicine(String toString);
+        void addCoach(String toString);
+        void addMedicine(String toString);
     }
 
     interface IFragmentView {

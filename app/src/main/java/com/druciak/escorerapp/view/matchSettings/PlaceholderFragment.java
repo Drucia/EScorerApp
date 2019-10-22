@@ -29,7 +29,7 @@ public class PlaceholderFragment extends Fragment {
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        int layout = R.layout.fragment_team_setting_page;
+        int layout = R.layout.fragment_match_settings;
         if (getArguments() != null) {
             layout = getArguments().getInt(ARG_SECTION_LAYOUT_ID);
         }

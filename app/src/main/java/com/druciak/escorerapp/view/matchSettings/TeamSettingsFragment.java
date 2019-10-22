@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,13 +20,17 @@ import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.model.entities.Player;
 import com.druciak.escorerapp.model.entities.Team;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.IFragmentView{
     private static final int MAX_NUMBER_OF_COACH = 3;
@@ -34,20 +39,21 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     private static final int MAX_NUMBER_OF_PLAYERS = 14;
     private static final int MAX_NUMBER_OF_PLAYERS_WITH_ONE_LIBERO = 12;
     private static final int MIN_NUMBER_OF_PLAYERS_FOR_LIBERO = 6;
+    private static final int NO_CAPTAIN_CHOSEN = -1;
 
     private int chipCoachCounter = 0;
     private int chipMedicineCounter = 0;
-    private int liberoCounter = 0;
-    private boolean isCaptainChosen = false;
+    private List<Integer> liberoNumbers = new ArrayList<>();
+    private int captainNumber = NO_CAPTAIN_CHOSEN;
 
     private PlayersAdapter playersAdapter;
     private List<Player> players;
-    private RecyclerView playerRecycler;
     private IMatchSettingsMVP.IView matchSettingsView;
-    private SpeedDialView speedDialView;
     private ChipGroup coachChipGroup;
     private ChipGroup medicineChipGroup;
     private Team team;
+    private ImageView liberoShirt;
+    private ImageView captainShirt;
 
     public TeamSettingsFragment(IMatchSettingsMVP.IView mContext, Team team,
                                 List<Player> playersOfHost) {
@@ -62,10 +68,10 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_team_setting_page, container, false);
-        playerRecycler = root.findViewById(R.id.playersRecyclerView);
+        RecyclerView playerRecycler = root.findViewById(R.id.playersRecyclerView);
         playerRecycler.setAdapter(playersAdapter);
         playerRecycler.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        speedDialView = root.findViewById(R.id.speedDial);
+        SpeedDialView speedDialView = root.findViewById(R.id.speedDial);
         coachChipGroup = root.findViewById(R.id.coachChips);
         medicineChipGroup = root.findViewById(R.id.medicineChips);
         speedDialView.addActionItem(
@@ -107,8 +113,98 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
             }
             return false;
         });
-        ((TextView) root.findViewById(R.id.teamName)).setText(team.getFullName());
+        ((TextInputLayout) root.findViewById(R.id.teamName)).getEditText().setText(team.getFullName());
+        ImageView playerShirtImage = root.findViewById(R.id.playerShirtImage);
+        playerShirtImage.setOnClickListener(view -> {
+            showPopUpWithColors();
+        });
+
+        LinearLayout liberoLayout = root.findViewById(R.id.liberoLayout);
+        LinearLayout captainLayout = root.findViewById(R.id.captainLayout);
+        liberoLayout.setOnClickListener(view -> showFunctionsPopUp(false));
+        captainLayout.setOnClickListener(view -> showFunctionsPopUp(true));
         return root;
+    }
+
+    private void showFunctionsPopUp(boolean isCaptainPopUp)
+    {
+        List<Player> playersWithNumbers = players.stream().filter(player -> player.getNumber() != 0)
+                .sorted(Comparator.comparingInt(Player::getNumber)).collect(Collectors.toList());
+        List<Integer> numbers = playersWithNumbers.stream()
+                .map(Player::getNumber).sorted(Comparator.comparingInt(integer -> integer))
+                .collect(Collectors.toList());
+
+        if (isCaptainPopUp)
+            showFunctionsPopUp(numbers.stream()
+                    .filter(n -> !liberoNumbers.contains(n))
+                    .collect(Collectors.toList()), true);
+        else
+            showFunctionsPopUp(numbers.stream()
+                    .filter(n -> n != captainNumber)
+                    .collect(Collectors.toList()), false);
+    }
+
+    private void showFunctionsPopUp(List<Integer> numbers, boolean isCaptainPopUp) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        View view = getLayoutInflater().inflate(R.layout.pop_up_functions, null);
+        dialogBuilder.setView(view);
+        dialogBuilder.setTitle(isCaptainPopUp ? "Wybierz kapitana" : "Wybierz libero");
+        dialogBuilder.setCancelable(true);
+        ChipGroup group = view.findViewById(R.id.functionsChipGroup);
+        group.setSingleSelection(true);
+
+        for (Integer number : numbers)
+        {
+            // todo if will be time
+            Chip chip = new Chip(getContext());
+//            newChip.setId(number);
+//            newChip.setChipDrawable(ChipDrawable.createFromResource(group.getContext(),
+//                    R.xml.default_chip));
+//            newChip.setText(number < 10 ? " " + String.valueOf(number) + " " : String.valueOf(number));
+//            newChip.setCheckable(true);
+//            newChip.setChecked(isCaptainPopUp ? captainNumber == number : liberoNumbers.contains(number));
+//            newChip.setChipBackgroundColorResource(newChip.isChecked() ? R.color.colorPrimary : R.color.chipColor);
+            ChipDrawable chipDrawable = ChipDrawable.createFromAttributes(getContext(), null, 0, R.style.Widget_MaterialComponents_Chip_Choice);
+            chip.setChipDrawable(chipDrawable);
+            chip.setText(String.valueOf(number));
+            group.addView(chip);
+        }
+
+        group.setOnCheckedChangeListener((chipGroup, i) -> {
+            Chip chip = chipGroup.findViewById(i);
+            if(chip != null){
+                Toast.makeText(chipGroup.getContext(), chip.getText().toString(),Toast.LENGTH_LONG).show();
+            }
+        });
+
+        dialogBuilder.setPositiveButton("Zapisz", (dialogInterface, i) -> {
+            if (isCaptainPopUp) {
+                Chip selected = view.findViewById(group.getCheckedChipId());
+                if (selected != null) {
+                    int number = Integer.valueOf(selected.getText().toString());
+                    if (number != captainNumber) {
+                        Player p = players.stream()
+                                .filter(player -> player.getNumber() == number).findAny().get();
+                        int idx = players.indexOf(p);
+                        p.setCaptain(true);
+                        playersAdapter.notifyItemChanged(idx);
+                    }
+                }
+            } else {
+                // todo make implementation for ok event
+            }
+            dialogInterface.dismiss();});
+        dialogBuilder.create().show();
+    }
+
+    private void showPopUpWithColors() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        View view = getLayoutInflater().inflate(R.layout.pop_up_colors, null);
+        dialogBuilder.setView(view);
+        dialogBuilder.setTitle("Wybierz kolor koszulki");
+        dialogBuilder.setCancelable(true);
+        // todo set on click
+        dialogBuilder.create().show();
     }
 
     void showPopUpWithAddedTeamMemberFields(int id, String data, int chipId)
@@ -139,16 +235,18 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
             if (isNew) {
                 Chip chip = new Chip(isCoach ? coachChipGroup.getContext() : medicineChipGroup.getContext());
                 chip.setText(name + " " + surname);
-                chip.setChipBackgroundColorResource(R.color.colorPrimary);
+                chip.setChipBackgroundColorResource(R.color.defaultColor);
                 chip.setCloseIconVisible(true);
                 chip.setOnCloseIconClickListener(chipView -> {
                     if (R.id.coachFab == id) {
                         coachChipGroup.removeView(chipView);
                         chipCoachCounter--;
+                        matchSettingsView.removeCoach(chip.getText().toString());
                     }
                     else {
                         medicineChipGroup.removeView(chipView);
                         chipMedicineCounter--;
+                        matchSettingsView.removeMedicine(chip.getText().toString());
                     }
                 });
 
@@ -158,9 +256,11 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                 if (R.id.coachFab == id) {
                     coachChipGroup.addView(chip);
                     chipCoachCounter++;
+                    matchSettingsView.addCoach(chip.getText().toString());
                 } else {
                     medicineChipGroup.addView(chip);
                     chipMedicineCounter++;
+                    matchSettingsView.addMedicine(chip.getText().toString());
                 }
             } else {
                 Chip chip = isCoach ? coachChipGroup.findViewById(chipId)
@@ -206,31 +306,49 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         }
 
         captain.setOnCheckedChangeListener((compoundButton, isOn) -> {
-            if (isOn && isCaptainChosen) {
+            if (isOn && captainNumber != NO_CAPTAIN_CHOSEN) {
                 Toast.makeText(getContext(), "Wybrano już kapitana", Toast.LENGTH_SHORT).show();
                 captain.setChecked(false);
             } else if (isOn){
-                if (libero.isChecked()) {
-                    libero.setChecked(false);
-                    liberoCounter--;
+                String sNumber = number.getEditText().getText().toString();
+                if (sNumber.equals("")) {
+                    Toast.makeText(getContext(), "Wprowadź numer zawodnika", Toast.LENGTH_SHORT).show();
+                    captain.setChecked(false);
                 }
-                isCaptainChosen = true;
+                else {
+                    captain.setChecked(true);
+                    Integer iNumber = Integer.valueOf(sNumber);
+                    if (libero.isChecked()) {
+                        libero.setChecked(false);
+                        liberoNumbers.remove(iNumber);
+                    }
+                    captainNumber = iNumber;
+                }
             } else {
-                isCaptainChosen = false;
+                captainNumber = NO_CAPTAIN_CHOSEN;
             }
         });
 
         libero.setOnCheckedChangeListener((compoundButton, isOn) -> {
-            if (isOn && liberoCounter < MAX_NUMBER_OF_LIBERO) {
-                libero.setChecked(true);
-                liberoCounter++;
-                if (captain.isChecked()) {
-                    captain.setChecked(false);
-                    isCaptainChosen = false;
+            if (isOn && liberoNumbers.size() < MAX_NUMBER_OF_LIBERO) { // if can be libero
+                String sNumber = number.getEditText().getText().toString();
+                if (sNumber.equals("")) {
+                    libero.setChecked(false);
+                    Toast.makeText(getContext(), "Wprowadź numer zawodnika", Toast.LENGTH_SHORT).show();
+                } else
+                {
+                    libero.setChecked(true);
+                    liberoNumbers.add(Integer.valueOf(sNumber));
+                    if (captain.isChecked()) {
+                        captain.setChecked(false);
+                        captainNumber = NO_CAPTAIN_CHOSEN;
+                    }
                 }
-            } else if (isOn) {
+            } else if (isOn) { // if too much libero
                 libero.setChecked(false);
                 Toast.makeText(getContext(), "Masz za dużo libero", Toast.LENGTH_SHORT).show();
+            } else {
+                liberoNumbers.remove(Integer.valueOf(number.getEditText().getText().toString()));
             }
         });
 
@@ -275,6 +393,10 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                 db.setNegativeButton("NIE", (dialogInterface1, i1) -> {dialogInterface1.cancel(); showPopUpForPlayer(player, adapterPosition);});
                 db.setPositiveButton("TAK", (dialogInterface1, i1) -> {
                     players.remove(adapterPosition);
+                    if (player.isLibero())
+                        liberoNumbers.remove(player.getNumber());
+                    if (player.isCaptain())
+                        captainNumber = NO_CAPTAIN_CHOSEN;
                     playersAdapter.notifyItemRemoved(adapterPosition);
                     matchSettingsView.removePlayer(player);
                     dialogInterface1.dismiss();

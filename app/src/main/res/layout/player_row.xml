@@ -16,7 +16,8 @@
             android:id="@+id/shirtImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            app:srcCompat="@drawable/player_shirt" />
+            android:background="@drawable/player_shirt"
+            android:backgroundTint="@color/defaultColor" />
 
         <TextView
             android:id="@+id/numberTextView"
