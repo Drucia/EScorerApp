@@ -58,4 +58,24 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     public void removePlayer(Player player) {
         presenter.removePlayer(player);
     }
+
+    @Override
+    public void removeCoach(String toString) {
+
+    }
+
+    @Override
+    public void removeMedicine(String toString) {
+
+    }
+
+    @Override
+    public void addCoach(String toString) {
+
+    }
+
+    @Override
+    public void addMedicine(String toString) {
+
+    }
 }
