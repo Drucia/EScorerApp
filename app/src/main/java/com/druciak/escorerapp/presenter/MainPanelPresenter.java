@@ -46,8 +46,14 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
             loggedInUser = ((Result.Success<LoggedInUser>) user).getData();
             view.setLoggedInUserFields(loggedInUser.getFullName(), loggedInUser.getEmail());
         }
-        else
-            view.showPopUpWithSetUserFields();
+        else {
+            String errCode = ((Result.Error) user).getError().getMessage();
+            if (errCode.equals("500")) {
+                logout();
+                view.onLogoutCompleted();
+            } else
+                view.showPopUpWithSetUserFields();
+        }
     }
 
     @Override

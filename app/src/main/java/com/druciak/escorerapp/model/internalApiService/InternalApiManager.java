@@ -101,7 +101,7 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
                     }
                 }
                 else
-                    mainPanelPresenter.onGetUserEventComplete(new Result.Error(new Exception(response.message())));
+                    mainPanelPresenter.onGetUserEventComplete(new Result.Error(new Exception(String.valueOf(response.code()))));
             }
 
             @Override

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,6 @@ import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.model.entities.Player;
 import com.druciak.escorerapp.model.entities.Team;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
@@ -52,8 +52,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     private ChipGroup coachChipGroup;
     private ChipGroup medicineChipGroup;
     private Team team;
-    private ImageView liberoShirt;
-    private ImageView captainShirt;
+    private TextView captainShirtNumber;
 
     public TeamSettingsFragment(IMatchSettingsMVP.IView mContext, Team team,
                                 List<Player> playersOfHost) {
@@ -74,6 +73,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         SpeedDialView speedDialView = root.findViewById(R.id.speedDial);
         coachChipGroup = root.findViewById(R.id.coachChips);
         medicineChipGroup = root.findViewById(R.id.medicineChips);
+        captainShirtNumber = root.findViewById(R.id.capitanNumber);
         speedDialView.addActionItem(
                 new SpeedDialActionItem.Builder(R.id.medicineFab, R.drawable.medicine)
                         .setLabel("Masażysta")
@@ -151,31 +151,23 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         dialogBuilder.setTitle(isCaptainPopUp ? "Wybierz kapitana" : "Wybierz libero");
         dialogBuilder.setCancelable(true);
         ChipGroup group = view.findViewById(R.id.functionsChipGroup);
-        group.setSingleSelection(true);
+        group.setSingleSelection(isCaptainPopUp);
+        group.setOnCheckedChangeListener((chipGroup, i) -> {
+            changeCaptain(i);
+        });
 
         for (Integer number : numbers)
         {
             // todo if will be time
-            Chip chip = new Chip(getContext());
-//            newChip.setId(number);
-//            newChip.setChipDrawable(ChipDrawable.createFromResource(group.getContext(),
-//                    R.xml.default_chip));
-//            newChip.setText(number < 10 ? " " + String.valueOf(number) + " " : String.valueOf(number));
-//            newChip.setCheckable(true);
-//            newChip.setChecked(isCaptainPopUp ? captainNumber == number : liberoNumbers.contains(number));
+            Chip newChip = (Chip) getLayoutInflater().inflate(R.layout.chip, group, false);
+            newChip.setId(number);
+            newChip.setText(number < 10 ? " " + String.valueOf(number) + " " : String.valueOf(number));
 //            newChip.setChipBackgroundColorResource(newChip.isChecked() ? R.color.colorPrimary : R.color.chipColor);
-            ChipDrawable chipDrawable = ChipDrawable.createFromAttributes(getContext(), null, 0, R.style.Widget_MaterialComponents_Chip_Choice);
-            chip.setChipDrawable(chipDrawable);
-            chip.setText(String.valueOf(number));
-            group.addView(chip);
-        }
-
-        group.setOnCheckedChangeListener((chipGroup, i) -> {
-            Chip chip = chipGroup.findViewById(i);
-            if(chip != null){
-                Toast.makeText(chipGroup.getContext(), chip.getText().toString(),Toast.LENGTH_LONG).show();
+            group.addView(newChip);
+            if (isCaptainPopUp && captainNumber == number){
+                group.check(newChip.getId());
             }
-        });
+        }
 
         dialogBuilder.setPositiveButton("Zapisz", (dialogInterface, i) -> {
             if (isCaptainPopUp) {
@@ -194,7 +186,29 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                 // todo make implementation for ok event
             }
             dialogInterface.dismiss();});
+
         dialogBuilder.create().show();
+    }
+
+    private void changeCaptain(int captainNumber) {
+        int oldCap = this.captainNumber;
+        if (oldCap != NO_CAPTAIN_CHOSEN){
+            if (oldCap == captainNumber)
+                return;
+            Player oldCapP = players.stream()
+                    .filter(player -> player.getNumber() == oldCap).findAny().get();
+            oldCapP.setCaptain(false);
+            playersAdapter.notifyItemChanged(players.indexOf(oldCapP));
+            if (captainNumber == NO_CAPTAIN_CHOSEN)
+                return;
+        }
+
+        Player newCap = players.stream()
+                .filter(player -> player.getNumber() == captainNumber).findAny().get();
+        newCap.setCaptain(true);
+        playersAdapter.notifyItemChanged(players.indexOf(newCap));
+        captainShirtNumber.setText(String.valueOf(captainNumber));
+        this.captainNumber = captainNumber;
     }
 
     private void showPopUpWithColors() {

@@ -8,4 +8,11 @@
         <item>SC</item>
         <item>M</item>
     </string-array>
+
+    <string-array name="matchType">
+        <item>Młodzicy</item>
+        <item>Kadeci</item>
+        <item>Juniorzy</item>
+        <item>Seniorzy</item>
+    </string-array>
 </resources>
