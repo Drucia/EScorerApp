@@ -1,9 +1,12 @@
 package com.druciak.escorerapp.model.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Player {
+public class Player implements Parcelable {
     @SerializedName("id")
     @Expose
     private int id;
@@ -48,6 +51,46 @@ public class Player {
         this.number = number;
         this.id = -1;
     }
+
+    protected Player(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        surname = in.readString();
+        sex = (char) in.readInt();
+        team = in.readParcelable(Team.class.getClassLoader());
+        isLibero = in.readByte() != 0;
+        isCaptain = in.readByte() != 0;
+        number = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(surname);
+        dest.writeInt((int) sex);
+        dest.writeParcelable(team, flags);
+        dest.writeByte((byte) (isLibero ? 1 : 0));
+        dest.writeByte((byte) (isCaptain ? 1 : 0));
+        dest.writeInt(number);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Player> CREATOR = new Creator<Player>() {
+        @Override
+        public Player createFromParcel(Parcel in) {
+            return new Player(in);
+        }
+
+        @Override
+        public Player[] newArray(int size) {
+            return new Player[size];
+        }
+    };
 
     public int getId() {
         return id;

@@ -103,26 +103,6 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
     }
 
     @Override
-    public void getAllTeams() {
-//        this.getTeamService().getTeams().enqueue(new Callback<List<Team>>() {
-//            @Override
-//            public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
-//                List<Team> teams = response.body();
-//
-//                if (teams != null)
-//                    presenter.onPrepareTeamListEventCompleted(new Result.Success(teams));
-//                else
-//                    presenter.onPrepareTeamListEventCompleted(new Result.Error(new Exception("Team Body is empty")));
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Team>> call, Throwable t) {
-//                presenter.onPrepareTeamListEventCompleted(new Result.Error(new Exception("Team Connection error")));
-//            }
-//        });
-    }
-
-    @Override
     public void getAllPlayersOfTeams(int hostId, int guestId) {
 //        this.getPlayerService().getPlayersOfTeam(teamId).enqueue(new Callback<List<Player>>() {
 //            @Override

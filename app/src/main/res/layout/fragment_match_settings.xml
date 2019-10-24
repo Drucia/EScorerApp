@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".view.matchSettings.PlaceholderFragment">
+    tools:context=".view.matchSettings.MatchSettingsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,6 +17,7 @@
             android:id="@+id/tournamentName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="Nazwa rozgrywek">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -45,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:layout_weight="0"
+                android:checked="true"
                 android:text="Zasadnicza" />
 
             <RadioButton
@@ -56,39 +58,51 @@
 
         </RadioGroup>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:layout_marginTop="7dp"
-            android:text="Rodzaj" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/spinnerType"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="40dp"
                 android:layout_weight="2"
-                android:entries="@array/matchType" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="7dp"
+                    android:text="Rodzaj" />
+
+                <Spinner
+                    android:id="@+id/spinnerType"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="0dp"
+                    android:entries="@array/matchType" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/imageViewSex"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:src="@drawable/referee" />
+                android:contentDescription="man"
+                android:src="@drawable/man" />
         </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/town"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="Miejscowość">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -100,6 +114,7 @@
             android:id="@+id/street"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="Ulica">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -111,6 +126,7 @@
             android:id="@+id/hall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="Hala">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -122,6 +138,7 @@
             android:id="@+id/refereeFirst"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="Sędzia I">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -133,6 +150,7 @@
             android:id="@+id/refereeSnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="Sędzia II">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -221,7 +239,7 @@
             android:layout_marginTop="18dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="Rozpocznij mecz"
+            android:text="Losowanie"
             android:textSize="20sp"
             app:cornerRadius="15dp" />
     </LinearLayout>

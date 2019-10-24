@@ -20,6 +20,7 @@ import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.model.entities.Player;
 import com.druciak.escorerapp.model.entities.Team;
+import com.druciak.escorerapp.model.entities.TeamAdditionalMember;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -162,14 +163,13 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
             Chip newChip = (Chip) getLayoutInflater().inflate(R.layout.chip, group, false);
             newChip.setId(number);
             newChip.setText(number < 10 ? " " + String.valueOf(number) + " " : String.valueOf(number));
-//            newChip.setChipBackgroundColorResource(newChip.isChecked() ? R.color.colorPrimary : R.color.chipColor);
             group.addView(newChip);
             if (isCaptainPopUp && captainNumber == number){
                 group.check(newChip.getId());
             }
         }
 
-        dialogBuilder.setPositiveButton("Zapisz", (dialogInterface, i) -> {
+        dialogBuilder.setPositiveButton("Ok", (dialogInterface, i) -> {
             if (isCaptainPopUp) {
                 Chip selected = view.findViewById(group.getCheckedChipId());
                 if (selected != null) {
@@ -255,12 +255,14 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                     if (R.id.coachFab == id) {
                         coachChipGroup.removeView(chipView);
                         chipCoachCounter--;
-                        matchSettingsView.removeCoach(chip.getText().toString());
+                        matchSettingsView.removeAdditionalMember(chip.getText().toString(),
+                                team.getId(), TeamAdditionalMember.COACH_MEMBER_ID);
                     }
                     else {
                         medicineChipGroup.removeView(chipView);
                         chipMedicineCounter--;
-                        matchSettingsView.removeMedicine(chip.getText().toString());
+                        matchSettingsView.removeAdditionalMember(chip.getText().toString(),
+                                team.getId(), TeamAdditionalMember.MEDICINE_MEMBER_ID);
                     }
                 });
 
@@ -270,11 +272,13 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                 if (R.id.coachFab == id) {
                     coachChipGroup.addView(chip);
                     chipCoachCounter++;
-                    matchSettingsView.addCoach(chip.getText().toString());
+                    matchSettingsView.addAdditionalMember(chip.getText().toString(), team.getId(),
+                            TeamAdditionalMember.COACH_MEMBER_ID);
                 } else {
                     medicineChipGroup.addView(chip);
                     chipMedicineCounter++;
-                    matchSettingsView.addMedicine(chip.getText().toString());
+                    matchSettingsView.addAdditionalMember(chip.getText().toString(), team.getId(),
+                            TeamAdditionalMember.MEDICINE_MEMBER_ID);
                 }
             } else {
                 Chip chip = isCoach ? coachChipGroup.findViewById(chipId)

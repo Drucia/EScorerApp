@@ -45,9 +45,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        int layout = R.layout.fragment_match_settings;
         switch(position)
         {
             case 0:
@@ -65,10 +62,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                         match.getGuestTeam(), playersOfGuest);
                 return currentFragment;
             case 2:
-                currentFragment = PlaceholderFragment.newInstance(layout);
+                currentFragment = new MatchSettingsFragment((IMatchSettingsMVP.IView) mContext);
                 return currentFragment;
         }
-        return PlaceholderFragment.newInstance(layout);
+        return new MatchSettingsFragment((IMatchSettingsMVP.IView) mContext);
     }
 
     @Nullable

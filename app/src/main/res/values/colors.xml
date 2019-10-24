@@ -14,4 +14,5 @@
     <color name="black_overlay">#66000000</color>
     <color name="line_light">#E6FFFFFF</color>
     <color name="line_dark">#66000000</color>
+    <color name="black">#B7000000</color>
 </resources>
