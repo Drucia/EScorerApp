@@ -160,7 +160,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         for (Integer number : numbers)
         {
             // todo if will be time
-            Chip newChip = (Chip) getLayoutInflater().inflate(R.layout.chip, group, false);
+            Chip newChip = (Chip) getLayoutInflater().inflate(R.layout.default_chip, group, false);
             newChip.setId(number);
             newChip.setText(number < 10 ? " " + String.valueOf(number) + " " : String.valueOf(number));
             group.addView(newChip);
