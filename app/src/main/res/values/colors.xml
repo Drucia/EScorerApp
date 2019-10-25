@@ -15,4 +15,5 @@
     <color name="line_light">#E6FFFFFF</color>
     <color name="line_dark">#66000000</color>
     <color name="black">#B7000000</color>
+    <color name="red">#D32F2F</color>
 </resources>
