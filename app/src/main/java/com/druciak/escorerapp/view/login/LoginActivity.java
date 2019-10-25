@@ -6,14 +6,15 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
+import com.druciak.escorerapp.model.entities.LoggedInUser;
 import com.druciak.escorerapp.presenter.LoginFormState;
 import com.druciak.escorerapp.presenter.LoginPresenter;
 import com.druciak.escorerapp.view.createAccount.CreateAccountActivity;
@@ -36,6 +37,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
     private MaterialButton loginButton;
     private TextInputLayout usernameEditTextLayout;
     private TextInputLayout passwordEditTextLayout;
+    private AlertDialog loginProgress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,11 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
         final TextView createAccount = findViewById(R.id.createAccount);
         final TextView googleText = findViewById(R.id.googleText);
         final ImageView googleImage = findViewById(R.id.googleImage);
-        final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logowanie...");
+        builder.setView(getLayoutInflater().inflate(R.layout.pop_up_progress_bar, null));
+        builder.setCancelable(false);
+        loginProgress = builder.create();
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -75,40 +81,26 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
         usernameEditText.addTextChangedListener(textWatcher);
         passwordEditText.addTextChangedListener(textWatcher);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                presenter.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-            }
+        loginButton.setOnClickListener(v -> {
+            loginProgress.show();
+            presenter.login(usernameEditText.getText().toString(),
+                    passwordEditText.getText().toString());
         });
 
-        forgotPassword.setOnClickListener(new TextView.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-                //TODO make popup with reset password
+        forgotPassword.setOnClickListener(view -> {
+            //TODO make popup with reset password
 //                loginViewModel.forgotPassword(LoginActivity.this, usernameEditText.getEditText().getText().toString(),
 //                        passwordEditText.getEditText().getText().toString());
-            }
         });
 
-        createAccount.setOnClickListener(new TextView.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
-                startActivity(intent);
-            }
+        createAccount.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
+            startActivity(intent);
         });
 
-        View.OnClickListener googleLoginListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.clickedLoginWithGoogle(LoginActivity.this);
-                loadingProgressBar.setVisibility(View.VISIBLE);
-            }
+        View.OnClickListener googleLoginListener = view -> {
+            presenter.clickedLoginWithGoogle(LoginActivity.this);
+            loginProgress.show();
         };
 
         googleText.setOnClickListener(googleLoginListener);
@@ -119,7 +111,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == SIGN_IN_BY_GOOGLE_REQ) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -127,12 +118,13 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 presenter.loginWithGoogle(account);
             } catch (ApiException e) {
-
+                // todo do sth
             }
         }
     }
 
     private void showLoginFailed(String errorString) {
+        loginProgress.dismiss();
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
@@ -156,10 +148,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
 
     @Override
     public void onLoginEventCompleteSuccessfully(FirebaseUser data) {
-        Intent intent = new Intent(this, MainPanelActivity.class);
-        intent.putExtra("user", data);
-        startActivity(intent);
-        finish();
+        loginProgress.show();
+        presenter.getUserAdditionalInfo(data);
     }
 
     @Override
@@ -173,8 +163,32 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
     }
 
     @Override
+    public void onGetUserLoggedInEventCompleteSuccess(FirebaseUser loggedInUser) {
+        Intent intent = new Intent(this, MainPanelActivity.class);
+        intent.putExtra("additional_info", false);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         presenter.activityIsStarted();
+    }
+
+    @Override
+    public void onGetUserAdditionalInfoEventFailure(String message) {
+        loginProgress.dismiss();
+        finish();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGetUserAdditionalInfoEventSuccess(LoggedInUser loggedInUser) {
+        Intent intent = new Intent(this, MainPanelActivity.class);
+        intent.putExtra("user", loggedInUser);
+        intent.putExtra("additional_info", true);
+        startActivity(intent);
+        finish();
     }
 }

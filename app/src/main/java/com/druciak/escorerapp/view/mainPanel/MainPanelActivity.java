@@ -63,7 +63,12 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         NavigationUI.setupWithNavController(navigationView, navController);
 
         presenter = new MainPanelPresenter(this);
-        presenter.createdActivity();
+        Intent intent = getIntent();
+        boolean isAdditionalInfo = intent.getBooleanExtra("additional_info", false);
+        if (!isAdditionalInfo)
+            showPopUpWithSetUserFields();
+        else
+            presenter.setLoggedInUser(intent.getParcelableExtra("user"));
     }
 
     @Override
@@ -119,13 +124,18 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
     }
 
     @Override
+    public void showErrorMsgAndFinish(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        finish();
+    }
+
+    @Override
     public void setLoggedInUserFields(String fullName, String email) {
         this.fullName.setText(fullName);
         this.email.setText(email);
     }
 
-    @Override
-    public void showPopUpWithSetUserFields() {
+    private void showPopUpWithSetUserFields() {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.pop_up_user_fields, null);
         dialogBuilder.setView(view);

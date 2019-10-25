@@ -12,9 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".view.RunningMatchActivity"></activity>
         <activity
             android:name=".view.DrawActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.matchSettings.MatchSettingsActivity"
             android:label="@string/title_activity_match_settings"

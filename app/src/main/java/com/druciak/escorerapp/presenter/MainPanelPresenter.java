@@ -22,7 +22,7 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
     private IMainPanelMVP.IMatchModel externalManager;
 
     public MainPanelPresenter(IMainPanelMVP.IView view) {
-        firebaseManager = new FirebaseManager(this);
+        firebaseManager = new FirebaseManager();
         userManager = new InternalApiManager(this);
         externalManager = new ExternalApiManager(this);
         this.view = view;
@@ -46,14 +46,8 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
             loggedInUser = ((Result.Success<LoggedInUser>) user).getData();
             view.setLoggedInUserFields(loggedInUser.getFullName(), loggedInUser.getEmail());
         }
-        else {
-            String errCode = ((Result.Error) user).getError().getMessage();
-            if (errCode.equals("500")) {
-                logout();
-                view.onLogoutCompleted();
-            } else
-                view.showPopUpWithSetUserFields();
-        }
+        else
+            view.showErrorMsgAndFinish("Błąd połączenia z serwerem");
     }
 
     @Override
@@ -76,5 +70,11 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
         if (result instanceof Result.Success) {
             view.showPopUpWithMatchToChoose(((Result.Success<List<Match>>) result).getData());
         }
+    }
+
+    @Override
+    public void setLoggedInUser(LoggedInUser user) {
+        this.loggedInUser = user;
+        view.setLoggedInUserFields(user.getFullName(), user.getEmail());
     }
 }

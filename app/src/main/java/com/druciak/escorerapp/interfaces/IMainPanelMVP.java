@@ -18,13 +18,14 @@ public interface IMainPanelMVP {
         void onCustomUserFieldsSaveClicked(String name, String surname);
         void clickOnDZPSMatch();
         void onPrepareMatchesListCompleted(Result<List<Match>> result);
+        void setLoggedInUser(LoggedInUser user);
     }
 
     interface IView{
         void onClick(int gameId);
         void onLogoutCompleted();
+        void showErrorMsgAndFinish(String msg);
         void setLoggedInUserFields(String fullName, String email);
-        void showPopUpWithSetUserFields();
         void showPopUpWithMatchToChoose(List<Match> matches);
     }
 

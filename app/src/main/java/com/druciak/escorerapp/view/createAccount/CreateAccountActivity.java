@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
@@ -32,7 +32,7 @@ public class CreateAccountActivity extends AppCompatActivity implements ICreateA
     private TextView refereeClassLabel;
     private TextInputLayout refereeCer;
     private Spinner refereeClass;
-    private ProgressBar progressBar;
+    private AlertDialog progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,12 @@ public class CreateAccountActivity extends AppCompatActivity implements ICreateA
         refereeClassLabel = findViewById(R.id.labelRefereeClass);
         refereeCer = findViewById(R.id.textInputRefereeCer);
         refereeClass = findViewById(R.id.spinnerRefereeClass);
-        progressBar = findViewById(R.id.progressBar);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Tworzenie konta...");
+        builder.setView(getLayoutInflater().inflate(R.layout.pop_up_progress_bar, null));
+        builder.setCancelable(false);
+        progressBar = builder.create();
 
         final TextInputLayout nameLayout = findViewById(R.id.textInputName);
         final TextInputLayout surnameLayout = findViewById(R.id.textInputSurname);
@@ -59,42 +64,36 @@ public class CreateAccountActivity extends AppCompatActivity implements ICreateA
         // TODO check if all fields are right fill in
 
         RadioGroup radioGroup = findViewById(R.id.radioGroupAccount);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int id) {
-                switch(id)
-                {
-                    case R.id.radioButtonReferee:
-                        onClick(imageViewLeft);
-                        break;
-                    case R.id.radioButtonOrganizer:
-                        onClick(imageViewRight);
-                        break;
-                }
+        radioGroup.setOnCheckedChangeListener((radioGroup1, id) -> {
+            switch(id)
+            {
+                case R.id.radioButtonReferee:
+                    onClick(imageViewLeft);
+                    break;
+                case R.id.radioButtonOrganizer:
+                    onClick(imageViewRight);
+                    break;
             }
         });
 
         MaterialButton button = findViewById(R.id.createAccountLabel);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-                if (radioButtonReferee.isChecked()) {
-                    presenter.clickedCreateAccount(
-                            nameLayout.getEditText().getText().toString(),
-                            surnameLayout.getEditText().getText().toString(),
-                            emailLayout.getEditText().getText().toString(),
-                            passwordLayout.getEditText().getText().toString(),
-                            refereeCer.getEditText().getText().toString(),
-                            refereeClass.getSelectedItem().toString());
-                }
-                else {
-                    presenter.clickedCreateAccount(
-                            nameLayout.getEditText().getText().toString(),
-                            surnameLayout.getEditText().getText().toString(),
-                            emailLayout.getEditText().getText().toString(),
-                            passwordLayout.getEditText().getText().toString());
-                }
+        button.setOnClickListener(view -> {
+            progressBar.show();
+            if (radioButtonReferee.isChecked()) {
+                presenter.clickedCreateAccount(
+                        nameLayout.getEditText().getText().toString(),
+                        surnameLayout.getEditText().getText().toString(),
+                        emailLayout.getEditText().getText().toString(),
+                        passwordLayout.getEditText().getText().toString(),
+                        refereeCer.getEditText().getText().toString(),
+                        refereeClass.getSelectedItem().toString());
+            }
+            else {
+                presenter.clickedCreateAccount(
+                        nameLayout.getEditText().getText().toString(),
+                        surnameLayout.getEditText().getText().toString(),
+                        emailLayout.getEditText().getText().toString(),
+                        passwordLayout.getEditText().getText().toString());
             }
         });
 
@@ -137,15 +136,16 @@ public class CreateAccountActivity extends AppCompatActivity implements ICreateA
 
     @Override
     public void onCreateAccountSuccess(LoggedInUser data) {
-        progressBar.setVisibility(View.GONE);
         Intent intent = new Intent(this, MainPanelActivity.class);
+        intent.putExtra("user", data);
+        intent.putExtra("additional_info", true);
         startActivity(intent);
         finish();
     }
 
     @Override
     public void onCreateAccountFailed(String error) {
-        progressBar.setVisibility(View.GONE);
-        Toast.makeText(this, error, Toast.LENGTH_LONG);
+        progressBar.dismiss();
+        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
 }
