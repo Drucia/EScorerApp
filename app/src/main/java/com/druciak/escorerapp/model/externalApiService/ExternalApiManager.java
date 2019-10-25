@@ -74,13 +74,12 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
         teams.add(gwardia);
 
         // prepare matches
-        // a6vhS2jGZddait8YEiDaeqf8euh2 - Tomasz
-        // URdZLXrwoyRxdrgVx1CaciAUpBh1 - Maciej
+        // 5YAYc3t7jWea1SnDXYyQEH3gQ1p1 - Tomasz
 
-        matches.add(new Match(teams.get(1), teams.get(2), "a6vhS2jGZddait8YEiDaeqf8euh2"));
-        matches.add(new Match(teams.get(2), teams.get(3), "a6vhS2jGZddait8YEiDaeqf8euh2"));
-        matches.add(new Match(teams.get(1), teams.get(3), "a6vhS2jGZddait8YEiDaeqf8euh2"));
-        matches.add(new Match(teams.get(2), teams.get(1), "URdZLXrwoyRxdrgVx1CaciAUpBh1"));
+        matches.add(new Match(teams.get(0), teams.get(1), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+        matches.add(new Match(teams.get(1), teams.get(2), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+        matches.add(new Match(teams.get(0), teams.get(2), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+        matches.add(new Match(teams.get(1), teams.get(0), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
     }
 
     private void initializeRetrofit(String serverUrl)

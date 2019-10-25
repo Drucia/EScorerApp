@@ -22,28 +22,23 @@ import java.io.IOException;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class FirebaseManager implements ILoginMVP.IModel, ICreateAccountMVP.IFirebaseModel{
+    private static final FirebaseAuth userAuth = FirebaseAuth.getInstance();
     private ILoginMVP.IPresenter loginPresenter;
     private ICreateAccountMVP.IPresenter createPresenter;
-    private static final FirebaseAuth userAuth = FirebaseAuth.getInstance();
-    private static String test = "wspólne";
     private GoogleSignInClient mGoogleSignInClient;
     private InternalApiManager internalApiManager;
 
     public FirebaseManager() {
-        //userAuth = FirebaseAuth.getInstance();
-
     }
 
     public FirebaseManager(ILoginMVP.IPresenter loginPresenter)
     {
         this.loginPresenter = loginPresenter;
-        //userAuth = FirebaseAuth.getInstance();
     }
 
     public FirebaseManager(ICreateAccountMVP.IPresenter createPresenter)
     {
         this.createPresenter = createPresenter;
-        //userAuth = FirebaseAuth.getInstance();
         internalApiManager = new InternalApiManager(createPresenter);
     }
 
@@ -131,8 +126,6 @@ public class FirebaseManager implements ILoginMVP.IModel, ICreateAccountMVP.IFir
         userAuth.signOut();
         if (mGoogleSignInClient != null )
             mGoogleSignInClient.signOut();
-        FirebaseUser user = userAuth.getCurrentUser();
-        String p = "dupa";
     }
 
     @Override
