@@ -41,34 +41,68 @@
         android:paddingLeft="25dp"
         android:paddingRight="25dp">
 
-        <ImageView
-            android:id="@+id/leftAdopting"
+        <LinearLayout
+            android:id="@+id/leftAdoptingLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/m_adaption" />
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/leftServe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="50dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ball" />
+            <ImageView
+                android:id="@+id/leftAdopting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/m_adaption" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/rightAdopting"
+        <LinearLayout
+            android:id="@+id/leftServeLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/m_adaption" />
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/rightServe"
+            <ImageView
+                android:id="@+id/leftServe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="50dp"
+                app:srcCompat="@drawable/ball" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rightAdoptingLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ball" />
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/rightAdopting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/m_adaption" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rightServeLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/rightServe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ball" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -82,18 +116,39 @@
         android:paddingLeft="40dp"
         android:paddingRight="40dp">
 
-        <Spinner
-            android:id="@+id/leftTeam"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@drawable/spinner_border"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/rightTeam"
+            <Spinner
+                android:id="@+id/leftTeamSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:outlineProvider="none"
+                android:pointerIcon="none"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="7dp"
+            android:layout_weight="1"
+            android:background="@drawable/spinner_border"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/rightTeamSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton

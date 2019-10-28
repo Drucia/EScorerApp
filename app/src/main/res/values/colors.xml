@@ -16,4 +16,6 @@
     <color name="line_dark">#66000000</color>
     <color name="black">#B7000000</color>
     <color name="red">#D32F2F</color>
+    <color name="orange">#F57C00</color>
+    <color name="orange_overlay">#80F57C00</color>
 </resources>
