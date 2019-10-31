@@ -19,5 +19,9 @@ public interface IRunningMatchMVP {
         void onActivityCreated();
         void onFirstLineUpSet();
         void onSecondLineUpSet();
+        void onAttentionsClicked();
+        void onReturnActionClicked();
+        void onTeamsInfoClicked();
+        void onFinishMatchClicked();
     }
 }

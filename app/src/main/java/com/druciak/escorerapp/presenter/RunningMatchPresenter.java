@@ -28,4 +28,24 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     public void onSecondLineUpSet() {
         view.setAdapterWithPlayersLineUp(matchInfo.getTeamA().getLineUp(), matchInfo.getTeamB().getLineUp());
     }
+
+    @Override
+    public void onAttentionsClicked() {
+
+    }
+
+    @Override
+    public void onReturnActionClicked() {
+
+    }
+
+    @Override
+    public void onTeamsInfoClicked() {
+
+    }
+
+    @Override
+    public void onFinishMatchClicked() {
+
+    }
 }

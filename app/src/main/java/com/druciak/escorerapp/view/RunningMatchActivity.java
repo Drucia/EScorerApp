@@ -1,9 +1,15 @@
 package com.druciak.escorerapp.view;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +25,8 @@ import com.druciak.escorerapp.model.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.presenter.RunningMatchPresenter;
 import com.druciak.escorerapp.view.matchSettings.PlayersAdapter;
 import com.google.android.material.button.MaterialButton;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,20 +38,24 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     private static final int RIGHT_LINE_UP_ID = 1;
     private static final int LEFT_LINE_UP_ID = 2;
 
-    private static final HashMap<Integer, Integer> positionChange = new HashMap<Integer, Integer>(){{
-        put(1, 3);
-        put(3, 5);
-        put(5, 4);
-        put(4, 2);
-        put(2, 0);
-        put(0, 1);
-    }};
-
     private IRunningMatchMVP.IPresenter presenter;
     private PlayersAdapter adapterLeft;
     private PlayersAdapter adapterRight;
     private RecyclerView recyclerViewLeft;
     private RecyclerView recyclerViewRight;
+    private TextView leftTeamName;
+    private TextView rightTeamName;
+    private TextView bigScore;
+    private TextView leftSets;
+    private TextView rightSets;
+    private ImageView leftServe;
+    private ImageView rightServe;
+    private ImageView leftTime;
+    private ImageView rightTime;
+    private ImageView leftCards;
+    private ImageView rightCards;
+    private SpeedDialView speedDial;
+    private CoordinatorLayout mainPanel;
 
     private ArrayList<MatchPlayer> playersLeft;
     private ArrayList<MatchPlayer> playersRight;
@@ -53,6 +65,8 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_running_match);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 //        Intent intent = getIntent();
 //        MatchInfo info = intent.getParcelableExtra(MATCH_INFO_ID);
 
@@ -61,6 +75,58 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
 
         recyclerViewLeft = findViewById(R.id.leftPlayersRecyclerView);
         recyclerViewRight = findViewById(R.id.rightPlayersRecyclerView);
+        leftTeamName = findViewById(R.id.leftTeamName);
+        rightTeamName = findViewById(R.id.rightTeamName);
+        bigScore = findViewById(R.id.score);
+        leftSets = findViewById(R.id.leftSets);
+        rightSets = findViewById(R.id.rightSets);
+        leftServe = findViewById(R.id.leftServe);
+        rightServe = findViewById(R.id.rightServe);
+        leftTime = findViewById(R.id.hourglassLeft);
+        rightTime = findViewById(R.id.hourglassRight);
+        leftCards = findViewById(R.id.cardsLeft);
+        rightCards = findViewById(R.id.cardsRight);
+        speedDial = findViewById(R.id.speedDialRunningMatch);
+        mainPanel = findViewById(R.id.runningMatchPanel);
+
+        speedDial.addActionItem(
+                new SpeedDialActionItem.Builder(R.id.attentions, R.drawable.attention)
+                        .setLabel("Uwagi")
+                        .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.black_overlay, getTheme()))
+                        .create());
+        speedDial.addActionItem(
+                new SpeedDialActionItem.Builder(R.id.returnAction, R.drawable.back)
+                        .setLabel("Cofinj Akcję")
+                        .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.black_overlay, getTheme()))
+                        .create());
+        speedDial.addActionItem(
+                new SpeedDialActionItem.Builder(R.id.teamMembers, R.drawable.person)
+                        .setLabel("Informacje")
+                        .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.black_overlay, getTheme()))
+                        .create());
+        speedDial.addActionItem(
+                new SpeedDialActionItem.Builder(R.id.finishMatch, R.drawable.end)
+                        .setLabel("Zakończ")
+                        .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.black_overlay, getTheme()))
+                        .create());
+        speedDial.setOnActionSelectedListener(actionItem -> {
+            switch (actionItem.getId()){
+                case R.id.attentions:
+                    presenter.onAttentionsClicked();
+                    break;
+                case R.id.returnAction:
+                    presenter.onReturnActionClicked();
+                    break;
+                case R.id.teamMembers:
+                    presenter.onTeamsInfoClicked();
+                    break;
+                case R.id.finishMatch:
+                    presenter.onFinishMatchClicked();
+                    break;
+            }
+            return false;
+        });
+
         MaterialButton rightPoint = findViewById(R.id.pointRight);
         MaterialButton leftPoint = findViewById(R.id.pointLeft);
         rightPoint.setOnClickListener(view -> makeShift(RIGHT_LINE_UP_ID));
@@ -95,8 +161,12 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
             dialogInterface.dismiss();
             if (isFirst)
                 presenter.onFirstLineUpSet(); // todo
-            else
+            else {
                 presenter.onSecondLineUpSet(); // todo
+                // todo extort horizontal view
+                mainPanel.setVisibility(View.VISIBLE);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
         });
         builder.create().show();
     }
