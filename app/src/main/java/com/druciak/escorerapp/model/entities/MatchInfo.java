@@ -33,4 +33,36 @@ public class MatchInfo {
         actionsOfSets.put(4, new ArrayList<>());
         actionsOfSets.put(5, new ArrayList<>());
     }
+
+    public String getTeamAName(int teamId) {
+        return teamId == TEAM_A_ID ? teamA.getTeam().getFullName() : teamB.getTeam().getFullName();
+    }
+
+    public MatchTeam getTeamA() {
+        return teamA;
+    }
+
+    public MatchTeam getTeamB() {
+        return teamB;
+    }
+
+    public MatchTeam getServeTeam() {
+        return serveTeam;
+    }
+
+    public MatchSettings getSettings() {
+        return settings;
+    }
+
+    public List<MatchPlayer> getPlayers(int teamId){
+        return teamId == TEAM_A_ID ? teamA.getPlayers() : teamB.getPlayers();
+    }
+
+    public void setTeamLineUp(int teamId, Map<Integer, MatchPlayer> lineUp){
+        if (teamId == TEAM_A_ID) {
+            teamA.setLineUp(lineUp);
+        } else {
+            teamB.setLineUp(lineUp);
+        }
+    }
 }

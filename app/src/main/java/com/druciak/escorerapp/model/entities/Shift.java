@@ -6,8 +6,8 @@ public class Shift extends Action{
     private int teamId;
 
     public Shift(MatchPlayer out, MatchPlayer enter, int teamId) {
-        outPlayerNb = out.getPlayer().getNumber();
-        enterPlayerNb = enter.getPlayer().getNumber();
+        outPlayerNb = out.getNumber();
+        enterPlayerNb = enter.getNumber();
         this.teamId = teamId;
     }
 }

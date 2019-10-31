@@ -3,6 +3,7 @@ package com.druciak.escorerapp.model.entities;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MatchTeam {
@@ -19,4 +20,27 @@ public class MatchTeam {
     }
 
     public void addPoint(){points += 1;}
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public List<MatchPlayer> getPlayers() {
+        return players;
+    }
+
+    public Map<Integer, MatchPlayer> getLineUp() {
+        return lineUp;
+    }
+
+    public void setLineUp(Map<Integer, MatchPlayer> lineUp) {
+        this.lineUp = lineUp;
+    }
+
+    public MatchPlayer getPlayerByNumber(int number){
+        Optional<MatchPlayer> player = players.stream()
+                .filter(matchPlayer -> matchPlayer.getNumber() == number).findAny();
+
+        return player.orElse(null);
+    }
 }

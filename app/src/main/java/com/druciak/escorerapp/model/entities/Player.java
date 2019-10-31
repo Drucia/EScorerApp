@@ -63,6 +63,17 @@ public class Player implements Parcelable {
         number = in.readInt();
     }
 
+    public Player(Player player) {
+        id = player.getId();
+        name = player.getName();
+        surname = player.getSurname();
+        sex = player.getSex();
+        team = player.getTeam();
+        isLibero = player.isLibero();
+        isCaptain = player.isCaptain();
+        number = player.getNumber();
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);

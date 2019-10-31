@@ -1,83 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingTop="30dp"
+    android:paddingRight="20dp">
 
-    <TextView
-        android:id="@+id/lineUpTeamName"
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="370dp"
+        android:alpha="0.85"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/half_court" />
+
+    <LinearLayout
+        android:id="@+id/firstLine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="MKS Chełmiec Wodociągi Wałbrzych"
-        android:textAlignment="center"
-        android:textSize="30sp" />
+        android:layout_alignBottom="@+id/imageView3"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:paddingTop="30dp">
 
-    <RelativeLayout
+        <include
+            android:id="@+id/four"
+            layout="@layout/row_player" />
+
+        <View
+            android:layout_width="15dp"
+            android:layout_height="0dp" />
+
+        <include
+            android:id="@+id/third"
+            layout="@layout/row_player" />
+
+        <View
+            android:layout_width="15dp"
+            android:layout_height="0dp" />
+
+        <include
+            android:id="@+id/two"
+            layout="@layout/row_player" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="390dp">
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView3"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal|bottom"
+        android:paddingBottom="40dp">
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0.85"
-            app:srcCompat="@drawable/half_court" />
+        <include
+            android:id="@+id/five"
+            layout="@layout/row_player" />
 
-        <LinearLayout
-            android:id="@+id/firstLine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/imageView3"
-            android:layout_marginTop="15dp"
-            android:gravity="center_horizontal">
+        <View
+            android:layout_width="15dp"
+            android:layout_height="0dp" />
 
-            <include
-                android:id="@+id/four"
-                layout="@layout/row_player" />
+        <include
+            android:id="@+id/six"
+            layout="@layout/row_player" />
 
-            <View
-                android:layout_width="25dp"
-                android:layout_height="0dp"/>
+        <View
+            android:layout_width="15dp"
+            android:layout_height="0dp" />
 
-            <include
-                android:id="@+id/third"
-                layout="@layout/row_player" />
+        <include
+            android:id="@+id/first"
+            layout="@layout/row_player" />
+    </LinearLayout>
 
-            <View
-                android:layout_width="25dp"
-                android:layout_height="0dp"/>
-
-            <include
-                android:id="@+id/two"
-                layout="@layout/row_player" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/firstLine"
-            android:layout_marginTop="80dp"
-            android:gravity="center_horizontal">
-
-            <include
-                android:id="@+id/five"
-                layout="@layout/row_player" />
-
-            <View
-                android:layout_width="25dp"
-                android:layout_height="0dp"/>
-
-            <include
-                android:id="@+id/six"
-                layout="@layout/row_player" />
-
-            <View
-                android:layout_width="25dp"
-                android:layout_height="0dp"/>
-
-            <include
-                android:id="@+id/first"
-                layout="@layout/row_player" />
-        </LinearLayout>
-    </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

@@ -12,16 +12,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
+import com.druciak.escorerapp.interfaces.IOnPlayerTouchCallback;
+import com.druciak.escorerapp.model.entities.MatchPlayer;
 import com.druciak.escorerapp.model.entities.Player;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHolder> {
-    private List<Player> listItems;
-    private IMatchSettingsMVP.IFragmentView callback;
+    private ArrayList<? extends Player> listItems;
+    private IOnPlayerTouchCallback callback;
 
-    public PlayersAdapter(IMatchSettingsMVP.IFragmentView view, List<Player> players) {
+    public PlayersAdapter(IOnPlayerTouchCallback view, ArrayList<? extends Player> players) {
         this.callback = view;
         this.listItems = players;
     }
@@ -29,13 +30,15 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
     @NonNull
     @Override
     public PlayersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_player, parent, false);
+        int layoutId = listItems.get(0) instanceof MatchPlayer ? R.layout.row_player_match : R.layout.row_player;
+        View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         return new PlayersAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PlayersAdapter.ViewHolder holder, int position) {
         Player player = listItems.get(position);
+
         holder.name.setText(player.getName());
         holder.surname.setText(player.getSurname());
 

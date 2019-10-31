@@ -33,7 +33,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.IFragmentView{
+public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.IFragmentView {
     private static final int MAX_NUMBER_OF_COACH = 3;
     private static final int MAX_NUMBER_OF_MEDICINE = 2;
     private static final int MAX_NUMBER_OF_LIBERO = 2;
@@ -48,7 +48,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     private int captainNumber = NO_CAPTAIN_CHOSEN;
 
     private PlayersAdapter playersAdapter;
-    private List<Player> players;
+    private ArrayList<Player> players;
     private IMatchSettingsMVP.IView matchSettingsView;
     private ChipGroup coachChipGroup;
     private ChipGroup medicineChipGroup;
@@ -59,7 +59,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                                 List<Player> playersOfHost) {
         matchSettingsView = mContext;
         this.team = team;
-        players = playersOfHost;
+        players = new ArrayList<>(playersOfHost);
         playersAdapter = new PlayersAdapter(this, players);
     }
 
@@ -295,8 +295,8 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     }
 
     @Override
-    public void onPlayerClicked(Player player, int adapterPosition) {
-        showPopUpForPlayer(player, adapterPosition);
+    public void onPlayerClicked(Object player, int adapterPosition) {
+        showPopUpForPlayer((Player) player, adapterPosition);
     }
 
     public void showPopUpForPlayer(Player player, int adapterPosition)

@@ -3,7 +3,7 @@
     android:id="@+id/playerLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="7dp"
+    android:layout_marginRight="45dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/shirtImageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/player_shirt"
             android:backgroundTint="@color/defaultColor" />
 
@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <TextView
@@ -31,12 +31,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textSize="13sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/surnameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textSize="13sp" />
+        android:textSize="10sp" />
 </LinearLayout>

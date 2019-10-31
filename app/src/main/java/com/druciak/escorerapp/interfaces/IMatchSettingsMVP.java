@@ -6,7 +6,7 @@ import com.druciak.escorerapp.model.firebaseService.Result;
 
 import java.util.List;
 
-public interface IMatchSettingsMVP {
+public interface IMatchSettingsMVP{
     interface IModel{
         void getAllPlayersOfTeams(int hostId, int guestId);
     }
@@ -27,10 +27,6 @@ public interface IMatchSettingsMVP {
                                     boolean isMan);
     }
 
-    interface IFragmentView {
-        void onPlayerClicked(Player player, int adapterPosition);
-    }
-
     interface IPresenter{
         void onPreparePlayersListEventCompleted(Result<List<Player>> result);
         void preparePlayersOfTeams(int hostId, int guestId);
@@ -43,5 +39,8 @@ public interface IMatchSettingsMVP {
                                     String sTown, String sStreet, String sHall,
                                     String sRefereeFirst, String sRefereeSnd, String sLine1,
                                     String sLine2, String sLine3, String sLine4, boolean isMan);
+    }
+
+    interface IFragmentView extends IOnPlayerTouchCallback{
     }
 }
