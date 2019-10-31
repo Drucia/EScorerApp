@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DrawActivity extends AppCompatActivity {
+    public static final String MATCH_INFO_ID = "match_info";
+
     private static final int NO_CHOICE_MADE_ID = -1;
     private static final int SERVE_ID = 1;
     private static final int ADOPTING_ID = 2;
@@ -40,6 +42,7 @@ public class DrawActivity extends AppCompatActivity {
         startMatchButton = findViewById(R.id.startMatch);
         startMatchButton.setOnClickListener(view -> {
 //            Intent intent = new Intent();
+//            getIntent().putExtra(MATCH_INFO_ID, ""); todo
         });
 //        Intent intent = getIntent();
 //        MatchSettings ms = intent.getParcelableExtra(MatchSettingsActivity.MACH_SETTINGS_ID);

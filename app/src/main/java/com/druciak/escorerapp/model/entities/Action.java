@@ -1,9 +1,13 @@
 package com.druciak.escorerapp.model.entities;
 
-public class Action {
-    String score = "";
+public abstract class Action {
+    public String score;
 
-    public void makeActionForTeam(MatchTeam team){
-        team.addPoint();
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
     }
 }
