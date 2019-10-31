@@ -63,4 +63,8 @@ public class MatchTeam {
 
         return player.orElse(null);
     }
+
+    public void resetPoints() {
+        points = 0;
+    }
 }

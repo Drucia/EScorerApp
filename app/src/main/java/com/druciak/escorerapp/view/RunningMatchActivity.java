@@ -270,12 +270,12 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     }
 
     @Override
-    public void showPopUpWithEndOfSet(String winner) {
+    public void showPopUpWithEndOf(String winner, String title, boolean isEnd) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Koniec seta");
-        builder.setMessage("Set wygrała drużyna: " + winner);
+        builder.setTitle(title);
+        builder.setMessage((isEnd ? "Mecz" : "Set") + " wygrała drużyna: " + winner);
         builder.setCancelable(false);
-        builder.setPositiveButton("Kolejny set", (dialogInterface, i) -> {
+        builder.setPositiveButton(isEnd ? "Podsumowanie" : "Kolejny set", (dialogInterface, i) -> {
             presenter.onNextSetClicked();
             dialogInterface.dismiss();});
         builder.create().show();
@@ -286,5 +286,11 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         leftTeamName.setText(fullNameLeft);
         rightTeamName.setText(fullNameRight);
         changeServeTeam(teamId);
+    }
+
+    @Override
+    public void setSets(int setsLeft, int setsRight) {
+        leftSets.setText(String.valueOf(setsLeft));
+        rightSets.setText(String.valueOf(setsRight));
     }
 }

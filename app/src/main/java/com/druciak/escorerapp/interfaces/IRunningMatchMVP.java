@@ -15,8 +15,9 @@ public interface IRunningMatchMVP {
         void setScore(String score);
         void showPopUpForLineUp(String teamName, List<MatchPlayer> players, boolean isFirst);
         void setAdapterWithPlayersLineUp(Map<Integer, MatchPlayer> lineUpA, Map<Integer, MatchPlayer> lineUpB);
-        void showPopUpWithEndOfSet(String winner);
-        void setFields(String fullName, String fullName1, int id);
+        void showPopUpWithEndOf(String winner, String title, boolean isEnd);
+        void setFields(String fullNameLeft, String fullNameRight, int serveTeamId);
+        void setSets(int setsLeft, int setsRight);
     }
 
     interface IPresenter{

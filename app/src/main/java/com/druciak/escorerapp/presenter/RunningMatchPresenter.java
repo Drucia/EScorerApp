@@ -9,7 +9,6 @@ import com.druciak.escorerapp.model.entities.Point;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS_IN_TIEBREAK;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_MIN_DIFFERENT_POINTS;
-import static com.druciak.escorerapp.model.entities.MatchInfo.TEAM_A_ID;
 import static com.druciak.escorerapp.view.RunningMatchActivity.LEFT_TEAM_ID;
 import static com.druciak.escorerapp.view.RunningMatchActivity.RIGHT_TEAM_ID;
 
@@ -46,7 +45,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     public void onSecondLineUpSet() {
         view.setAdapterWithPlayersLineUp(matchInfo.getTeamA().getLineUp(), matchInfo.getTeamB().getLineUp());
         view.setFields(leftTeam.getTeam().getFullName(), rightTeam.getTeam().getFullName(),
-                serveTeam.getTeamId() == TEAM_A_ID ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
+                serveTeam == leftTeam ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
     }
 
     @Override
@@ -74,6 +73,10 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         Action action = new Point(teamSideId == RIGHT_TEAM_ID ? rightTeam : leftTeam,
                 teamSideId == RIGHT_TEAM_ID ? leftTeam.getPoints() : rightTeam.getPoints());
 
+        makeAction(action);
+    }
+
+    private void makeAction(Action action) {
         if (checkIfIsEndOfSet()) {
             if (checkIfIsEndOfMatch()) {
                 isEndOfMatch();
@@ -87,24 +90,23 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
                 if (serveTeam.getTeamId() != teamId) {
                     changeServeTeam();
                     makeShiftInLineUp(teamId);
-                    view.makeShiftInLineUp(teamSideId);
+                    view.makeShiftInLineUp(serveTeam == leftTeam ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
                 }
             }
         }
-        view.setScore(action.getScore());
+        view.setScore(leftTeam.getPoints() + " : " + rightTeam.getPoints());
         matchInfo.addAction(actualSet, action);
     }
 
     private void isEndOfSet() {
-        view.showPopUpWithEndOfSet(leftTeam.getPoints() > rightTeam.getPoints() ?
-                leftTeam.getTeam().getShortName() : rightTeam.getTeam().getShortName());
+        view.showPopUpWithEndOf(getWinner().getTeam().getShortName(), "Koniec seta", false);
     }
 
     private boolean checkIfIsEndOfSet() {
         int different = Math.abs(leftTeam.getPoints() - rightTeam.getPoints());
         return (leftTeam.getPoints() >= (matchInfo.isTiebreak(actualSet) ? MATCH_END_POINTS_IN_TIEBREAK : MATCH_END_POINTS)
                 || rightTeam.getPoints() >= (matchInfo.isTiebreak(actualSet) ? MATCH_END_POINTS_IN_TIEBREAK : MATCH_END_POINTS))
-                && different == MATCH_MIN_DIFFERENT_POINTS;
+                && different >= MATCH_MIN_DIFFERENT_POINTS;
     }
 
     private void makeShiftInLineUp(Integer teamId) {
@@ -112,7 +114,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     }
 
     private void isEndOfMatch() {
-        // todo
+        view.showPopUpWithEndOf(getWinner().getTeam().getFullName(), "Koniec meczu", true);
     }
 
     private void changeServeTeam() {
@@ -120,11 +122,45 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     }
 
     private boolean checkIfIsEndOfMatch(){
-        return matchInfo.isTiebreak(actualSet);
+        return getWinner().getSets() + 1 == matchInfo.getMinSetsToWin();
     }
 
     @Override
     public void onNextSetClicked() {
+        setTeamsParams();
+        MatchTeam tmp = leftTeam;
+        leftTeam = rightTeam;
+        rightTeam = tmp;
+        serveTeam = getServeTeam(++actualSet);
         view.setScore("0 : 0");
+        view.setSets(leftTeam.getSets(), rightTeam.getSets());
+        view.setFields(leftTeam.getTeam().getFullName(), rightTeam.getTeam().getFullName(),
+                serveTeam == leftTeam ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
+    }
+
+    private MatchTeam getServeTeam(int set) {
+        MatchTeam first = matchInfo.getServeTeam();
+        if (set % 2 == 0)
+            return getSecondTeam(first);
+        else
+            return first;
+    }
+
+    private MatchTeam getSecondTeam(MatchTeam firstTeam) {
+        if (firstTeam.getTeam().getId() == leftTeam.getTeam().getId())
+            return rightTeam;
+        else
+            return leftTeam;
+    }
+
+    private void setTeamsParams() {
+        getWinner().addSet();
+        leftTeam.resetPoints();
+        rightTeam.resetPoints();
+    }
+
+    private MatchTeam getWinner()
+    {
+        return leftTeam.getPoints() > rightTeam.getPoints() ? leftTeam : rightTeam;
     }
 }

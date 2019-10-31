@@ -18,6 +18,8 @@ public class MatchInfo {
     public static final int MATCH_MIN_DIFFERENT_POINTS = 2;
     public static final int LAST_SET_FOR_YOUNG = 3;
     public static final int LAST_SET = 5;
+    public static final int MIN_SETS_TO_WIN = 3;
+    public static final int MIN_SETS_TO_WIN_FOR_YOUNG = 2;
     public static final String YOUNG_TYPE_OF_MATCH = "Młodzicy";
 
     private MatchTeam teamA;
@@ -82,5 +84,12 @@ public class MatchInfo {
             return set == LAST_SET_FOR_YOUNG;
         else
             return set == LAST_SET;
+    }
+
+    public int getMinSetsToWin(){
+        if (settings.getType().equals(YOUNG_TYPE_OF_MATCH))
+            return MIN_SETS_TO_WIN_FOR_YOUNG;
+        else
+            return MIN_SETS_TO_WIN;
     }
 }
