@@ -11,8 +11,12 @@ public interface IRunningMatchMVP {
     }
 
     interface IView extends IOnPlayerTouchCallback{
+        void makeShiftInLineUp(int teamSideId);
+        void setScore(String score);
         void showPopUpForLineUp(String teamName, List<MatchPlayer> players, boolean isFirst);
         void setAdapterWithPlayersLineUp(Map<Integer, MatchPlayer> lineUpA, Map<Integer, MatchPlayer> lineUpB);
+        void showPopUpWithEndOfSet(String winner);
+        void setFields(String fullName, String fullName1, int id);
     }
 
     interface IPresenter{
@@ -23,5 +27,7 @@ public interface IRunningMatchMVP {
         void onReturnActionClicked();
         void onTeamsInfoClicked();
         void onFinishMatchClicked();
+        void onAddPointClicked(int rightLineUpId);
+        void onNextSetClicked();
     }
 }

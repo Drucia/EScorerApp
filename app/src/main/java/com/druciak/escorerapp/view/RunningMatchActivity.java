@@ -35,8 +35,8 @@ import java.util.List;
 import java.util.Map;
 
 public class RunningMatchActivity extends AppCompatActivity implements IRunningMatchMVP.IView{
-    private static final int RIGHT_LINE_UP_ID = 1;
-    private static final int LEFT_LINE_UP_ID = 2;
+    public static final int RIGHT_TEAM_ID = 1;
+    public static final int LEFT_TEAM_ID = 2;
 
     private IRunningMatchMVP.IPresenter presenter;
     private PlayersAdapter adapterLeft;
@@ -129,16 +129,17 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
 
         MaterialButton rightPoint = findViewById(R.id.pointRight);
         MaterialButton leftPoint = findViewById(R.id.pointLeft);
-        rightPoint.setOnClickListener(view -> makeShift(RIGHT_LINE_UP_ID));
-        leftPoint.setOnClickListener(view -> makeShift(LEFT_LINE_UP_ID));
+        rightPoint.setOnClickListener(view -> presenter.onAddPointClicked(RIGHT_TEAM_ID));
+        leftPoint.setOnClickListener(view -> presenter.onAddPointClicked(LEFT_TEAM_ID));
 
         presenter = new RunningMatchPresenter(this, matchInfo);
         presenter.onActivityCreated();
     }
 
-    private void makeShift(int lineUpId) {
-        PlayersAdapter adapter = lineUpId == RIGHT_LINE_UP_ID ? adapterRight : adapterLeft;
-        ArrayList<MatchPlayer> players = lineUpId == RIGHT_LINE_UP_ID ? playersRight : playersLeft;
+    @Override
+    public void makeShiftInLineUp(int teamSideId) {
+        PlayersAdapter adapter = teamSideId == RIGHT_TEAM_ID ? adapterRight : adapterLeft;
+        ArrayList<MatchPlayer> players = teamSideId == RIGHT_TEAM_ID ? playersRight : playersLeft;
         MatchPlayer p = players.remove(2);
         players.add(0, p);
         adapter.notifyItemMoved(2, 0);
@@ -148,6 +149,22 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         p = players.remove(5);
         players.add(4, p);
         adapter.notifyItemMoved(5, 4);
+        changeServeTeam(teamSideId);
+    }
+
+    private void changeServeTeam(int teamWhichServe) {
+        if (teamWhichServe == RIGHT_TEAM_ID) {
+            rightServe.setVisibility(View.VISIBLE);
+            leftServe.setVisibility(View.INVISIBLE);
+        } else {
+            rightServe.setVisibility(View.INVISIBLE);
+            leftServe.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void setScore(String score){
+        bigScore.setText(score);
     }
 
     @Override
@@ -250,5 +267,24 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
 
     @Override
     public void onPlayerClicked(Object player, int adapterPosition) {
+    }
+
+    @Override
+    public void showPopUpWithEndOfSet(String winner) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Koniec seta");
+        builder.setMessage("Set wygrała drużyna: " + winner);
+        builder.setCancelable(false);
+        builder.setPositiveButton("Kolejny set", (dialogInterface, i) -> {
+            presenter.onNextSetClicked();
+            dialogInterface.dismiss();});
+        builder.create().show();
+    }
+
+    @Override
+    public void setFields(String fullNameLeft, String fullNameRight, int teamId) {
+        leftTeamName.setText(fullNameLeft);
+        rightTeamName.setText(fullNameRight);
+        changeServeTeam(teamId);
     }
 }

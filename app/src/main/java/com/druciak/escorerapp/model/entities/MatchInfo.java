@@ -13,6 +13,12 @@ public class MatchInfo {
     public static final int YELLOW_AND_RED_CARD_SEPARATELY_ID = 4;
     public static final int TEAM_A_ID = 6;
     public static final int TEAM_B_ID = 7;
+    public static final int MATCH_END_POINTS = 25;
+    public static final int MATCH_END_POINTS_IN_TIEBREAK = 15;
+    public static final int MATCH_MIN_DIFFERENT_POINTS = 2;
+    public static final int LAST_SET_FOR_YOUNG = 3;
+    public static final int LAST_SET = 5;
+    public static final String YOUNG_TYPE_OF_MATCH = "Młodzicy";
 
     private MatchTeam teamA;
     private MatchTeam teamB;
@@ -64,5 +70,17 @@ public class MatchInfo {
         } else {
             teamB.setLineUp(lineUp);
         }
+    }
+
+    public void addAction(int set, Action action) {
+        ArrayList<Action> actions = actionsOfSets.get(set);
+        actions.add(action);
+    }
+
+    public boolean isTiebreak(int set){
+        if (settings.getType().equals(YOUNG_TYPE_OF_MATCH))
+            return set == LAST_SET_FOR_YOUNG;
+        else
+            return set == LAST_SET;
     }
 }

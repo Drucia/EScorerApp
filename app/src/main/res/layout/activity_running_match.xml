@@ -28,7 +28,6 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="5dp"
             android:layout_toStartOf="@+id/infoLayout"
-            android:text="MKS Polonia Swidnica"
             android:textAlignment="center"
             android:textSize="18sp" />
 
@@ -51,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="3"
+                    android:text="0"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -71,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="15 : 14"
+                    android:text="0 : 0"
                     android:textSize="20sp" />
 
                 <View
@@ -96,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="2"
+                    android:text="0"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </RelativeLayout>
@@ -112,7 +111,6 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="25dp"
             android:layout_toEndOf="@+id/infoLayout"
-            android:text="MKS Chełmiec Wodociągi Wałbrzych"
             android:textAlignment="center"
             android:textSize="18sp" />
 
