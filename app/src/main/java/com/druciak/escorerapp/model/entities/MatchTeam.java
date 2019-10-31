@@ -11,18 +11,28 @@ public class MatchTeam {
     private List<MatchPlayer> players;
     private Map<Integer, MatchPlayer> lineUp;
     private int points;
+    private int teamId;
 
-    public MatchTeam(Team team, List<Player> players) {
+    public MatchTeam(Team team, List<Player> players, int teamId) {
         this.team = team;
         this.players = players.stream().map(MatchPlayer::new).collect(Collectors.toList());
         lineUp = new HashMap<>();
         points = 0;
+        this.teamId = teamId;
     }
 
     public void addPoint(){points += 1;}
 
+    public int getPoints() {
+        return points;
+    }
+
     public Team getTeam() {
         return team;
+    }
+
+    public int getTeamId() {
+        return teamId;
     }
 
     public List<MatchPlayer> getPlayers() {

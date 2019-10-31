@@ -10,4 +10,6 @@ public abstract class Action {
     public void setScore(String score) {
         this.score = score;
     }
+
+    public abstract Integer returnTeamIdIfIsPoint();
 }

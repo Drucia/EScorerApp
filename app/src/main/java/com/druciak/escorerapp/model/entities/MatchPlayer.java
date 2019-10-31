@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import static com.druciak.escorerapp.model.entities.MatchInfo.NO_CARD_ID;
+import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CARD_SEPARATELY_ID;
+import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CARD_TOGETHER_ID;
 
 public class MatchPlayer extends Player implements Parcelable {
     public static final int STATUS_PLAYER_ON_COURT = 1;
@@ -85,5 +87,7 @@ public class MatchPlayer extends Player implements Parcelable {
 
     public void setCardId(int cardId) {
         this.cardId = cardId;
+        if (cardId == YELLOW_AND_RED_CARD_TOGETHER_ID || cardId == YELLOW_AND_RED_CARD_SEPARATELY_ID)
+            this.canPlay = false;
     }
 }

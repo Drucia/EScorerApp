@@ -22,8 +22,8 @@ public class MatchInfo {
 
     public MatchInfo(Team teamA, List<Player> playersA, Team teamB, List<Player> playersB,
                      boolean isAServe, MatchSettings settings) {
-        this.teamA = new MatchTeam(teamA, playersA);
-        this.teamB = new MatchTeam(teamB, playersB);
+        this.teamA = new MatchTeam(teamA, playersA, TEAM_A_ID);
+        this.teamB = new MatchTeam(teamB, playersB, TEAM_B_ID);
         this.serveTeam = isAServe ? this.teamA : this.teamB;
         this.settings = settings;
         actionsOfSets = new HashMap<>();

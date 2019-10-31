@@ -5,8 +5,16 @@ public final class PlayerPunishment extends TeamPunishment {
 
     private int memberId;
 
-    public PlayerPunishment(int cardId, int teamId, int memberId) {
-        super(cardId, teamId);
-        this.memberId = memberId;
+    public PlayerPunishment(int cardId, int teamId, TeamAdditionalMember member, int teamPoints,
+                            int sndTeamPoints, int set) {
+        super(cardId, teamId, set, teamPoints, sndTeamPoints);
+        this.memberId = member.getMemberId();
+    }
+
+    public PlayerPunishment(int cardId, int teamId, MatchPlayer player, int teamPoints,
+                            int sndTeamPoints, int set) {
+        super(cardId, teamId, set, teamPoints, sndTeamPoints);
+        this.memberId = player.getNumber();
+        player.setCardId(cardId);
     }
 }
