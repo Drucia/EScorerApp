@@ -100,8 +100,10 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     public void showPopUpWithErrorMatchSettings(String error) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Błąd");
-        View root = getLayoutInflater().inflate(R.layout.pop_up_msg_error, null);
-        ((TextView) root.findViewById(R.id.msg)).setText(error);
+        View root = getLayoutInflater().inflate(R.layout.pop_up_msg, null);
+        TextView msg = root.findViewById(R.id.msg);
+        msg.setTextColor(getResources().getColor(R.color.design_default_color_error));
+        msg.setText(error);
         builder.setView(root);
         builder.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss());
         builder.create().show();

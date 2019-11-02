@@ -8,6 +8,5 @@
     <TextView
         android:id="@+id/msg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/design_default_color_error" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

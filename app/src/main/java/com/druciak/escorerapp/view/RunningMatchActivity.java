@@ -1,7 +1,9 @@
 package com.druciak.escorerapp.view;
 
+import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -354,8 +356,24 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     public void showTimeCountDown(String teamName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Czas dla " + teamName);
-        int time = TIME_LENGHT;
-        builder.setMessage("Pozostało " + time + "s.");
-        builder.create().show();
+        View root = getLayoutInflater().inflate(R.layout.pop_up_msg, null);
+        TextView msg = root.findViewById(R.id.msg);
+        msg.setTextSize(16);
+        builder.setView(root);
+        builder.setCancelable(false);
+        Dialog dialog = builder.create();
+        new CountDownTimer(TIME_LENGHT * 1000, 1000){
+
+            @Override
+            public void onTick(long l) {
+                msg.setText("Pozostało: " + (l / 1000) + "s.");
+            }
+
+            @Override
+            public void onFinish() {
+                dialog.dismiss();
+            }
+        }.start();
+        dialog.show();
     }
 }
