@@ -25,6 +25,12 @@ public class Team implements Parcelable {
         this.shortName = shortName;
     }
 
+    public Team(Team team){
+        this.id = team.getId();
+        this.shortName = team.getShortName();
+        this.fullName = team.getFullName();
+    }
+
     protected Team(Parcel in) {
         id = in.readInt();
         fullName = in.readString();

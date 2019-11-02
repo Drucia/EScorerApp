@@ -13,7 +13,7 @@ public class TeamPunishment extends Action {
         this.cardId = cardId;
         this.teamId = teamId;
         this.set = set;
-        setScore(teamPoints + " : " + sndTeamPoints);
+        setScore(teamPoints, sndTeamPoints);
     }
 
     @Override

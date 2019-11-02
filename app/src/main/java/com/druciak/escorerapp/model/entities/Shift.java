@@ -9,7 +9,7 @@ public class Shift extends Action{
         outPlayerNb = out.getNumber();
         enterPlayerNb = enter.getNumber();
         this.teamId = teamId;
-        setScore(teamPoints + " : " + sndTeamPoints);
+        setScore(teamPoints, sndTeamPoints);
         out.setShiftNumber(enterPlayerNb);
         enter.setShiftNumber(outPlayerNb);
         out.setStatusId(MatchPlayer.STATUS_PLAYER_ON_DESK);

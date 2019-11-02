@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.druciak.escorerapp.model.entities.MatchInfo.TIME_LENGHT;
+
 public class RunningMatchActivity extends AppCompatActivity implements IRunningMatchMVP.IView{
     public static final int RIGHT_TEAM_ID = 1;
     public static final int LEFT_TEAM_ID = 2;
@@ -56,6 +58,10 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     private ImageView rightCards;
     private SpeedDialView speedDial;
     private CoordinatorLayout mainPanel;
+    private View leftFirstTime;
+    private View rightFirstTime;
+    private View leftSndTime;
+    private View rightSndTime;
 
     private ArrayList<MatchPlayer> playersLeft;
     private ArrayList<MatchPlayer> playersRight;
@@ -88,6 +94,10 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         rightCards = findViewById(R.id.cardsRight);
         speedDial = findViewById(R.id.speedDialRunningMatch);
         mainPanel = findViewById(R.id.runningMatchPanel);
+        leftFirstTime = findViewById(R.id.timeCounterFirstLeft);
+        rightFirstTime = findViewById(R.id.timeCounterFirstRight);
+        leftSndTime = findViewById(R.id.timeCounterSndLeft);
+        rightSndTime = findViewById(R.id.timeCounterSndRight);
 
         speedDial.addActionItem(
                 new SpeedDialActionItem.Builder(R.id.attentions, R.drawable.attention)
@@ -131,9 +141,31 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         MaterialButton leftPoint = findViewById(R.id.pointLeft);
         rightPoint.setOnClickListener(view -> presenter.onAddPointClicked(RIGHT_TEAM_ID));
         leftPoint.setOnClickListener(view -> presenter.onAddPointClicked(LEFT_TEAM_ID));
+        rightTime.setOnClickListener(view -> presenter.onTimeClicked(RIGHT_TEAM_ID));
+        leftTime.setOnClickListener(view -> presenter.onTimeClicked(LEFT_TEAM_ID));
 
         presenter = new RunningMatchPresenter(this, matchInfo);
         presenter.onActivityCreated();
+    }
+
+    public void showPopUpWithConfirm(int teamId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Czas");
+        builder.setMessage("Czy na pewno chcesz wziąć czas?");
+        builder.setPositiveButton("TAK", (dialogInterface, i) -> {
+            presenter.onTimeConfirmClicked(teamId);
+            dialogInterface.dismiss();
+        });
+        builder.setNegativeButton("NIE", (dialogInterface, i) -> dialogInterface.cancel());
+        builder.create().show();
+    }
+
+    @Override
+    public void resetTimes() {
+        leftFirstTime.setBackgroundResource(R.drawable.ring);
+        leftSndTime.setBackgroundResource(R.drawable.ring);
+        rightFirstTime.setBackgroundResource(R.drawable.ring);
+        rightSndTime.setBackgroundResource(R.drawable.ring);
     }
 
     @Override
@@ -292,5 +324,38 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     public void setSets(int setsLeft, int setsRight) {
         leftSets.setText(String.valueOf(setsLeft));
         rightSets.setText(String.valueOf(setsRight));
+    }
+
+    @Override
+    public void showPopUpWithInfo(String title, String msg, String positiveButton) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(msg);
+        builder.setPositiveButton(positiveButton, (dialogInterface, i) -> dialogInterface.dismiss());
+        builder.create().show();
+    }
+
+    @Override
+    public void addTimeFor(int teamId, int timeCount) {
+        if (teamId == LEFT_TEAM_ID){
+            if (timeCount == 1)
+                leftFirstTime.setBackgroundResource(R.drawable.circle_with_ring);
+            else
+                leftSndTime.setBackgroundResource(R.drawable.circle_with_ring);
+        } else {
+            if (timeCount == 1)
+                rightFirstTime.setBackgroundResource(R.drawable.circle_with_ring);
+            else
+                rightSndTime.setBackgroundResource(R.drawable.circle_with_ring);
+        }
+    }
+
+    @Override
+    public void showTimeCountDown(String teamName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Czas dla " + teamName);
+        int time = TIME_LENGHT;
+        builder.setMessage("Pozostało " + time + "s.");
+        builder.create().show();
     }
 }

@@ -20,6 +20,9 @@ public class MatchInfo {
     public static final int LAST_SET = 5;
     public static final int MIN_SETS_TO_WIN = 3;
     public static final int MIN_SETS_TO_WIN_FOR_YOUNG = 2;
+    public static final int MAX_TIMES_AMOUNT = 2;
+    public static final int MAX_SHIFTS_AMOUNT = 6;
+    public static final int TIME_LENGHT = 30;
     public static final String YOUNG_TYPE_OF_MATCH = "Młodzicy";
 
     private MatchTeam teamA;
@@ -43,7 +46,7 @@ public class MatchInfo {
     }
 
     public String getTeamAName(int teamId) {
-        return teamId == TEAM_A_ID ? teamA.getTeam().getFullName() : teamB.getTeam().getFullName();
+        return teamId == TEAM_A_ID ? teamA.getFullName() : teamB.getFullName();
     }
 
     public MatchTeam getTeamA() {

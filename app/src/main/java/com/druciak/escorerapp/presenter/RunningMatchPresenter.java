@@ -5,6 +5,7 @@ import com.druciak.escorerapp.model.entities.Action;
 import com.druciak.escorerapp.model.entities.MatchInfo;
 import com.druciak.escorerapp.model.entities.MatchTeam;
 import com.druciak.escorerapp.model.entities.Point;
+import com.druciak.escorerapp.model.entities.Time;
 
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS_IN_TIEBREAK;
@@ -44,8 +45,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     @Override
     public void onSecondLineUpSet() {
         view.setAdapterWithPlayersLineUp(matchInfo.getTeamA().getLineUp(), matchInfo.getTeamB().getLineUp());
-        view.setFields(leftTeam.getTeam().getFullName(), rightTeam.getTeam().getFullName(),
-                serveTeam == leftTeam ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
+        view.setFields(leftTeam.getFullName(), rightTeam.getFullName(), serveTeam.getTeamSideId());
     }
 
     @Override
@@ -72,11 +72,11 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     public void onAddPointClicked(int teamSideId) {
         Action action = new Point(teamSideId == RIGHT_TEAM_ID ? rightTeam : leftTeam,
                 teamSideId == RIGHT_TEAM_ID ? leftTeam.getPoints() : rightTeam.getPoints());
-
-        makeAction(action);
+        updateMatchState(action);
     }
 
-    private void makeAction(Action action) {
+    private void updateMatchState(Action action) {
+        makeAction(action);
         if (checkIfIsEndOfSet()) {
             if (checkIfIsEndOfMatch()) {
                 isEndOfMatch();
@@ -90,7 +90,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
                 if (serveTeam.getTeamId() != teamId) {
                     changeServeTeam();
                     makeShiftInLineUp(teamId);
-                    view.makeShiftInLineUp(serveTeam == leftTeam ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
+                    view.makeShiftInLineUp(serveTeam.getTeamSideId());
                 }
             }
         }
@@ -98,8 +98,19 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         matchInfo.addAction(actualSet, action);
     }
 
+    private void makeAction(Action action) {
+        if (action instanceof Time){
+            int teamId = ((Time) action).getTeamId();
+            view.showTimeCountDown(teamId == leftTeam.getTeamId() ?
+                    leftTeam.getShortName() : rightTeam.getShortName());
+            view.addTimeFor(teamId == leftTeam.getTeamId() ?
+                    LEFT_TEAM_ID : RIGHT_TEAM_ID, teamId == leftTeam.getTeamId() ?
+                    leftTeam.getTimesCounter() : rightTeam.getTimesCounter());
+        }
+    }
+
     private void isEndOfSet() {
-        view.showPopUpWithEndOf(getWinner().getTeam().getShortName(), "Koniec seta", false);
+        view.showPopUpWithEndOf(getWinner().getShortName(), "Koniec seta", false);
     }
 
     private boolean checkIfIsEndOfSet() {
@@ -114,7 +125,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     }
 
     private void isEndOfMatch() {
-        view.showPopUpWithEndOf(getWinner().getTeam().getFullName(), "Koniec meczu", true);
+        view.showPopUpWithEndOf(getWinner().getFullName(), "Koniec meczu", true);
     }
 
     private void changeServeTeam() {
@@ -134,8 +145,27 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         serveTeam = getServeTeam(++actualSet);
         view.setScore("0 : 0");
         view.setSets(leftTeam.getSets(), rightTeam.getSets());
-        view.setFields(leftTeam.getTeam().getFullName(), rightTeam.getTeam().getFullName(),
+        view.setFields(leftTeam.getFullName(), rightTeam.getFullName(),
                 serveTeam == leftTeam ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
+        view.resetTimes();
+    }
+
+    @Override
+    public void onTimeClicked(int teamId) {
+        MatchTeam team = teamId == LEFT_TEAM_ID ? leftTeam : rightTeam;
+        if (team.canGetTime()) {
+            view.showPopUpWithConfirm(teamId);
+        } else {
+            view.showPopUpWithInfo("Uwaga", "Drużyna już nie ma czasów", "OK");
+        }
+    }
+
+    @Override
+    public void onTimeConfirmClicked(int teamId) {
+        MatchTeam team = teamId == LEFT_TEAM_ID ? leftTeam : rightTeam;
+        Action action = new Time(team,
+                teamId == LEFT_TEAM_ID ? leftTeam.getPoints() : rightTeam.getPoints());
+        updateMatchState(action);
     }
 
     private MatchTeam getServeTeam(int set) {
@@ -147,7 +177,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     }
 
     private MatchTeam getSecondTeam(MatchTeam firstTeam) {
-        if (firstTeam.getTeam().getId() == leftTeam.getTeam().getId())
+        if (firstTeam.getTeamId() == leftTeam.getTeamId())
             return rightTeam;
         else
             return leftTeam;
@@ -155,8 +185,8 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
 
     private void setTeamsParams() {
         getWinner().addSet();
-        leftTeam.resetPoints();
-        rightTeam.resetPoints();
+        leftTeam.nextSet();
+        rightTeam.nextSet();
     }
 
     private MatchTeam getWinner()

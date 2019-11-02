@@ -6,31 +6,55 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class MatchTeam {
-    private Team team;
+import static com.druciak.escorerapp.model.entities.MatchInfo.MAX_SHIFTS_AMOUNT;
+import static com.druciak.escorerapp.model.entities.MatchInfo.MAX_TIMES_AMOUNT;
+import static com.druciak.escorerapp.model.entities.MatchInfo.TEAM_A_ID;
+import static com.druciak.escorerapp.view.RunningMatchActivity.LEFT_TEAM_ID;
+import static com.druciak.escorerapp.view.RunningMatchActivity.RIGHT_TEAM_ID;
+
+public class MatchTeam extends Team {
     private List<MatchPlayer> players;
     private Map<Integer, MatchPlayer> lineUp;
     private int points;
     private int sets;
     private int teamId;
+    private int teamSideId;
+    private int timesCounter;
+    private int shiftCounter;
 
     public MatchTeam(Team team, List<Player> players, int teamId) {
-        this.team = team;
+        super(team);
         this.players = players.stream().map(MatchPlayer::new).collect(Collectors.toList());
         lineUp = new HashMap<>();
         points = 0;
         sets = 0;
         this.teamId = teamId;
+        this.teamSideId = teamId == TEAM_A_ID ? LEFT_TEAM_ID : RIGHT_TEAM_ID;
+    }
+
+    public int getTeamSideId() {
+        return teamSideId;
+    }
+
+    public void setTeamSideId(int teamSideId) {
+        this.teamSideId = teamSideId;
+    }
+
+    public void addTime(){timesCounter += 1;}
+
+    public void addShift(){shiftCounter += 1;}
+
+    public boolean canGetTime() {return timesCounter < MAX_TIMES_AMOUNT;}
+    public boolean canGetShift() {return shiftCounter < MAX_SHIFTS_AMOUNT;}
+
+    public int getTimesCounter() {
+        return timesCounter;
     }
 
     public void addPoint(){points += 1;}
 
     public int getPoints() {
         return points;
-    }
-
-    public Team getTeam() {
-        return team;
     }
 
     public int getSets() {
@@ -64,7 +88,9 @@ public class MatchTeam {
         return player.orElse(null);
     }
 
-    public void resetPoints() {
-        points = 0;
+    public void nextSet() {
+        this.points = 0;
+        this.timesCounter = 0;
+        this.shiftCounter = 0;
     }
 }

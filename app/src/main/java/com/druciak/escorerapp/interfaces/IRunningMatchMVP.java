@@ -18,6 +18,11 @@ public interface IRunningMatchMVP {
         void showPopUpWithEndOf(String winner, String title, boolean isEnd);
         void setFields(String fullNameLeft, String fullNameRight, int serveTeamId);
         void setSets(int setsLeft, int setsRight);
+        void showPopUpWithInfo(String title, String msg, String positiveButton);
+        void addTimeFor(int teamId, int timeCount);
+        void showTimeCountDown(String teamName);
+        void showPopUpWithConfirm(int teamId);
+        void resetTimes();
     }
 
     interface IPresenter{
@@ -28,7 +33,9 @@ public interface IRunningMatchMVP {
         void onReturnActionClicked();
         void onTeamsInfoClicked();
         void onFinishMatchClicked();
-        void onAddPointClicked(int rightLineUpId);
+        void onAddPointClicked(int lineUpId);
         void onNextSetClicked();
+        void onTimeClicked(int teamId);
+        void onTimeConfirmClicked(int teamId);
     }
 }

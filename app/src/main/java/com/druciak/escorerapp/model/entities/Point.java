@@ -6,7 +6,7 @@ public class Point extends Action {
     public Point(MatchTeam team, int pointsOtherTeam) {
         team.addPoint();
         this.teamId = team.getTeamId();
-        setScore(team.getPoints() + " : " + pointsOtherTeam);
+        setScore(team.getPoints(), pointsOtherTeam);
     }
 
     @Override

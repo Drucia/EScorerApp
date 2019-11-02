@@ -1,14 +1,16 @@
 package com.druciak.escorerapp.model.entities;
 
 public abstract class Action {
-    public String score;
+    private int teamMadeActionPoints;
+    private int sndTeamPoints;
 
     public String getScore() {
-        return score;
+        return teamMadeActionPoints + " : " + sndTeamPoints;
     }
 
-    public void setScore(String score) {
-        this.score = score;
+    public void setScore(int madeActionPoints, int sndTeamPoints) {
+        this.teamMadeActionPoints = madeActionPoints;
+        this.sndTeamPoints = sndTeamPoints;
     }
 
     public abstract Integer returnTeamIdIfIsPoint();
