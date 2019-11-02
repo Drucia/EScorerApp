@@ -27,6 +27,8 @@ import com.druciak.escorerapp.model.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.presenter.RunningMatchPresenter;
 import com.druciak.escorerapp.view.matchSettings.PlayersAdapter;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -35,8 +37,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.druciak.escorerapp.model.entities.MatchInfo.TIME_LENGHT;
+import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_ON_COURT;
 
 public class RunningMatchActivity extends AppCompatActivity implements IRunningMatchMVP.IView{
     public static final int RIGHT_TEAM_ID = 1;
@@ -171,6 +175,45 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     }
 
     @Override
+    public void showPopUpWithShift(List<MatchPlayer> players, int adapterPosition, int teamSideId) {
+        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.pop_up_functions, null);
+        dialogBuilder.setView(view);
+        dialogBuilder.setTitle("Wybierz zawodnika");
+        ChipGroup group = view.findViewById(R.id.functionsChipGroup);
+        group.setSingleSelection(true);
+
+        for (Integer number : players.stream().map(Player::getNumber).collect(Collectors.toList()))
+        {
+            Chip newChip = (Chip) getLayoutInflater().inflate(R.layout.default_chip, group,
+                    false);
+            newChip.setId(number);
+            newChip.setText(number < 10 ? " " + number + " " : String.valueOf(number));
+            group.addView(newChip);
+        }
+        dialogBuilder.setPositiveButton("Zmień", (dialogInterface, i) -> {
+            int number = group.getCheckedChipId();
+            MatchPlayer playerToShift = players.stream()
+                    .filter(player -> player.getNumber() == number).findAny().get();
+            presenter.chosenPlayerToShift(playerToShift,
+                    teamSideId == LEFT_TEAM_ID ? playersLeft.get(adapterPosition)
+                            : playersRight.get(adapterPosition), teamSideId);
+            dialogInterface.dismiss();
+        });
+
+        dialogBuilder.create().show();
+    }
+
+    @Override
+    public void makeChangeInAdapter(MatchPlayer playerOut, MatchPlayer playerIn, int teamSideId) {
+        PlayersAdapter adapter = teamSideId == LEFT_TEAM_ID ? adapterLeft : adapterRight;
+        ArrayList<MatchPlayer> players = teamSideId == LEFT_TEAM_ID ? playersLeft : playersRight;
+        int idx = players.indexOf(playerOut);
+        players.set(idx, playerIn);
+        adapter.notifyItemChanged(idx);
+    }
+
+    @Override
     public void makeShiftInLineUp(int teamSideId) {
         PlayersAdapter adapter = teamSideId == RIGHT_TEAM_ID ? adapterRight : adapterLeft;
         ArrayList<MatchPlayer> players = teamSideId == RIGHT_TEAM_ID ? playersRight : playersLeft;
@@ -269,20 +312,44 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
 
         MatchInfo matchInfo = new MatchInfo(polonia, poloniaPlayers, chelmiec, chelmiecPlayers, false, matchSettings);
         Map<Integer, MatchPlayer> lineUpA = new HashMap<>();
-        lineUpA.put(1, matchInfo.getTeamA().getPlayerByNumber(1));
-        lineUpA.put(2, matchInfo.getTeamA().getPlayerByNumber(2));
-        lineUpA.put(3, matchInfo.getTeamA().getPlayerByNumber(3));
-        lineUpA.put(4, matchInfo.getTeamA().getPlayerByNumber(4));
-        lineUpA.put(5, matchInfo.getTeamA().getPlayerByNumber(5));
-        lineUpA.put(6, matchInfo.getTeamA().getPlayerByNumber(7));
+        MatchPlayer mp = matchInfo.getTeamA().getPlayerByNumber(1);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpA.put(1, mp);
+        mp = matchInfo.getTeamA().getPlayerByNumber(2);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpA.put(2, mp);
+        mp = matchInfo.getTeamA().getPlayerByNumber(3);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpA.put(3, mp);
+        mp = matchInfo.getTeamA().getPlayerByNumber(4);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpA.put(4, mp);
+        mp = matchInfo.getTeamA().getPlayerByNumber(5);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpA.put(5, mp);
+        mp = matchInfo.getTeamA().getPlayerByNumber(7);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpA.put(7, mp);
         matchInfo.setTeamLineUp(MatchInfo.TEAM_A_ID, lineUpA);
         Map<Integer, MatchPlayer> lineUpB = new HashMap<>();
-        lineUpB.put(1, matchInfo.getTeamB().getPlayerByNumber(10));
-        lineUpB.put(2, matchInfo.getTeamB().getPlayerByNumber(12));
-        lineUpB.put(3, matchInfo.getTeamB().getPlayerByNumber(13));
-        lineUpB.put(4, matchInfo.getTeamB().getPlayerByNumber(15));
-        lineUpB.put(5, matchInfo.getTeamB().getPlayerByNumber(16));
-        lineUpB.put(6, matchInfo.getTeamB().getPlayerByNumber(99));
+        mp = matchInfo.getTeamB().getPlayerByNumber(10);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpB.put(1, mp);
+        mp = matchInfo.getTeamB().getPlayerByNumber(12);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpB.put(2, mp);
+        mp = matchInfo.getTeamB().getPlayerByNumber(13);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpB.put(3, mp);
+        mp = matchInfo.getTeamB().getPlayerByNumber(15);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpB.put(4, mp);
+        mp = matchInfo.getTeamB().getPlayerByNumber(16);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpB.put(5, mp);
+        mp = matchInfo.getTeamB().getPlayerByNumber(99);
+        mp.setStatusId(STATUS_PLAYER_ON_COURT);
+        lineUpB.put(6, mp);
         matchInfo.setTeamLineUp(MatchInfo.TEAM_B_ID, lineUpB);
         return matchInfo;
     }
@@ -293,6 +360,8 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         playersRight = new ArrayList<>(lineUpRight.values());
         adapterLeft = new PlayersAdapter(this, playersLeft);
         adapterRight = new PlayersAdapter(this, playersRight);
+        adapterLeft.setTeamSideId(LEFT_TEAM_ID);
+        adapterRight.setTeamSideId(RIGHT_TEAM_ID);
         recyclerViewLeft.setAdapter(adapterLeft);
         recyclerViewRight.setAdapter(adapterRight);
         recyclerViewLeft.setLayoutManager(new GridLayoutManager(this, 2));
@@ -300,7 +369,9 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     }
 
     @Override
-    public void onPlayerClicked(Object player, int adapterPosition) {
+    public void onPlayerClicked(Object player, int adapterPosition, PlayersAdapter adapter) {
+        MatchPlayer mPlayer = (MatchPlayer) player;
+        presenter.onPlayerClicked(mPlayer, adapterPosition, adapter.getTeamSideId());
     }
 
     @Override

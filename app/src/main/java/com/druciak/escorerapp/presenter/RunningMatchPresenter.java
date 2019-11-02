@@ -3,13 +3,21 @@ package com.druciak.escorerapp.presenter;
 import com.druciak.escorerapp.interfaces.IRunningMatchMVP;
 import com.druciak.escorerapp.model.entities.Action;
 import com.druciak.escorerapp.model.entities.MatchInfo;
+import com.druciak.escorerapp.model.entities.MatchPlayer;
 import com.druciak.escorerapp.model.entities.MatchTeam;
 import com.druciak.escorerapp.model.entities.Point;
+import com.druciak.escorerapp.model.entities.Shift;
 import com.druciak.escorerapp.model.entities.Time;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS_IN_TIEBREAK;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_MIN_DIFFERENT_POINTS;
+import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_NOT_TO_SHIFT;
+import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_ON_DESK;
+import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_SHIFTED;
 import static com.druciak.escorerapp.view.RunningMatchActivity.LEFT_TEAM_ID;
 import static com.druciak.escorerapp.view.RunningMatchActivity.RIGHT_TEAM_ID;
 
@@ -101,11 +109,16 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     private void makeAction(Action action) {
         if (action instanceof Time){
             int teamId = ((Time) action).getTeamId();
-            view.showTimeCountDown(teamId == leftTeam.getTeamId() ?
-                    leftTeam.getShortName() : rightTeam.getShortName());
+            MatchTeam team = teamId == leftTeam.getTeamId() ? leftTeam : rightTeam;
+            view.showTimeCountDown(team.getShortName());
             view.addTimeFor(teamId == leftTeam.getTeamId() ?
-                    LEFT_TEAM_ID : RIGHT_TEAM_ID, teamId == leftTeam.getTeamId() ?
-                    leftTeam.getTimesCounter() : rightTeam.getTimesCounter());
+                    LEFT_TEAM_ID : RIGHT_TEAM_ID, team.getTimesCounter());
+        } else if (action instanceof Shift) {
+            int teamId = ((Shift) action).getTeamId();
+            MatchTeam team = teamId == leftTeam.getTeamId() ? leftTeam : rightTeam;
+            view.makeChangeInAdapter(team.getPlayerByNumber(((Shift) action).getOutPlayerNb()),
+                    team.getPlayerByNumber(((Shift) action).getEnterPlayerNb()),
+                    teamId == leftTeam.getTeamId() ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
         }
     }
 
@@ -166,6 +179,44 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         Action action = new Time(team,
                 teamId == LEFT_TEAM_ID ? leftTeam.getPoints() : rightTeam.getPoints());
         updateMatchState(action);
+    }
+
+    @Override
+    public void onPlayerClicked(MatchPlayer mPlayer, int adapterPosition, int teamSideId) {
+        MatchTeam team = teamSideId == LEFT_TEAM_ID ? leftTeam : rightTeam;
+        if (team.canGetShift()){
+            int shiftNumber = mPlayer.getShiftNumber();
+            if (mPlayer.getStatusId() == STATUS_PLAYER_NOT_TO_SHIFT){
+                view.showPopUpWithInfo("Zmiana", "Zawodnik nie może być zmieniony.",
+                        "OK");
+            } else {
+                List<MatchPlayer> players = team.getPlayers().stream()
+                        .filter(player -> player.getStatusId() == STATUS_PLAYER_ON_DESK &&
+                                !player.isLibero() && player.isCanPlay())
+                        .collect(Collectors.toList());
+                if (mPlayer.getStatusId() == STATUS_PLAYER_SHIFTED)
+                {
+                    players = team.getPlayers().stream()
+                            .filter(player -> player.getNumber() == shiftNumber && player.isCanPlay())
+                            .collect(Collectors.toList());
+                }
+                if (players.isEmpty())
+                    view.showPopUpWithInfo("Zmiana", "Nie ma zawodników do zmiany.",
+                            "OK");
+                else
+                    view.showPopUpWithShift(players, adapterPosition, teamSideId);
+            }
+        } else
+        {
+            view.showPopUpWithInfo("Zmiana", "Zespół nie ma już zmian.", "OK");
+        }
+    }
+
+    @Override
+    public void chosenPlayerToShift(MatchPlayer playerToShift, MatchPlayer player, int teamSideId) {
+        Action action = new Shift(player, playerToShift, teamSideId == LEFT_TEAM_ID ? leftTeam : rightTeam,
+                teamSideId == LEFT_TEAM_ID ? rightTeam.getPoints() : leftTeam.getPoints());
+        makeAction(action);
     }
 
     private MatchTeam getServeTeam(int set) {

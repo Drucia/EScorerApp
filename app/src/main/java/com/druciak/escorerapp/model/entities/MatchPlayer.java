@@ -10,6 +10,8 @@ import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CAR
 public class MatchPlayer extends Player implements Parcelable {
     public static final int STATUS_PLAYER_ON_COURT = 1;
     public static final int STATUS_PLAYER_ON_DESK = 2;
+    public static final int STATUS_PLAYER_SHIFTED = 3;
+    public static final int STATUS_PLAYER_NOT_TO_SHIFT = 4;
     public static final int NO_SHIFT = -1;
 
     private int statusId;

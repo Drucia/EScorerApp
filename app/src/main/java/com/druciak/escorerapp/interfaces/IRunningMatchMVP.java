@@ -23,6 +23,8 @@ public interface IRunningMatchMVP {
         void showTimeCountDown(String teamName);
         void showPopUpWithConfirm(int teamId);
         void resetTimes();
+        void showPopUpWithShift(List<MatchPlayer> players, int adapterPosition, int teamSideId);
+        void makeChangeInAdapter(MatchPlayer playerOut, MatchPlayer playerIn, int teamSideId);
     }
 
     interface IPresenter{
@@ -37,5 +39,7 @@ public interface IRunningMatchMVP {
         void onNextSetClicked();
         void onTimeClicked(int teamId);
         void onTimeConfirmClicked(int teamId);
+        void onPlayerClicked(MatchPlayer mPlayer, int adapterPosition, int teamSideId);
+        void chosenPlayerToShift(MatchPlayer playerToShift, MatchPlayer player, int teamSideId);
     }
 }

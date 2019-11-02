@@ -162,7 +162,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
             // todo if will be time
             Chip newChip = (Chip) getLayoutInflater().inflate(R.layout.default_chip, group, false);
             newChip.setId(number);
-            newChip.setText(number < 10 ? " " + String.valueOf(number) + " " : String.valueOf(number));
+            newChip.setText(number < 10 ? " " + number + " " : String.valueOf(number));
             group.addView(newChip);
             if (isCaptainPopUp && captainNumber == number){
                 group.check(newChip.getId());
@@ -221,7 +221,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         dialogBuilder.create().show();
     }
 
-    void showPopUpWithAddedTeamMemberFields(int id, String data, int chipId)
+    private void showPopUpWithAddedTeamMemberFields(int id, String data, int chipId)
     {
         boolean isCoach = id == R.id.coachFab;
         boolean isNew = data.equals("");
@@ -295,11 +295,11 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     }
 
     @Override
-    public void onPlayerClicked(Object player, int adapterPosition) {
+    public void onPlayerClicked(Object player, int adapterPosition, PlayersAdapter adapter) {
         showPopUpForPlayer((Player) player, adapterPosition);
     }
 
-    public void showPopUpForPlayer(Player player, int adapterPosition)
+    private void showPopUpForPlayer(Player player, int adapterPosition)
     {
         boolean isNew = player == null;
 

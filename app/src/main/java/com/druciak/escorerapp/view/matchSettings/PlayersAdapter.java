@@ -21,10 +21,19 @@ import java.util.ArrayList;
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHolder> {
     private ArrayList<? extends Player> listItems;
     private IOnPlayerTouchCallback callback;
+    private int teamSideId;
 
     public PlayersAdapter(IOnPlayerTouchCallback view, ArrayList<? extends Player> players) {
         this.callback = view;
         this.listItems = players;
+    }
+
+    public int getTeamSideId() {
+        return teamSideId;
+    }
+
+    public void setTeamSideId(int teamSideId) {
+        this.teamSideId = teamSideId;
     }
 
     @NonNull
@@ -76,7 +85,8 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
             shirt = itemView.findViewById(R.id.shirtImageView);
             playerContent = itemView.findViewById(R.id.playerLayout);
             playerContent.setOnClickListener(view ->
-                    callback.onPlayerClicked(listItems.get(getAdapterPosition()), getAdapterPosition()));
+                    callback.onPlayerClicked(listItems.get(getAdapterPosition()),
+                            getAdapterPosition(), PlayersAdapter.this));
         }
     }
 }
