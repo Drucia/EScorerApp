@@ -11,6 +11,7 @@ import com.druciak.escorerapp.model.entities.Shift;
 import com.druciak.escorerapp.model.entities.Time;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -143,7 +144,8 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     }
 
     private void makeShiftInLineUp(Integer teamId) {
-        // todo
+        MatchTeam team = teamId == leftTeam.getTeamId() ? leftTeam : rightTeam;
+        team.makeShift();
     }
 
     private void isEndOfMatch() {
@@ -258,7 +260,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         MatchTeam team = teamSideId == LEFT_TEAM_ID ? leftTeam : rightTeam;
         if (player.isPresent()) {
             Action action = new LineUp(team, player.get(), areaNb);
-            updateMatchState(action);
+            makeAction(action);
         } else {
             if (out != null)
                 out.setStatusId(STATUS_PLAYER_ON_DESK);
@@ -271,6 +273,21 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     public void onConfirmLineUp(boolean isSetLineUp, MatchTeam team) {
         team.setIsLineUpSet(isSetLineUp);
         updateCanPlay();
+
+        if (canPlay) {
+            addLineUpActions(leftTeam);
+            addLineUpActions(rightTeam);
+        }
+    }
+
+    private void addLineUpActions(MatchTeam team) {
+        Map<Integer, MatchPlayer> lineUp = team.getLineUp();
+        for (int i = 0; i < lineUp.size(); i++)
+        {
+            MatchPlayer player = lineUp.get(i+1);
+            Action action = new LineUp(team, player, i+1);
+            matchInfo.addAction(actualSet, action);
+        }
     }
 
     @Override

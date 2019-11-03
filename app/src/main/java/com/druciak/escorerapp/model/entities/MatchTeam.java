@@ -1,5 +1,6 @@
 package com.druciak.escorerapp.model.entities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,5 +114,23 @@ public class MatchTeam extends Team {
 
     public void setIsLineUpSet(boolean isSetLineUp) {
         this.isLineUpSet = isSetLineUp;
+    }
+
+    public void makeShift() {
+        List<MatchPlayer> players = new ArrayList<>(lineUp.values());
+        MatchPlayer p = players.remove(0);
+        players.add(p);
+
+        for (int i = 0; i < players.size(); i++)
+            lineUp.put(i +1 , players.get(i));
+    }
+
+    public void makeRevertShift() {
+        List<MatchPlayer> players = new ArrayList<>(lineUp.values());
+        MatchPlayer p = players.remove(players.size()-1);
+        players.add(0, p);
+
+        for (int i = 0; i < players.size(); i++)
+            lineUp.put(i +1 , players.get(i));
     }
 }

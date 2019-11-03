@@ -9,7 +9,8 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:minWidth="50dp">
 
         <ImageView
             android:id="@+id/shirtImageView"
@@ -31,6 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:minWidth="50dp"
+        android:textAlignment="center"
         android:textSize="10sp" />
 
     <TextView
@@ -38,5 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:minWidth="50dp"
+        android:textAlignment="center"
         android:textSize="10sp" />
 </LinearLayout>

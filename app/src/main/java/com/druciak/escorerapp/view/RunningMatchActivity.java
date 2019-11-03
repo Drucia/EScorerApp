@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,7 +65,6 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     private ImageView leftCards;
     private ImageView rightCards;
     private SpeedDialView speedDial;
-    private CoordinatorLayout mainPanel;
     private View leftFirstTime;
     private View rightFirstTime;
     private View leftSndTime;
@@ -123,7 +121,6 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         leftCards = findViewById(R.id.cardsLeft);
         rightCards = findViewById(R.id.cardsRight);
         speedDial = findViewById(R.id.speedDialRunningMatch);
-        mainPanel = findViewById(R.id.runningMatchPanel);
         leftFirstTime = findViewById(R.id.timeCounterFirstLeft);
         rightFirstTime = findViewById(R.id.timeCounterFirstRight);
         leftSndTime = findViewById(R.id.timeCounterSndLeft);
