@@ -1,5 +1,7 @@
 package com.druciak.escorerapp.model.entities;
 
+import java.util.Optional;
+
 import static com.druciak.escorerapp.model.entities.MatchInfo.RED_CARD_ID;
 import static com.druciak.escorerapp.model.entities.MatchInfo.TEAM_A_ID;
 import static com.druciak.escorerapp.model.entities.MatchInfo.TEAM_B_ID;
@@ -17,10 +19,10 @@ public class TeamPunishment extends Action {
     }
 
     @Override
-    public Integer returnTeamIdIfIsPoint() {
+    public Optional<Integer> returnTeamIdIfIsPoint() {
         if (cardId == RED_CARD_ID)
-            return teamId == TEAM_A_ID ? TEAM_B_ID : TEAM_A_ID;
+            return Optional.of(teamId == TEAM_A_ID ? TEAM_B_ID : TEAM_A_ID);
         else
-            return null;
+            return Optional.empty();
     }
 }

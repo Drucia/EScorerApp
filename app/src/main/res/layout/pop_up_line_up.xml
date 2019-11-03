@@ -34,7 +34,7 @@
             android:layout_height="0dp" />
 
         <include
-            android:id="@+id/third"
+            android:id="@+id/three"
             layout="@layout/row_player" />
 
         <View
@@ -71,7 +71,7 @@
             android:layout_height="0dp" />
 
         <include
-            android:id="@+id/first"
+            android:id="@+id/one"
             layout="@layout/row_player" />
     </LinearLayout>
 

@@ -1,8 +1,10 @@
 package com.druciak.escorerapp.model.entities;
 
+import java.util.Optional;
+
 public abstract class Action {
-    private int teamMadeActionPoints;
-    private int sndTeamPoints;
+    private int teamMadeActionPoints = 0;
+    private int sndTeamPoints = 0;
 
     public String getScore() {
         return teamMadeActionPoints + " : " + sndTeamPoints;
@@ -13,5 +15,5 @@ public abstract class Action {
         this.sndTeamPoints = sndTeamPoints;
     }
 
-    public abstract Integer returnTeamIdIfIsPoint();
+    public abstract Optional<Integer> returnTeamIdIfIsPoint();
 }

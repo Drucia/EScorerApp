@@ -1,5 +1,7 @@
 package com.druciak.escorerapp.model.entities;
 
+import java.util.Optional;
+
 public class Time extends Action {
     private int teamId;
     private int timeCount;
@@ -16,7 +18,7 @@ public class Time extends Action {
     }
 
     @Override
-    public Integer returnTeamIdIfIsPoint() {
+    public Optional<Integer> returnTeamIdIfIsPoint() {
         return null;
     }
 }

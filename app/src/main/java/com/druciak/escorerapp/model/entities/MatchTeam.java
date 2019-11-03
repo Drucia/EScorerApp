@@ -13,6 +13,8 @@ import static com.druciak.escorerapp.view.RunningMatchActivity.LEFT_TEAM_ID;
 import static com.druciak.escorerapp.view.RunningMatchActivity.RIGHT_TEAM_ID;
 
 public class MatchTeam extends Team {
+    public static final int PLAYERS_ON_COURT = 6;
+
     private List<MatchPlayer> players;
     private Map<Integer, MatchPlayer> lineUp;
     private int points;
@@ -21,6 +23,7 @@ public class MatchTeam extends Team {
     private int teamSideId;
     private int timesCounter;
     private int shiftCounter;
+    private boolean isLineUpSet;
 
     public MatchTeam(Team team, List<Player> players, int teamId) {
         super(team);
@@ -30,6 +33,11 @@ public class MatchTeam extends Team {
         sets = 0;
         this.teamId = teamId;
         this.teamSideId = teamId == TEAM_A_ID ? LEFT_TEAM_ID : RIGHT_TEAM_ID;
+        this.isLineUpSet = false;
+    }
+
+    public boolean getIsLineUpSet() {
+        return isLineUpSet;
     }
 
     public int getTeamSideId() {
@@ -92,5 +100,18 @@ public class MatchTeam extends Team {
         this.points = 0;
         this.timesCounter = 0;
         this.shiftCounter = 0;
+    }
+
+    public void setLineUp(int areaNb, MatchPlayer player) {
+        if (player == null){
+            lineUp.remove(areaNb);
+        } else {
+            lineUp.put(areaNb, player);
+        }
+        isLineUpSet = lineUp.size() == PLAYERS_ON_COURT;
+    }
+
+    public void setIsLineUpSet(boolean isSetLineUp) {
+        this.isLineUpSet = isSetLineUp;
     }
 }

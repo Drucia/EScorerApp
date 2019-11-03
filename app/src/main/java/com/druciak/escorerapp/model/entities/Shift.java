@@ -1,5 +1,7 @@
 package com.druciak.escorerapp.model.entities;
 
+import java.util.Optional;
+
 import static com.druciak.escorerapp.model.entities.MatchPlayer.NO_SHIFT;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_NOT_TO_SHIFT;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_SHIFTED;
@@ -10,15 +12,15 @@ public class Shift extends Action{
     private int teamId;
 
     public Shift(MatchPlayer out, MatchPlayer enter, MatchTeam team, int sndTeamPoints) {
-        outPlayerNb = out.getNumber();
+
         enterPlayerNb = enter.getNumber();
+        outPlayerNb = out.getNumber();
         this.teamId = team.getTeamId();
         setScore(team.getPoints(), sndTeamPoints);
-        if (out.getShiftNumber() != NO_SHIFT){
+        if (out.getShiftNumber() != NO_SHIFT) {
             out.setStatusId(STATUS_PLAYER_NOT_TO_SHIFT);
             enter.setStatusId(STATUS_PLAYER_NOT_TO_SHIFT);
-        }
-        else {
+        } else {
             out.setStatusId(STATUS_PLAYER_SHIFTED);
             enter.setStatusId(STATUS_PLAYER_SHIFTED);
         }
@@ -28,8 +30,8 @@ public class Shift extends Action{
     }
 
     @Override
-    public Integer returnTeamIdIfIsPoint() {
-        return null;
+    public Optional<Integer> returnTeamIdIfIsPoint() {
+        return Optional.empty();
     }
 
     public int getTeamId() {

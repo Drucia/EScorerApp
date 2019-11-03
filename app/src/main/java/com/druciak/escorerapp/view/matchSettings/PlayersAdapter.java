@@ -1,6 +1,7 @@
 package com.druciak.escorerapp.view.matchSettings;
 
 import android.graphics.Paint;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,11 @@ import com.druciak.escorerapp.model.entities.MatchPlayer;
 import com.druciak.escorerapp.model.entities.Player;
 
 import java.util.ArrayList;
+import java.util.Map;
+
+import static com.druciak.escorerapp.view.RunningMatchActivity.LEFT_TEAM_ID;
+import static com.druciak.escorerapp.view.RunningMatchActivity.leftLineUpConversion;
+import static com.druciak.escorerapp.view.RunningMatchActivity.rightLineUpConversion;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHolder> {
     private ArrayList<? extends Player> listItems;
@@ -39,7 +45,8 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
     @NonNull
     @Override
     public PlayersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layoutId = listItems.get(0) instanceof MatchPlayer ? R.layout.row_player_match : R.layout.row_player;
+        int layoutId = listItems.get(0) instanceof MatchPlayer || listItems.get(0) == null
+                ? R.layout.row_player_match : R.layout.row_player;
         View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         return new PlayersAdapter.ViewHolder(view);
     }
@@ -48,20 +55,27 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
     public void onBindViewHolder(@NonNull PlayersAdapter.ViewHolder holder, int position) {
         Player player = listItems.get(position);
 
-        holder.name.setText(player.getName());
-        holder.surname.setText(player.getSurname());
+        if (player != null) {
 
-        if (player.isCaptain())
-            holder.number.setPaintFlags(holder.number.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        else
-            holder.number.setPaintFlags(holder.number.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
+            holder.name.setText(player.getName());
+            holder.surname.setText(player.getSurname());
 
-        holder.number.setText(player.getNumber() == 0 ? "" : String.valueOf(player.getNumber()));
+            if (player.isCaptain())
+                holder.number.setPaintFlags(holder.number.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            else
+                holder.number.setPaintFlags(holder.number.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
 
-        if (player.isLibero())
-            holder.shirt.setImageResource(R.drawable.libero_shirt);
-        else {
-            holder.shirt.setBackgroundResource(R.drawable.player_shirt);
+            holder.number.setText(player.getNumber() == 0 ? "" : String.valueOf(player.getNumber()));
+
+            if (player.isLibero())
+                holder.shirt.setImageResource(R.drawable.libero_shirt);
+            else {
+                holder.shirt.setBackgroundResource(R.drawable.player_shirt);
+            }
+        } else {
+            Map<Integer, Pair<Integer, String>> conversion = teamSideId == LEFT_TEAM_ID ?
+                    leftLineUpConversion : rightLineUpConversion;
+            holder.number.setText(conversion.get(position).second);
         }
     }
 
