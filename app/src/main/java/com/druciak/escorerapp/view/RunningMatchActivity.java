@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Pair;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,6 +50,7 @@ import static com.druciak.escorerapp.model.entities.MatchInfo.TIME_LENGHT;
 public class RunningMatchActivity extends AppCompatActivity implements IRunningMatchMVP.IView{
     public static final int RIGHT_TEAM_ID = 1;
     public static final int LEFT_TEAM_ID = 2;
+    public static final int NO_TEAM_ID = -1;
 
     private IRunningMatchMVP.IPresenter presenter;
     private PlayersAdapter adapterLeft;
@@ -181,6 +185,32 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         leftPoint.setOnClickListener(view -> presenter.onAddPointClicked(LEFT_TEAM_ID));
         rightTime.setOnClickListener(view -> presenter.onTimeClicked(RIGHT_TEAM_ID));
         leftTime.setOnClickListener(view -> presenter.onTimeClicked(LEFT_TEAM_ID));
+        View.OnClickListener listener = view -> {
+            int side = view.getId() == R.id.cardsLeft ? LEFT_TEAM_ID : RIGHT_TEAM_ID;
+
+            MenuBuilder builder = new MenuBuilder(RunningMatchActivity.this);
+            builder.add("Opóźnienie").setIcon(R.drawable.delay);
+            builder.add("Zachowanie").setIcon(R.drawable.behaviour);
+            builder.setCallback(new MenuBuilder.Callback() {
+                @Override
+                public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
+                    presenter.onCardClicked(side, item.getTitle().equals("Opóźnienie"));
+                    return true;
+                }
+
+                @Override
+                public void onMenuModeChange(MenuBuilder menu) {
+
+                }
+            });
+            MenuPopupHelper menuHelper = new MenuPopupHelper(RunningMatchActivity.this,
+                    builder, view);
+            menuHelper.setForceShowIcon(true);
+            menuHelper.show();
+        };
+
+        rightCards.setOnClickListener(listener);
+        leftCards.setOnClickListener(listener);
 
         presenter = new RunningMatchPresenter(this, matchInfo);
         presenter.onActivityCreated();
@@ -196,6 +226,14 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         });
         builder.setNegativeButton("NIE", (dialogInterface, i) -> dialogInterface.cancel());
         builder.create().show();
+    }
+
+    @Override
+    public void showPopUpWithPunishments(int teamSideId, boolean isTeamPun) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Kara");
+        builder.setMessage(teamSideId == LEFT_TEAM_ID ? "lewa" : "prawa" + " czy drużynowa: " + isTeamPun);
+        builder.create().show(); //todo
     }
 
     @Override

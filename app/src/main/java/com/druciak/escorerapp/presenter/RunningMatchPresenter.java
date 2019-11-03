@@ -302,6 +302,11 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
             view.showPopUpWithConfirmLineUp(team);
     }
 
+    @Override
+    public void onCardClicked(int teamSideId, boolean isTeamPun) {
+        view.showPopUpWithPunishments(teamSideId, isTeamPun);
+    }
+
     private void updateCanPlay() {
         canPlay = leftTeam.getIsLineUpSet() && rightTeam.getIsLineUpSet();
     }

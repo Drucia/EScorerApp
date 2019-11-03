@@ -69,5 +69,7 @@
     <string name="captain_label">Kapitan</string>
     <string name="libero_label">Libero</string>
     <string name="hint_player_number">Numer koszulki</string>
+    <string name="menu_team_punish">Opóźnienie</string>
+    <string name="menu_mem_punish">Zachowanie</string>
 
 </resources>

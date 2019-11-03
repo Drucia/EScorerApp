@@ -29,6 +29,7 @@ public interface IRunningMatchMVP {
         void makeChangeInAdapter(MatchPlayer playerOut, MatchPlayer playerIn, int teamSideId);
         void showToast(String msg);
         void showPopUpWithConfirmTime(int teamId);
+        void showPopUpWithPunishments(int teamSideId, boolean isTeamPun);
     }
 
     interface IPresenter{
@@ -47,5 +48,6 @@ public interface IRunningMatchMVP {
         void onConfirmLineUp(boolean isSetLineUp, MatchTeam team);
         void onActivityCreated();
         void cancelChoosePlayerToLineUp(int teamSideId);
+        void onCardClicked(int teamSideId, boolean isTeamPun);
     }
 }
