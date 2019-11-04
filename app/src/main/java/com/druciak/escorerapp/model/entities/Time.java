@@ -19,6 +19,6 @@ public class Time extends Action {
 
     @Override
     public Optional<Integer> returnTeamIdIfIsPoint() {
-        return null;
+        return Optional.empty();
     }
 }
