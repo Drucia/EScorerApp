@@ -75,6 +75,10 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
         } else {
             Map<Integer, Pair<Integer, String>> conversion = teamSideId == LEFT_TEAM_ID ?
                     leftLineUpConversion : rightLineUpConversion;
+            holder.name.setText("");
+            holder.surname.setText("");
+            holder.shirt.setBackgroundResource(R.drawable.player_shirt);
+            holder.number.setPaintFlags(holder.number.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
             holder.number.setText(conversion.get(position).second);
         }
     }

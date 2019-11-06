@@ -11,6 +11,7 @@ public class MatchInfo {
     public static final int RED_CARD_ID = 2;
     public static final int YELLOW_AND_RED_CARD_TOGETHER_ID = 3;
     public static final int YELLOW_AND_RED_CARD_SEPARATELY_ID = 4;
+    public static final int WARNING_ID = 5;
     public static final int TEAM_A_ID = 6;
     public static final int TEAM_B_ID = 7;
     public static final int MATCH_END_POINTS = 25;
@@ -22,7 +23,7 @@ public class MatchInfo {
     public static final int MIN_SETS_TO_WIN_FOR_YOUNG = 2;
     public static final int MAX_TIMES_AMOUNT = 2;
     public static final int MAX_SHIFTS_AMOUNT = 6;
-    public static final int TIME_LENGHT = 30;
+    public static final int TIME_LENGTH = 30;
     public static final String YOUNG_TYPE_OF_MATCH = "Młodzicy";
 
     private MatchTeam teamA;
@@ -33,8 +34,8 @@ public class MatchInfo {
 
     public MatchInfo(Team teamA, List<Player> playersA, Team teamB, List<Player> playersB,
                      boolean isAServe, MatchSettings settings) {
-        this.teamA = new MatchTeam(teamA, playersA, TEAM_A_ID);
-        this.teamB = new MatchTeam(teamB, playersB, TEAM_B_ID);
+        this.teamA = new MatchTeam(teamA, playersA, TEAM_A_ID, settings.getMembers());
+        this.teamB = new MatchTeam(teamB, playersB, TEAM_B_ID, settings.getMembers());
         this.serveTeam = isAServe ? this.teamA : this.teamB;
         this.settings = settings;
         actionsOfSets = new HashMap<>();

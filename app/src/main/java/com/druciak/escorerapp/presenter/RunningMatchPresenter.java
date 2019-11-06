@@ -8,6 +8,7 @@ import com.druciak.escorerapp.model.entities.MatchPlayer;
 import com.druciak.escorerapp.model.entities.MatchTeam;
 import com.druciak.escorerapp.model.entities.Point;
 import com.druciak.escorerapp.model.entities.Shift;
+import com.druciak.escorerapp.model.entities.TeamPunishment;
 import com.druciak.escorerapp.model.entities.Time;
 
 import java.util.List;
@@ -29,11 +30,11 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
 
     private IRunningMatchMVP.IView view;
     private MatchInfo matchInfo;
-    MatchTeam serveTeam;
-    MatchTeam leftTeam;
-    MatchTeam rightTeam;
-    int actualSet;
-    boolean canPlay;
+    private MatchTeam serveTeam;
+    private MatchTeam leftTeam;
+    private MatchTeam rightTeam;
+    private int actualSet;
+    private boolean canPlay;
 
     public RunningMatchPresenter(IRunningMatchMVP.IView view, MatchInfo matchInfo) {
         this.view = view;
@@ -165,7 +166,9 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         setTeamsParams();
         MatchTeam tmp = leftTeam;
         leftTeam = rightTeam;
+        leftTeam.setTeamSideId(LEFT_TEAM_ID);
         rightTeam = tmp;
+        rightTeam.setTeamSideId(RIGHT_TEAM_ID);
         serveTeam = getServeTeam(++actualSet);
         canPlay = false;
         view.setScore("0 : 0");
@@ -173,6 +176,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         view.setFields(leftTeam.getFullName(), rightTeam.getFullName(),
                 serveTeam == leftTeam ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
         view.resetTimes();
+        view.resetAdapters();
     }
 
     @Override
@@ -210,10 +214,15 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     private void onPlayerClickedBeforeStartMatch(int adapterPosition,
                                                  int teamSideId) {
         MatchTeam team = teamSideId == LEFT_TEAM_ID ? leftTeam : rightTeam;
-        view.showPopUpWithShift(team.getPlayers().stream()
-                .filter(player -> player.getStatusId() == STATUS_PLAYER_ON_DESK &&
-                        !player.isLibero())
-                .collect(Collectors.toList()), adapterPosition, teamSideId, canPlay);
+        if (team.getIsLineUpSet())
+        {
+            view.showToast("Nie wprowadzono ustawienia drugiej drużyny");
+        } else {
+            view.showPopUpWithShift(team.getPlayers().stream()
+                    .filter(player -> player.getStatusId() == STATUS_PLAYER_ON_DESK &&
+                            !player.isLibero())
+                    .collect(Collectors.toList()), adapterPosition, teamSideId, canPlay);
+        }
     }
 
     private void onPlayerClickedOnMatchDuring(MatchPlayer mPlayer, int adapterPosition,
@@ -262,11 +271,11 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
             Action action = new LineUp(team, player.get(), areaNb);
             makeAction(action);
         } else {
-            if (out != null)
-                out.setStatusId(STATUS_PLAYER_ON_DESK);
             team.setLineUp(areaNb, null);
             view.updateAdapterWithPlayersLineUp(null, areaNb, teamSideId);
         }
+        if (out != null)
+            out.setStatusId(STATUS_PLAYER_ON_DESK);
     }
 
     @Override
@@ -304,7 +313,29 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
 
     @Override
     public void onCardClicked(int teamSideId, boolean isTeamPun) {
-        view.showPopUpWithPunishments(teamSideId, isTeamPun);
+        if (canPlay) {
+            if (isTeamPun) {
+                view.showPopUpWithTeamPunish(teamSideId);
+            } else {
+                view.showPopUpWithMemberPunish(teamSideId == leftTeam.getTeamSideId() ? leftTeam :
+                        rightTeam);
+            }
+        }
+        else {
+            view.showToast(LINE_UP_NOT_SET);
+        }
+    }
+
+    @Override
+    public void onPunishmentClicked(int teamSideId, int cardId) {
+        MatchTeam team = teamSideId == leftTeam.getTeamSideId() ? leftTeam : rightTeam;
+        Action action = new TeamPunishment(cardId, team, actualSet, getSecondTeam(team));
+        updateMatchState(action);
+    }
+
+    @Override
+    public void onPunishmentClicked(MatchTeam team, int cardId, int memberId, int memberNb) {
+
     }
 
     private void updateCanPlay() {

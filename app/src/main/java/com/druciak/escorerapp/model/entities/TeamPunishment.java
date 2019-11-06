@@ -11,11 +11,14 @@ public class TeamPunishment extends Action {
     private int teamId;
     private int set;
 
-    public TeamPunishment(int cardId, int teamId, int set, int teamPoints, int sndTeamPoints){
+    public TeamPunishment(int cardId, MatchTeam team, int set, MatchTeam sndTeam){
         this.cardId = cardId;
-        this.teamId = teamId;
+        this.teamId = team.getTeamId();
         this.set = set;
-        setScore(teamPoints, sndTeamPoints);
+        setScore(team.getPoints(), sndTeam.getPoints());
+        team.setCardId(cardId);
+        if (cardId == RED_CARD_ID)
+            sndTeam.addPoint();
     }
 
     @Override

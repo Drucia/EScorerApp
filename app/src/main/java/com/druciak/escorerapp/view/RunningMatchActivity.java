@@ -5,16 +5,14 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Pair;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,18 +37,24 @@ import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.druciak.escorerapp.model.entities.MatchInfo.TIME_LENGHT;
+import static com.druciak.escorerapp.model.entities.MatchInfo.RED_CARD_ID;
+import static com.druciak.escorerapp.model.entities.MatchInfo.TIME_LENGTH;
+import static com.druciak.escorerapp.model.entities.MatchInfo.WARNING_ID;
+import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_CARD_ID;
+import static com.druciak.escorerapp.model.entities.TeamAdditionalMember.COACH_MEMBER_ID;
+import static com.druciak.escorerapp.model.entities.TeamAdditionalMember.MASSEUR_MEMBER_ID;
+import static com.druciak.escorerapp.model.entities.TeamAdditionalMember.MEDICINE_MEMBER_ID;
 
 public class RunningMatchActivity extends AppCompatActivity implements IRunningMatchMVP.IView{
     public static final int RIGHT_TEAM_ID = 1;
     public static final int LEFT_TEAM_ID = 2;
-    public static final int NO_TEAM_ID = -1;
 
     private IRunningMatchMVP.IPresenter presenter;
     private PlayersAdapter adapterLeft;
@@ -73,6 +77,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     private View rightFirstTime;
     private View leftSndTime;
     private View rightSndTime;
+    private LinearLayout cardsLayout;
 
     private ArrayList<MatchPlayer> playersLeft;
     private ArrayList<MatchPlayer> playersRight;
@@ -186,31 +191,27 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         rightTime.setOnClickListener(view -> presenter.onTimeClicked(RIGHT_TEAM_ID));
         leftTime.setOnClickListener(view -> presenter.onTimeClicked(LEFT_TEAM_ID));
         View.OnClickListener listener = view -> {
-            int side = view.getId() == R.id.cardsLeft ? LEFT_TEAM_ID : RIGHT_TEAM_ID;
-
-            MenuBuilder builder = new MenuBuilder(RunningMatchActivity.this);
-            builder.add("Opóźnienie").setIcon(R.drawable.delay);
-            builder.add("Zachowanie").setIcon(R.drawable.behaviour);
-            builder.setCallback(new MenuBuilder.Callback() {
-                @Override
-                public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
-                    presenter.onCardClicked(side, item.getTitle().equals("Opóźnienie"));
-                    return true;
-                }
-
-                @Override
-                public void onMenuModeChange(MenuBuilder menu) {
-
-                }
-            });
-            MenuPopupHelper menuHelper = new MenuPopupHelper(RunningMatchActivity.this,
-                    builder, view);
-            menuHelper.setForceShowIcon(true);
-            menuHelper.show();
+            cardsLayout = view.getId() == R.id.cardsLeft ? findViewById(R.id.leftLayoutCards)
+                    : findViewById(R.id.rightLayoutCards);
+            if (cardsLayout.getVisibility() == View.GONE) {
+                int teamId = view.getId() == R.id.cardsLeft ? LEFT_TEAM_ID : RIGHT_TEAM_ID;
+                cardsLayout.setVisibility(View.VISIBLE);
+                ImageView delay = findViewById(view.getId() == R.id.cardsLeft ? R.id.leftDelay : R.id.rightDelay);
+                ImageView behavior = findViewById(view.getId() == R.id.cardsLeft ? R.id.leftBehavior : R.id.rightBehavior);
+                delay.setOnClickListener(view1 -> {presenter.onCardClicked(teamId, true);
+                    cardsLayout.setVisibility(View.GONE);});
+                behavior.setOnClickListener(view1 -> {presenter.onCardClicked(teamId, false);
+                    cardsLayout.setVisibility(View.GONE);});
+            } else
+                cardsLayout.setVisibility(View.GONE);
         };
-
-        rightCards.setOnClickListener(listener);
         leftCards.setOnClickListener(listener);
+        rightCards.setOnClickListener(listener);
+
+        findViewById(R.id.relativeLayout).setOnClickListener(view -> {
+            if (cardsLayout != null && cardsLayout.getVisibility() == View.VISIBLE)
+                cardsLayout.setVisibility(View.GONE);
+        });
 
         presenter = new RunningMatchPresenter(this, matchInfo);
         presenter.onActivityCreated();
@@ -219,7 +220,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     public void showPopUpWithConfirmTime(int teamId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Czas");
-        builder.setMessage("Czy na pewno chcesz wziąć czas?");
+        builder.setMessage("Czy na pewno przyznać przerwę?");
         builder.setPositiveButton("TAK", (dialogInterface, i) -> {
             presenter.onTimeConfirmClicked(teamId);
             dialogInterface.dismiss();
@@ -229,11 +230,111 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     }
 
     @Override
-    public void showPopUpWithPunishments(int teamSideId, boolean isTeamPun) {
+    public void showPopUpWithTeamPunish(int teamSideId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Kara");
-        builder.setMessage(teamSideId == LEFT_TEAM_ID ? "lewa" : "prawa" + " czy drużynowa: " + isTeamPun);
-        builder.create().show(); //todo
+        View root = getLayoutInflater().inflate(R.layout.pop_up_delay, null);
+        ChipGroup group = root.findViewById(R.id.cardsChipGroup);
+        builder.setView(root);
+        // todo if time allow - filter cards
+        builder.setPositiveButton("Zatwierdź", (dialogInterface, i) -> {
+            int chipId = group.getCheckedChipId();
+            if (chipId != -1)
+            {
+                switch (chipId)
+                {
+                    case R.id.chipWarning:
+                        presenter.onPunishmentClicked(teamSideId, WARNING_ID);
+                        break;
+                    case R.id.chipYellow:
+                        presenter.onPunishmentClicked(teamSideId, YELLOW_CARD_ID);
+                        break;
+                    case R.id.chipRed:
+                        presenter.onPunishmentClicked(teamSideId, RED_CARD_ID);
+                        break;
+                }
+                dialogInterface.dismiss();
+            } else
+            {
+                Toast.makeText(RunningMatchActivity.this, "Wybierz karę",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Anuluj", (dialogInterface, i) -> dialogInterface.dismiss());
+        builder.create().show();
+    }
+
+    @Override
+    public void showPopUpWithMemberPunish(MatchTeam team)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Niewłaściwe zachowanie");
+        View root = getLayoutInflater().inflate(R.layout.pop_up_behavior, null);
+        ChipGroup memberGroup = root.findViewById(R.id.memberGroupMem);
+        for (MatchPlayer player : team.getPlayers().stream()
+                .sorted(Comparator.comparing(MatchPlayer::getNumber))
+                .collect(Collectors.toList()))
+        {
+            Chip newChip = (Chip) getLayoutInflater().inflate(R.layout.default_chip, memberGroup, false);
+            int number = player.getNumber();
+            newChip.setId(number);
+            newChip.setText(number < 10 ? " " + number + " " : String.valueOf(number));
+            memberGroup.addView(newChip);
+        }
+
+        List<TeamAdditionalMember> members = team.getMembers().stream()
+                .sorted(Comparator.comparingInt(TeamAdditionalMember::getMemberId))
+                .collect(Collectors.toList());
+        int coachCounter = 0;
+        int medicineCounter = 0;
+        int masseurCounter = 0;
+        for (int i = 1; i <= members.size(); i++)
+        {
+            Chip newChip = (Chip) getLayoutInflater().inflate(R.layout.default_chip, memberGroup, false);
+            newChip.setId(100+i);
+            TeamAdditionalMember m = members.get(i-1);
+            switch (m.getMemberId()) {
+                case COACH_MEMBER_ID:
+                    newChip.setText("C"+ (++coachCounter));
+                    break;
+                case MEDICINE_MEMBER_ID:
+                    newChip.setText("M"+ (++medicineCounter));
+                    break;
+                case MASSEUR_MEMBER_ID:
+                    newChip.setText("T"+ (++masseurCounter));
+                    break;
+            }
+            memberGroup.addView(newChip);
+        }
+
+        ChipGroup group = root.findViewById(R.id.cardsChipGroupMem);
+        builder.setView(root);
+        // todo if time allow - filter cards
+        builder.setPositiveButton("Zatwierdź", (dialogInterface, i) -> {
+            int chipId = group.getCheckedChipId();
+            if (chipId != -1)
+            {
+                dialogInterface.dismiss();
+            } else
+            {
+                Toast.makeText(RunningMatchActivity.this, "Wybierz karę",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Anuluj", (dialogInterface, i) -> dialogInterface.dismiss());
+        builder.create().show();
+    }
+
+    @Override
+    public void resetAdapters() {
+        for (int i = 0; i < MatchTeam.PLAYERS_ON_COURT; i++){
+            playersLeft.set(i, null);
+            playersRight.set(i, null);
+            adapterLeft.notifyDataSetChanged();
+            adapterRight.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -395,9 +496,9 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         players.addAll(chelmiecPlayers);
         matchSettings.setPlayers(players);
         matchSettings.setMembers(new ArrayList<>(Arrays.asList(
-                new TeamAdditionalMember("Marek Olczyk", 2, TeamAdditionalMember.COACH_MEMBER_ID),
-                new TeamAdditionalMember("Marcin Dąbrowski", 2, TeamAdditionalMember.MEDICINE_MEMBER_ID),
-                new TeamAdditionalMember("Magda Sadowska", 1, TeamAdditionalMember.COACH_MEMBER_ID))));
+                new TeamAdditionalMember("Marek Olczyk", 2, COACH_MEMBER_ID),
+                new TeamAdditionalMember("Marcin Dąbrowski", 2, MEDICINE_MEMBER_ID),
+                new TeamAdditionalMember("Magda Sadowska", 1, COACH_MEMBER_ID))));
         matchSettings.setLineReferees(new ArrayList<>());
 
         return new MatchInfo(polonia, poloniaPlayers, chelmiec, chelmiecPlayers, false, matchSettings);
@@ -480,7 +581,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         builder.setView(root);
         builder.setCancelable(false);
         Dialog dialog = builder.create();
-        new CountDownTimer(TIME_LENGHT * 1000, 1000){
+        new CountDownTimer(TIME_LENGTH * 1000, 1000){
 
             @Override
             public void onTick(long l) {

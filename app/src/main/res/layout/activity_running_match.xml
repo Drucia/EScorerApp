@@ -116,6 +116,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical">
@@ -135,11 +136,69 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignLeft="@id/court"
+            android:layout_alignBottom="@id/court"
             android:layout_alignParentStart="false"
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
             android:layout_marginLeft="-35dp"
+            android:layout_marginBottom="5dp"
             app:srcCompat="@drawable/ball" />
+
+        <ImageView
+            android:id="@+id/fakeServe"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignLeft="@id/court"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:layout_marginLeft="-35dp" />
+
+        <LinearLayout
+            android:id="@+id/leftLayoutCards"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fakeServe"
+            android:layout_alignStart="@id/court"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="-33dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/ring"
+                android:backgroundTint="#E6000000" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/pop_up"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/leftDelay"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/delay"
+                    android:backgroundTint="#B3000000" />
+
+                <ImageView
+                    android:id="@+id/leftBehavior"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/behaviour"
+                    android:backgroundTint="#B3000000" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/rightServe"
@@ -153,14 +212,16 @@
             app:srcCompat="@drawable/ball" />
 
         <LinearLayout
-            android:layout_width="53dp"
+            android:id="@+id/rightLayoutCards"
+            android:layout_width="58dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rightServe"
             android:layout_alignEnd="@+id/court"
             android:layout_alignParentBottom="true"
-            android:layout_marginRight="-30dp"
+            android:layout_marginRight="-33dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -170,18 +231,19 @@
                 android:padding="5dp">
 
                 <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:id="@+id/rightDelay"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:background="@drawable/delay"
                     android:backgroundTint="#B3000000" />
 
                 <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:id="@+id/rightBehavior"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/behaviour"
                     android:backgroundTint="#B3000000" />
             </LinearLayout>

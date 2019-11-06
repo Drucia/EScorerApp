@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IRunningMatchMVP {
-    interface IModel{
-
-    }
-
     interface IView extends IOnPlayerTouchCallback{
         void showPopUpWithConfirmLineUp(MatchTeam team);
         void makeShiftInLineUp(int teamSideId);
@@ -29,7 +25,9 @@ public interface IRunningMatchMVP {
         void makeChangeInAdapter(MatchPlayer playerOut, MatchPlayer playerIn, int teamSideId);
         void showToast(String msg);
         void showPopUpWithConfirmTime(int teamId);
-        void showPopUpWithPunishments(int teamSideId, boolean isTeamPun);
+        void resetAdapters();
+        void showPopUpWithTeamPunish(int teamSideId);
+        void showPopUpWithMemberPunish(MatchTeam team);
     }
 
     interface IPresenter{
@@ -49,5 +47,7 @@ public interface IRunningMatchMVP {
         void onActivityCreated();
         void cancelChoosePlayerToLineUp(int teamSideId);
         void onCardClicked(int teamSideId, boolean isTeamPun);
+        void onPunishmentClicked(int teamSideId, int cardId);
+        void onPunishmentClicked(MatchTeam team, int cardId, int memberId, int memberNb);
     }
 }

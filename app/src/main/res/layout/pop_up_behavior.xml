@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="25dp"
+    android:paddingTop="15dp"
+    android:paddingRight="25dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/punishment_member_label"
+            android:textSize="16sp" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/memberGroupMem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:chipSpacingHorizontal="2dp"
+            app:chipSpacingVertical="5dp"
+            app:singleSelection="true" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/punishment_label_punishment"
+            android:textSize="16sp" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:srcCompat="@drawable/yellow_card" />
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:srcCompat="@drawable/red_card" />
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:srcCompat="@drawable/yellow_and_red_together" />
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:srcCompat="@drawable/yellow_and_red_separately" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cardsChipGroupMem"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipYellowMem"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/punishment_reminder"
+                            android:textColor="#B3000000"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipCornerRadius="10dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipRedMem"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/punishment_punishment"
+                            android:textColor="#B3000000"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipCornerRadius="10dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipExclusionMem"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/punishment_exclusion"
+                            android:textColor="#B3000000"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipCornerRadius="10dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipDisqualificationMem"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/punishment_disqualification"
+                            android:textColor="#B3000000"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipCornerRadius="10dp" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+
+            </TableRow>
+
+        </TableLayout>
+
+    </LinearLayout>
+
+</ScrollView>

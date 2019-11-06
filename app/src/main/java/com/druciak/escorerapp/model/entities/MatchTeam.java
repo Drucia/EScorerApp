@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MAX_SHIFTS_AMOUNT;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MAX_TIMES_AMOUNT;
 import static com.druciak.escorerapp.model.entities.MatchInfo.TEAM_A_ID;
+import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CARD_SEPARATELY_ID;
 import static com.druciak.escorerapp.view.RunningMatchActivity.LEFT_TEAM_ID;
 import static com.druciak.escorerapp.view.RunningMatchActivity.RIGHT_TEAM_ID;
 
@@ -17,6 +18,7 @@ public class MatchTeam extends Team {
     public static final int PLAYERS_ON_COURT = 6;
 
     private List<MatchPlayer> players;
+    private List<TeamAdditionalMember> members;
     private Map<Integer, MatchPlayer> lineUp;
     private int points;
     private int sets;
@@ -25,8 +27,9 @@ public class MatchTeam extends Team {
     private int timesCounter;
     private int shiftCounter;
     private boolean isLineUpSet;
+    private int cardId;
 
-    public MatchTeam(Team team, List<Player> players, int teamId) {
+    public MatchTeam(Team team, List<Player> players, int teamId, List<TeamAdditionalMember> members) {
         super(team);
         this.players = players.stream().map(MatchPlayer::new).collect(Collectors.toList());
         lineUp = new HashMap<>();
@@ -35,6 +38,12 @@ public class MatchTeam extends Team {
         this.teamId = teamId;
         this.teamSideId = teamId == TEAM_A_ID ? LEFT_TEAM_ID : RIGHT_TEAM_ID;
         this.isLineUpSet = false;
+        this.members = members.stream().filter(member -> member.getTeamId() == team.getId()).
+                collect(Collectors.toList());
+    }
+
+    public List<TeamAdditionalMember> getMembers() {
+        return members;
     }
 
     public boolean getIsLineUpSet() {
@@ -52,6 +61,14 @@ public class MatchTeam extends Team {
     public void addTime(){timesCounter += 1;}
 
     public void addShift(){shiftCounter += 1;}
+
+    public int getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(int cardId) {
+        this.cardId = cardId;
+    }
 
     public boolean canGetTime() {return timesCounter < MAX_TIMES_AMOUNT;}
     public boolean canGetShift() {return shiftCounter < MAX_SHIFTS_AMOUNT;}
@@ -101,6 +118,13 @@ public class MatchTeam extends Team {
         this.points = 0;
         this.timesCounter = 0;
         this.shiftCounter = 0;
+        this.isLineUpSet = false;
+        for (MatchPlayer player : players) {
+            player.setStatusId(MatchPlayer.STATUS_PLAYER_ON_DESK);
+            if (player.getCardId() != YELLOW_AND_RED_CARD_SEPARATELY_ID && !player.isCanPlay())
+                player.setCanPlay(true);
+        }
+        this.lineUp = new HashMap<>();
     }
 
     public void setLineUp(int areaNb, MatchPlayer player) {

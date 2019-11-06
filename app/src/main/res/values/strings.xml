@@ -64,6 +64,8 @@
 
     <!-- ERRORS  -->
     <string name="get_user_info_error">Nie udało się pobrać danych użytkownika</string>
+
+    <!-- RUNNING MATCH -->
     <string name="coach_list_label">Trenerzy</string>
     <string name="medicine_list_label">Masażyści</string>
     <string name="captain_label">Kapitan</string>
@@ -71,5 +73,12 @@
     <string name="hint_player_number">Numer koszulki</string>
     <string name="menu_team_punish">Opóźnienie</string>
     <string name="menu_mem_punish">Zachowanie</string>
+    <string name="punishment_warning">Ostrzeżenie</string>
+    <string name="punishment_reminder">Upomnienie</string>
+    <string name="punishment_punishment">Kara</string>
+    <string name="punishment_exclusion">Wykluczenie</string>
+    <string name="punishment_disqualification">Dyskwalifikacja</string>
+    <string name="punishment_member_label">Wybierz osobę</string>
+    <string name="punishment_label_punishment">Kara</string>
 
 </resources>
