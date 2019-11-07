@@ -133,26 +133,27 @@
 
         <ImageView
             android:id="@+id/leftServe"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_alignLeft="@id/court"
             android:layout_alignBottom="@id/court"
             android:layout_alignParentStart="false"
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
             android:layout_marginLeft="-35dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="15dp"
             app:srcCompat="@drawable/ball" />
 
         <ImageView
             android:id="@+id/fakeServe"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_alignLeft="@id/court"
             android:layout_alignParentStart="false"
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
-            android:layout_marginLeft="-35dp" />
+            android:layout_marginLeft="-35dp"
+            android:layout_marginTop="15dp" />
 
         <LinearLayout
             android:id="@+id/leftLayoutCards"
@@ -202,11 +203,12 @@
 
         <ImageView
             android:id="@+id/rightServe"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_alignRight="@id/court"
             android:layout_alignParentTop="false"
             android:layout_alignParentEnd="false"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="-35dp"
             android:visibility="invisible"
             app:srcCompat="@drawable/ball" />

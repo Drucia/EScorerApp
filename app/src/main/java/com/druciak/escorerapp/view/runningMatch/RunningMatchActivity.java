@@ -89,6 +89,12 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     private TextView teamBName;
     private RecyclerView teamAPlayers;
     private RecyclerView teamBPlayers;
+    private RecyclerView teamALibero;
+    private RecyclerView teamBLibero;
+    private RecyclerView teamACoaches;
+    private RecyclerView teamBCoaches;
+    private RecyclerView teamAMembers;
+    private RecyclerView teamBMembers;
     private BottomSheetBehavior behaviorBS;
 
     private ArrayList<MatchPlayer> playersLeft;
@@ -152,6 +158,13 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         teamBName = findViewById(R.id.teamBNameBS);
         teamAPlayers = findViewById(R.id.teamAPlayersBS);
         teamBPlayers = findViewById(R.id.teamBPlayersBS);
+        teamALibero = findViewById(R.id.teamALiberoBS);
+        teamBLibero= findViewById(R.id.teamBLiberoBS);
+        teamACoaches = findViewById(R.id.teamACoachBS);
+        teamBCoaches = findViewById(R.id.teamBCoachBS);
+        teamAMembers = findViewById(R.id.teamAMembersBS);
+        teamBMembers = findViewById(R.id.teamBMembersBS);
+
 
         playersLeft = new ArrayList<>(Arrays.asList(null, null, null, null, null, null));
         playersRight = new ArrayList<>(Arrays.asList(null, null, null, null, null, null));
@@ -372,10 +385,44 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
                         && !player.isOnCourt() && !player.isLibero())
                 .sorted(Comparator.comparingInt(MatchPlayer::getNumber))
                 .collect(Collectors.toList());
+        List<MatchPlayer> liberoA = teamA.getPlayers().stream()
+                .filter(MatchPlayer::isLibero)
+                .sorted(Comparator.comparingInt(MatchPlayer::getNumber))
+                .collect(Collectors.toList());
+        List<MatchPlayer> liberoB = teamB.getPlayers().stream()
+                .filter(MatchPlayer::isLibero)
+                .sorted(Comparator.comparingInt(MatchPlayer::getNumber))
+                .collect(Collectors.toList());
         teamAPlayers.setLayoutManager(new LinearLayoutManager(this));
         teamAPlayers.setAdapter(new SimplyPlayersAdapter(playersOnDeskA));
         teamBPlayers.setLayoutManager(new LinearLayoutManager(this));
         teamBPlayers.setAdapter(new SimplyPlayersAdapter(playersOnDeskB));
+        teamALibero.setLayoutManager(new LinearLayoutManager(this));
+        teamALibero.setAdapter(new SimplyPlayersAdapter(liberoA));
+        teamBLibero.setLayoutManager(new LinearLayoutManager(this));
+        teamBLibero.setAdapter(new SimplyPlayersAdapter(liberoB));
+
+        List<String> coachesA = teamA.getMembers().stream()
+                .filter(member -> member.getMemberId() == COACH_MEMBER_ID)
+                .map(TeamAdditionalMember::getName).collect(Collectors.toList());
+        List<String> coachesB = teamB.getMembers().stream()
+                .filter(member -> member.getMemberId() == COACH_MEMBER_ID)
+                .map(TeamAdditionalMember::getName).collect(Collectors.toList());
+        teamACoaches.setLayoutManager(new LinearLayoutManager(this));
+        teamACoaches.setAdapter(new StringAdapter(coachesA));
+        teamBCoaches.setLayoutManager(new LinearLayoutManager(this));
+        teamBCoaches.setAdapter(new StringAdapter(coachesB));
+
+        List<String> membersA = teamA.getMembers().stream()
+                .filter(member -> member.getMemberId() != COACH_MEMBER_ID)
+                .map(TeamAdditionalMember::getName).collect(Collectors.toList());
+        List<String> membersB = teamB.getMembers().stream()
+                .filter(member -> member.getMemberId() != COACH_MEMBER_ID)
+                .map(TeamAdditionalMember::getName).collect(Collectors.toList());
+        teamAMembers.setLayoutManager(new LinearLayoutManager(this));
+        teamAMembers.setAdapter(new StringAdapter(membersA));
+        teamBMembers.setLayoutManager(new LinearLayoutManager(this));
+        teamBMembers.setAdapter(new StringAdapter(membersB));
         teamAName.setText(teamA.getFullName());
         teamBName.setText(teamB.getFullName());
     }
