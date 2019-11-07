@@ -18,7 +18,7 @@ public class MatchInfo {
     public static final int MATCH_END_POINTS_IN_TIEBREAK = 15;
     public static final int MATCH_MIN_DIFFERENT_POINTS = 2;
     public static final int LAST_SET_FOR_YOUNG = 3;
-    public static final int LAST_SET = 5;
+    public static final int LAST_SET = 3;
     public static final int MIN_SETS_TO_WIN = 3;
     public static final int MIN_SETS_TO_WIN_FOR_YOUNG = 2;
     public static final int MAX_TIMES_AMOUNT = 2;

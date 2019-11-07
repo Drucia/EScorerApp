@@ -30,6 +30,7 @@ import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.LEFT
 import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.RIGHT_TEAM_ID;
 
 public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
+    private static final String ACTION_TAG = "ACTION";
     private static final String LINE_UP_NOT_SET = "Nie wprowadzono ustawień początkowych zespołów.";
 
     private IRunningMatchMVP.IView view;
@@ -40,6 +41,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     private int actualSet;
     private boolean canPlay;
     private boolean isTiebreak;
+    private boolean isAfterShift;
 
     public RunningMatchPresenter(IRunningMatchMVP.IView view, MatchInfo matchInfo) {
         this.view = view;
@@ -50,6 +52,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         this.actualSet = 1;
         this.canPlay = false;
         this.isTiebreak = false;
+        this.isAfterShift = false;
     }
 
     @Override
@@ -69,8 +72,6 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
 
     @Override
     public void onTeamsInfoClicked() {
-        MatchTeam teamA = leftTeam.getTeamId() == TEAM_A_ID ? leftTeam : rightTeam;
-        view.setInfoFields(teamA, getSecondTeam(teamA));
         view.showTeamsInfo();
     }
 
@@ -84,20 +85,34 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         if (canPlay) {
             Action action = new Point(teamSideId == RIGHT_TEAM_ID ? rightTeam : leftTeam,
                     teamSideId == RIGHT_TEAM_ID ? leftTeam.getPoints() : rightTeam.getPoints());
+            Log.d(ACTION_TAG, action.toString());
             updateMatchState(action);
-            if (isTiebreak && (leftTeam.getPoints() == TIEBREAK_POINTS_TO_SHIFT ||
+            if (isTiebreak && !isAfterShift && (leftTeam.getPoints() == TIEBREAK_POINTS_TO_SHIFT ||
                     rightTeam.getPoints() == TIEBREAK_POINTS_TO_SHIFT))
             {
                 changeTeamSides();
-                view.setScore(leftTeam.getPoints() + " : " + rightTeam.getPoints());
-                view.setSets(leftTeam.getSets(), rightTeam.getSets());
-                view.setFields(leftTeam.getFullName(), rightTeam.getFullName(),
-                        serveTeam == leftTeam ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
-                // todo set adapter
+                setFieldsAfterFinishSet();
+                changeLineUpAndTimesAfterChangeTeamSides();
+                this.isAfterShift = true;
             }
         } else
         {
             view.showToast(LINE_UP_NOT_SET);
+        }
+    }
+
+    private void changeLineUpAndTimesAfterChangeTeamSides() {
+        for (int area : leftTeam.getLineUp().keySet())
+        {
+            MatchPlayer left = leftTeam.getLineUp().get(area);
+            MatchPlayer right = rightTeam.getLineUp().get(area);
+            view.updateAdapterWithPlayersLineUp(left, area, leftTeam.getTeamSideId());
+            view.updateAdapterWithPlayersLineUp(right, area, rightTeam.getTeamSideId());
+            view.resetTimes();
+            for (int i=1; i<=leftTeam.getTimesCounter(); i++)
+                view.addTimeFor(leftTeam.getTeamSideId(), i);
+            for (int i=1; i<=rightTeam.getTimesCounter(); i++)
+                view.addTimeFor(rightTeam.getTeamSideId(), i);
         }
     }
 
@@ -184,7 +199,8 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     }
 
     private boolean checkIfIsEndOfMatch(){
-        return getWinner().getSets() + 1 == matchInfo.getMinSetsToWin();
+        return getWinner().getSets() + 1 == matchInfo.getMinSetsToWin() ||
+                matchInfo.isTiebreak(actualSet);
     }
 
     @Override
@@ -192,19 +208,24 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         isTiebreak = matchInfo.isTiebreak(++actualSet);
         if (isTiebreak)
         {
-            // todo
+            view.showDrawActivity(matchInfo.getSettings());
         } else {
             changeTeamSides();
             serveTeam = getServeTeam(actualSet);
+            setTeamsParams();
+            setFieldsAfterFinishSet();
         }
-        setTeamsParams();
         canPlay = false;
+        view.resetTimes();
+        view.resetAdapters();
+    }
+
+    private void setFieldsAfterFinishSet()
+    {
         view.setScore(leftTeam.getPoints() + " : " + rightTeam.getPoints());
         view.setSets(leftTeam.getSets(), rightTeam.getSets());
         view.setFields(leftTeam.getFullName(), rightTeam.getFullName(),
                 serveTeam == leftTeam ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
-        view.resetTimes();
-        view.resetAdapters();
     }
 
     @Override
@@ -227,7 +248,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         MatchTeam team = teamId == LEFT_TEAM_ID ? leftTeam : rightTeam;
         Action action = new Time(team,
                 teamId == LEFT_TEAM_ID ? leftTeam.getPoints() : rightTeam.getPoints());
-        Log.d("ACTION", action.toString());
+        Log.d(ACTION_TAG, action.toString());
         updateMatchState(action);
     }
 
@@ -289,7 +310,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     public void chosenPlayerToShift(MatchPlayer playerToShift, MatchPlayer player, int teamSideId) {
         Action action = new Shift(player, playerToShift, teamSideId == LEFT_TEAM_ID ? leftTeam : rightTeam,
                 teamSideId == LEFT_TEAM_ID ? rightTeam.getPoints() : leftTeam.getPoints());
-        Log.d("ACTION", action.toString());
+        Log.d(ACTION_TAG, action.toString());
         updateMatchState(action);
     }
 
@@ -299,7 +320,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         MatchTeam team = teamSideId == LEFT_TEAM_ID ? leftTeam : rightTeam;
         if (player.isPresent()) {
             Action action = new LineUp(team, player.get(), areaNb);
-            Log.d("ACTION", action.toString());
+            Log.d(ACTION_TAG, action.toString());
             makeAction(action);
         } else {
             team.setLineUp(areaNb, null);
@@ -326,7 +347,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         {
             MatchPlayer player = lineUp.get(i+1);
             Action action = new LineUp(team, player, i+1);
-            Log.d("ACTION", action.toString());
+            Log.d(ACTION_TAG, action.toString());
             matchInfo.addAction(actualSet, action);
         }
     }
@@ -363,7 +384,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     public void onPunishmentClicked(int teamSideId, int cardId) {
         MatchTeam team = teamSideId == leftTeam.getTeamSideId() ? leftTeam : rightTeam;
         Action action = new TeamPunishment(cardId, team, actualSet, getSecondTeam(team));
-        Log.d("ACTION", action.toString());
+        Log.d(ACTION_TAG, action.toString());
         updateMatchState(action);
     }
 
@@ -375,6 +396,17 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     @Override
     public void onAttentionsSavedClicked(String attentions) {
         matchInfo.setAttentions(attentions);
+    }
+
+    @Override
+    public void onDrawFinish(int serveTeamId, int leftTeamId) {
+        MatchTeam left = leftTeam;
+        MatchTeam right = rightTeam;
+        leftTeam = leftTeamId == left.getId() ? left : right;
+        rightTeam = leftTeamId == left.getId() ? right : left;
+        serveTeam = leftTeam.getId() == leftTeamId ? leftTeam : rightTeam;
+        setTeamsParams();
+        setFieldsAfterFinishSet();
     }
 
     private void updateCanPlay() {

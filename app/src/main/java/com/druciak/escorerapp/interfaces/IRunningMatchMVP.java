@@ -1,6 +1,7 @@
 package com.druciak.escorerapp.interfaces;
 
 import com.druciak.escorerapp.model.entities.MatchPlayer;
+import com.druciak.escorerapp.model.entities.MatchSettings;
 import com.druciak.escorerapp.model.entities.MatchTeam;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public interface IRunningMatchMVP {
         void showPopUpWithMemberPunish(MatchTeam team);
         void setInfoFields(MatchTeam teamA, MatchTeam teamB);
         void showTeamsInfo();
+        void showDrawActivity(MatchSettings settings);
     }
 
     interface IPresenter{
@@ -53,5 +55,6 @@ public interface IRunningMatchMVP {
         void onPunishmentClicked(int teamSideId, int cardId);
         void onPunishmentClicked(MatchTeam team, int cardId, int memberId, int memberNb);
         void onAttentionsSavedClicked(String attentions);
+        void onDrawFinish(int serveTeamId, int leftSideTeamId);
     }
 }

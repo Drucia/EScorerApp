@@ -1,5 +1,6 @@
 package com.druciak.escorerapp.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -9,13 +10,21 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.model.entities.Match;
+import com.druciak.escorerapp.model.entities.MatchSettings;
+import com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity;
+import com.druciak.escorerapp.view.runningMatch.RunningMatchActivity;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.IS_REQ_ID;
+
 public class DrawActivity extends AppCompatActivity {
     public static final String MATCH_INFO_ID = "match_info";
+    public static final String SERVE_TEAM_ID = "serve_team";
+    public static final String LEFT_TEAM_ID = "left_team_id";
 
     private static final int NO_CHOICE_MADE_ID = -1;
     private static final int SERVE_ID = 1;
@@ -37,18 +46,34 @@ public class DrawActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw);
 
+        Intent intent = getIntent();
+        boolean isRequest = intent.getBooleanExtra(IS_REQ_ID, false);
+        MatchSettings ms = intent.getParcelableExtra(MatchSettingsActivity.MACH_SETTINGS_ID);
+        Match match = ms.getMatch();
         Spinner leftTeam = findViewById(R.id.leftTeamSpinner);
         Spinner rightTeam = findViewById(R.id.rightTeamSpinner);
         startMatchButton = findViewById(R.id.startMatch);
         startMatchButton.setOnClickListener(view -> {
-//            Intent intent = new Intent();
-//            getIntent().putExtra(MATCH_INFO_ID, ""); todo
+            if (isRequest){
+                Intent i = new Intent();
+                int leftTeamId = leftTeam.getSelectedItem().toString().equals(match.getHostTeam()
+                        .getShortName()) ? match.getHostTeam().getId() : match.getGuestTeam().getId();
+                int serveTeam = leftTeamChoice == SERVE_ID ? match.getHostTeam().getId() == leftTeamId
+                        ? leftTeamId : match.getGuestTeam().getId() :
+                        match.getHostTeam().getId() != leftTeamId ? match.getGuestTeam().getId() : leftTeamId;
+                i.putExtra(SERVE_TEAM_ID, serveTeam); //todo
+                i.putExtra(LEFT_TEAM_ID, leftTeamId); //todo
+                setResult(RESULT_OK, i);
+            } else
+            {
+                Intent i = new Intent(this, RunningMatchActivity.class);
+                i.putExtra(MATCH_INFO_ID, ""); // todo
+                startActivity(i);
+            }
+            finish();
         });
-//        Intent intent = getIntent();
-//        MatchSettings ms = intent.getParcelableExtra(MatchSettingsActivity.MACH_SETTINGS_ID);
-//        Match match = ms.getMatch();
-//        List<String> teamsNames = Arrays.asList(match.getHostTeam().getShortName(), match.getGuestTeam().getShortName());
-        List<String> teamsNames = Arrays.asList("Chełmiec", "Polonia"); // todo remove hardcode
+        List<String> teamsNames = Arrays.asList(match.getHostTeam().getShortName(), match.getGuestTeam().getShortName());
+//        List<String> teamsNames = Arrays.asList("Chełmiec", "Polonia"); // todo remove hardcode
         ArrayAdapter<String> data = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, teamsNames);
         leftTeam.setAdapter(data);
         rightTeam.setAdapter(data);

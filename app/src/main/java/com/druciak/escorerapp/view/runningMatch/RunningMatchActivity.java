@@ -1,6 +1,7 @@
 package com.druciak.escorerapp.view.runningMatch;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -33,6 +35,7 @@ import com.druciak.escorerapp.model.entities.Player;
 import com.druciak.escorerapp.model.entities.Team;
 import com.druciak.escorerapp.model.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.presenter.RunningMatchPresenter;
+import com.druciak.escorerapp.view.DrawActivity;
 import com.druciak.escorerapp.view.matchSettings.PlayersAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
@@ -58,10 +61,14 @@ import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_CARD_ID;
 import static com.druciak.escorerapp.model.entities.TeamAdditionalMember.COACH_MEMBER_ID;
 import static com.druciak.escorerapp.model.entities.TeamAdditionalMember.MASSEUR_MEMBER_ID;
 import static com.druciak.escorerapp.model.entities.TeamAdditionalMember.MEDICINE_MEMBER_ID;
+import static com.druciak.escorerapp.view.DrawActivity.SERVE_TEAM_ID;
+import static com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity.MACH_SETTINGS_ID;
 
 public class RunningMatchActivity extends AppCompatActivity implements IRunningMatchMVP.IView{
+    public static final String IS_REQ_ID = "is_req";
     public static final int RIGHT_TEAM_ID = 1;
     public static final int LEFT_TEAM_ID = 2;
+    private static final int DRAW_REQ = 7;
 
     private IRunningMatchMVP.IPresenter presenter;
     private PlayersAdapter adapterLeft;
@@ -437,6 +444,26 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     @Override
     public void showTeamsInfo() {
         behaviorBS.setState(BottomSheetBehavior.STATE_EXPANDED );
+    }
+
+    @Override
+    public void showDrawActivity(MatchSettings settings) {
+        Intent intent = new Intent(this, DrawActivity.class);
+        intent.putExtra(MACH_SETTINGS_ID, settings);
+        intent.putExtra(IS_REQ_ID, true); // todo make draw activity always for result
+        startActivityForResult(intent, DRAW_REQ);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == DRAW_REQ) {
+            if (data != null) {
+                presenter.onDrawFinish(data.getIntExtra(SERVE_TEAM_ID, -1),
+                        data.getIntExtra(DrawActivity.LEFT_TEAM_ID, -1));
+            }
+        }
     }
 
     @Override
