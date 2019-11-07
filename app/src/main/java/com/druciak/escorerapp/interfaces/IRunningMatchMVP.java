@@ -30,6 +30,7 @@ public interface IRunningMatchMVP {
         void showPopUpWithTeamPunish(int teamSideId);
         void showPopUpWithMemberPunish(MatchTeam team);
         void setInfoFields(MatchTeam teamA, MatchTeam teamB);
+        void showTeamsInfo();
     }
 
     interface IPresenter{

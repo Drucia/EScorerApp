@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS_IN_TIEBREAK;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_MIN_DIFFERENT_POINTS;
+import static com.druciak.escorerapp.model.entities.MatchInfo.TEAM_A_ID;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_NOT_TO_SHIFT;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_ON_DESK;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_SHIFTED;
@@ -65,7 +66,9 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
 
     @Override
     public void onTeamsInfoClicked() {
-
+        MatchTeam teamA = leftTeam.getTeamId() == TEAM_A_ID ? leftTeam : rightTeam;
+        view.setInfoFields(teamA, getSecondTeam(teamA));
+        view.showTeamsInfo();
     }
 
     @Override

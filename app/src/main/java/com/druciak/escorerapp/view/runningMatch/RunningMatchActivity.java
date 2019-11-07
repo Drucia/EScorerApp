@@ -89,6 +89,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     private TextView teamBName;
     private RecyclerView teamAPlayers;
     private RecyclerView teamBPlayers;
+    private BottomSheetBehavior behaviorBS;
 
     private ArrayList<MatchPlayer> playersLeft;
     private ArrayList<MatchPlayer> playersRight;
@@ -165,7 +166,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
 
         CoordinatorLayout coordinatorLayout= findViewById(R.id.runningMatchPanel);
         final View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
-        final BottomSheetBehavior behaviorBS = BottomSheetBehavior.from(bottomSheet);
+        behaviorBS = BottomSheetBehavior.from(bottomSheet);
         behaviorBS.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -207,7 +208,6 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
                     presenter.onReturnActionClicked();
                     break;
                 case R.id.teamMembers:
-                    behaviorBS.setState(BottomSheetBehavior.STATE_EXPANDED );
                     presenter.onTeamsInfoClicked();
                     break;
                 case R.id.finishMatch:
@@ -362,17 +362,15 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
 
     @Override
     public void setInfoFields(MatchTeam teamA, MatchTeam teamB) {
-        List<String> playersOnDeskA = teamA.getPlayers().stream()
+        List<MatchPlayer> playersOnDeskA = teamA.getPlayers().stream()
                 .filter(player -> player.getStatusId() != MatchPlayer.STATUS_PLAYER_ON_COURT
                 && !player.isOnCourt() && !player.isLibero())
                 .sorted(Comparator.comparingInt(MatchPlayer::getNumber))
-                .map(Player::toString)
                 .collect(Collectors.toList());
-        List<String> playersOnDeskB = teamB.getPlayers().stream()
+        List<MatchPlayer> playersOnDeskB = teamB.getPlayers().stream()
                 .filter(player -> player.getStatusId() != MatchPlayer.STATUS_PLAYER_ON_COURT
                         && !player.isOnCourt() && !player.isLibero())
                 .sorted(Comparator.comparingInt(MatchPlayer::getNumber))
-                .map(Player::toString)
                 .collect(Collectors.toList());
         teamAPlayers.setLayoutManager(new LinearLayoutManager(this));
         teamAPlayers.setAdapter(new SimplyPlayersAdapter(playersOnDeskA));
@@ -380,6 +378,11 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         teamBPlayers.setAdapter(new SimplyPlayersAdapter(playersOnDeskB));
         teamAName.setText(teamA.getFullName());
         teamBName.setText(teamB.getFullName());
+    }
+
+    @Override
+    public void showTeamsInfo() {
+        behaviorBS.setState(BottomSheetBehavior.STATE_EXPANDED );
     }
 
     @Override
