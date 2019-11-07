@@ -25,7 +25,9 @@ public class Shift extends Action{
             enter.setStatusId(STATUS_PLAYER_SHIFTED);
         }
         out.setShiftNumber(enterPlayerNb);
+        out.setOnCourt(false);
         enter.setShiftNumber(outPlayerNb);
+        out.setOnCourt(true);
         team.addShift();
     }
 

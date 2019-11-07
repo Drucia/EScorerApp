@@ -18,12 +18,14 @@ public class MatchPlayer extends Player implements Parcelable {
     private int shiftNumber;
     private boolean canPlay;
     private int cardId;
+    private boolean isOnCourt;
 
     public MatchPlayer(Player player) {
         super(player);
         statusId = STATUS_PLAYER_ON_DESK;
         shiftNumber = NO_SHIFT;
         canPlay = true;
+        isOnCourt = false;
         cardId = NO_CARD_ID;
     }
 
@@ -91,5 +93,13 @@ public class MatchPlayer extends Player implements Parcelable {
         this.cardId = cardId;
         if (cardId == YELLOW_AND_RED_CARD_TOGETHER_ID || cardId == YELLOW_AND_RED_CARD_SEPARATELY_ID)
             this.canPlay = false;
+    }
+
+    public boolean isOnCourt() {
+        return isOnCourt;
+    }
+
+    public void setOnCourt(boolean onCourt) {
+        isOnCourt = onCourt;
     }
 }

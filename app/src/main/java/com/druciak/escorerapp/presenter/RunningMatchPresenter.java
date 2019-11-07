@@ -24,8 +24,8 @@ import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_MIN_DIFFEREN
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_NOT_TO_SHIFT;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_ON_DESK;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_SHIFTED;
-import static com.druciak.escorerapp.view.RunningMatchActivity.LEFT_TEAM_ID;
-import static com.druciak.escorerapp.view.RunningMatchActivity.RIGHT_TEAM_ID;
+import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.LEFT_TEAM_ID;
+import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.RIGHT_TEAM_ID;
 
 public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     private static final String LINE_UP_NOT_SET = "Nie wprowadzono ustawień początkowych zespołów.";
@@ -308,6 +308,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     @Override
     public void onActivityCreated() {
         view.setFields(leftTeam.getFullName(), rightTeam.getFullName(), serveTeam.getTeamSideId());
+        view.setInfoFields(leftTeam, rightTeam);
     }
 
     @Override

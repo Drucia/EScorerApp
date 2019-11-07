@@ -166,4 +166,9 @@ public class Player implements Parcelable {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    @Override
+    public String toString() {
+        return surname + " " + name + "       " + number;
+    }
 }

@@ -82,5 +82,6 @@
     <string name="punishment_label_punishment">Kara</string>
     <string name="hint_attentions">Wprowadź uwagi</string>
     <string name="label_attentions">Uwagi</string>
+    <string name="label_team_info">Informacje o zespołach</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.view;
+package com.druciak.escorerapp.view.runningMatch;
 
 import android.app.Dialog;
 import android.content.pm.ActivityInfo;
@@ -11,10 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
@@ -29,6 +32,7 @@ import com.druciak.escorerapp.model.entities.Team;
 import com.druciak.escorerapp.model.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.presenter.RunningMatchPresenter;
 import com.druciak.escorerapp.view.matchSettings.PlayersAdapter;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -79,6 +83,12 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     private View leftSndTime;
     private View rightSndTime;
     private LinearLayout cardsLayout;
+
+    // BOTTOM SHEET LAYOUT
+    private TextView teamAName;
+    private TextView teamBName;
+    private RecyclerView teamAPlayers;
+    private RecyclerView teamBPlayers;
 
     private ArrayList<MatchPlayer> playersLeft;
     private ArrayList<MatchPlayer> playersRight;
@@ -136,6 +146,12 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         leftSndTime = findViewById(R.id.timeCounterSndLeft);
         rightSndTime = findViewById(R.id.timeCounterSndRight);
 
+        // BOTTOM SHEET LAYOUT
+        teamAName = findViewById(R.id.teamANameBS);
+        teamBName = findViewById(R.id.teamBNameBS);
+        teamAPlayers = findViewById(R.id.teamAPlayersBS);
+        teamBPlayers = findViewById(R.id.teamBPlayersBS);
+
         playersLeft = new ArrayList<>(Arrays.asList(null, null, null, null, null, null));
         playersRight = new ArrayList<>(Arrays.asList(null, null, null, null, null, null));
         adapterLeft = new PlayersAdapter(this, playersLeft);
@@ -146,6 +162,21 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         recyclerViewRight.setAdapter(adapterRight);
         recyclerViewLeft.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerViewRight.setLayoutManager(new GridLayoutManager(this, 2));
+
+        CoordinatorLayout coordinatorLayout= findViewById(R.id.runningMatchPanel);
+        final View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
+        final BottomSheetBehavior behaviorBS = BottomSheetBehavior.from(bottomSheet);
+        behaviorBS.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                // React to dragging events
+
+            }
+        });
 
         speedDial.addActionItem(
                 new SpeedDialActionItem.Builder(R.id.attentions, R.drawable.attention)
@@ -176,6 +207,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
                     presenter.onReturnActionClicked();
                     break;
                 case R.id.teamMembers:
+                    behaviorBS.setState(BottomSheetBehavior.STATE_EXPANDED );
                     presenter.onTeamsInfoClicked();
                     break;
                 case R.id.finishMatch:
@@ -326,6 +358,28 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
 
         builder.setNegativeButton("Anuluj", (dialogInterface, i) -> dialogInterface.dismiss());
         builder.create().show();
+    }
+
+    @Override
+    public void setInfoFields(MatchTeam teamA, MatchTeam teamB) {
+        List<String> playersOnDeskA = teamA.getPlayers().stream()
+                .filter(player -> player.getStatusId() != MatchPlayer.STATUS_PLAYER_ON_COURT
+                && !player.isOnCourt() && !player.isLibero())
+                .sorted(Comparator.comparingInt(MatchPlayer::getNumber))
+                .map(Player::toString)
+                .collect(Collectors.toList());
+        List<String> playersOnDeskB = teamB.getPlayers().stream()
+                .filter(player -> player.getStatusId() != MatchPlayer.STATUS_PLAYER_ON_COURT
+                        && !player.isOnCourt() && !player.isLibero())
+                .sorted(Comparator.comparingInt(MatchPlayer::getNumber))
+                .map(Player::toString)
+                .collect(Collectors.toList());
+        teamAPlayers.setLayoutManager(new LinearLayoutManager(this));
+        teamAPlayers.setAdapter(new SimplyPlayersAdapter(playersOnDeskA));
+        teamBPlayers.setLayoutManager(new LinearLayoutManager(this));
+        teamBPlayers.setAdapter(new SimplyPlayersAdapter(playersOnDeskB));
+        teamAName.setText(teamA.getFullName());
+        teamBName.setText(teamB.getFullName());
     }
 
     @Override

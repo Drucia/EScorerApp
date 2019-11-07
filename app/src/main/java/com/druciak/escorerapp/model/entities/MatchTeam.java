@@ -11,8 +11,8 @@ import static com.druciak.escorerapp.model.entities.MatchInfo.MAX_SHIFTS_AMOUNT;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MAX_TIMES_AMOUNT;
 import static com.druciak.escorerapp.model.entities.MatchInfo.TEAM_A_ID;
 import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CARD_SEPARATELY_ID;
-import static com.druciak.escorerapp.view.RunningMatchActivity.LEFT_TEAM_ID;
-import static com.druciak.escorerapp.view.RunningMatchActivity.RIGHT_TEAM_ID;
+import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.LEFT_TEAM_ID;
+import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.RIGHT_TEAM_ID;
 
 public class MatchTeam extends Team {
     public static final int PLAYERS_ON_COURT = 6;
@@ -123,6 +123,7 @@ public class MatchTeam extends Team {
             player.setStatusId(MatchPlayer.STATUS_PLAYER_ON_DESK);
             if (player.getCardId() != YELLOW_AND_RED_CARD_SEPARATELY_ID && !player.isCanPlay())
                 player.setCanPlay(true);
+            player.setOnCourt(false);
         }
         this.lineUp = new HashMap<>();
     }

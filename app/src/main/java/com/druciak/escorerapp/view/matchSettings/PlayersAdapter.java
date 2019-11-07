@@ -20,9 +20,9 @@ import com.druciak.escorerapp.model.entities.Player;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static com.druciak.escorerapp.view.RunningMatchActivity.LEFT_TEAM_ID;
-import static com.druciak.escorerapp.view.RunningMatchActivity.leftLineUpConversion;
-import static com.druciak.escorerapp.view.RunningMatchActivity.rightLineUpConversion;
+import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.LEFT_TEAM_ID;
+import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.leftLineUpConversion;
+import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.rightLineUpConversion;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHolder> {
     private ArrayList<? extends Player> listItems;
