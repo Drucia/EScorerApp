@@ -28,4 +28,14 @@ public class TeamPunishment extends Action {
         else
             return Optional.empty();
     }
+
+    @Override
+    public String toString() {
+        return "TeamPunishment{" +
+                "cardId=" + cardId +
+                ", teamId=" + teamId +
+                ", set=" + set +
+                ", score=" + super.toString() +
+                '}';
+    }
 }

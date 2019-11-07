@@ -31,4 +31,14 @@ public class LineUp extends Action {
     public int getAreaNb() {
         return areaNb;
     }
+
+    @Override
+    public String toString() {
+        return "LineUp{" +
+                "enterNb=" + enterNb +
+                ", areaNb=" + areaNb +
+                ", teamId=" + teamId +
+                ", score=" + super.toString() +
+                '}';
+    }
 }

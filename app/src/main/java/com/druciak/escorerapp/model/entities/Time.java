@@ -21,4 +21,13 @@ public class Time extends Action {
     public Optional<Integer> returnTeamIdIfIsPoint() {
         return Optional.empty();
     }
+
+    @Override
+    public String toString() {
+        return "Time{" +
+                "teamId=" + teamId +
+                ", timeCount=" + timeCount +
+                ", score=" + super.toString() +
+                '}';
+    }
 }

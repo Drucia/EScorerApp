@@ -17,4 +17,12 @@ public final class PlayerPunishment extends TeamPunishment {
         this.memberId = player.getNumber();
         player.setCardId(cardId);
     }
+
+    @Override
+    public String toString() {
+        return "PlayerPunishment{" +
+                "memberId=" + memberId +
+                ", teamPun=" + super.toString() +
+                '}';
+    }
 }

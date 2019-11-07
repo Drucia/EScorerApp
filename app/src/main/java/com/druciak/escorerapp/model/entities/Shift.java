@@ -45,4 +45,14 @@ public class Shift extends Action{
     public int getEnterPlayerNb() {
         return enterPlayerNb;
     }
+
+    @Override
+    public String toString() {
+        return "Shift{" +
+                "outPlayerNb=" + outPlayerNb +
+                ", enterPlayerNb=" + enterPlayerNb +
+                ", teamId=" + teamId +
+                ", score=" + super.toString() +
+                '}';
+    }
 }

@@ -1,5 +1,7 @@
 package com.druciak.escorerapp.presenter;
 
+import android.util.Log;
+
 import com.druciak.escorerapp.interfaces.IRunningMatchMVP;
 import com.druciak.escorerapp.model.entities.Action;
 import com.druciak.escorerapp.model.entities.LineUp;
@@ -48,7 +50,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
 
     @Override
     public void onAttentionsClicked() {
-
+        view.showPopUpWithAttentions(matchInfo.getAttentions());
     }
 
     @Override
@@ -199,6 +201,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         MatchTeam team = teamId == LEFT_TEAM_ID ? leftTeam : rightTeam;
         Action action = new Time(team,
                 teamId == LEFT_TEAM_ID ? leftTeam.getPoints() : rightTeam.getPoints());
+        Log.d("ACTION", action.toString());
         updateMatchState(action);
     }
 
@@ -260,6 +263,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     public void chosenPlayerToShift(MatchPlayer playerToShift, MatchPlayer player, int teamSideId) {
         Action action = new Shift(player, playerToShift, teamSideId == LEFT_TEAM_ID ? leftTeam : rightTeam,
                 teamSideId == LEFT_TEAM_ID ? rightTeam.getPoints() : leftTeam.getPoints());
+        Log.d("ACTION", action.toString());
         updateMatchState(action);
     }
 
@@ -269,6 +273,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         MatchTeam team = teamSideId == LEFT_TEAM_ID ? leftTeam : rightTeam;
         if (player.isPresent()) {
             Action action = new LineUp(team, player.get(), areaNb);
+            Log.d("ACTION", action.toString());
             makeAction(action);
         } else {
             team.setLineUp(areaNb, null);
@@ -295,6 +300,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         {
             MatchPlayer player = lineUp.get(i+1);
             Action action = new LineUp(team, player, i+1);
+            Log.d("ACTION", action.toString());
             matchInfo.addAction(actualSet, action);
         }
     }
@@ -330,12 +336,18 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     public void onPunishmentClicked(int teamSideId, int cardId) {
         MatchTeam team = teamSideId == leftTeam.getTeamSideId() ? leftTeam : rightTeam;
         Action action = new TeamPunishment(cardId, team, actualSet, getSecondTeam(team));
+        Log.d("ACTION", action.toString());
         updateMatchState(action);
     }
 
     @Override
     public void onPunishmentClicked(MatchTeam team, int cardId, int memberId, int memberNb) {
 
+    }
+
+    @Override
+    public void onAttentionsSavedClicked(String attentions) {
+        matchInfo.setAttentions(attentions);
     }
 
     private void updateCanPlay() {

@@ -30,6 +30,7 @@ public class MatchInfo {
     private MatchTeam teamB;
     private MatchTeam serveTeam;
     private MatchSettings settings;
+    private String attentions;
     private Map<Integer, ArrayList<Action>> actionsOfSets;
 
     public MatchInfo(Team teamA, List<Player> playersA, Team teamB, List<Player> playersB,
@@ -38,6 +39,7 @@ public class MatchInfo {
         this.teamB = new MatchTeam(teamB, playersB, TEAM_B_ID, settings.getMembers());
         this.serveTeam = isAServe ? this.teamA : this.teamB;
         this.settings = settings;
+        this.attentions = "";
         actionsOfSets = new HashMap<>();
         actionsOfSets.put(1, new ArrayList<>());
         actionsOfSets.put(2, new ArrayList<>());
@@ -95,5 +97,13 @@ public class MatchInfo {
             return MIN_SETS_TO_WIN_FOR_YOUNG;
         else
             return MIN_SETS_TO_WIN;
+    }
+
+    public String getAttentions() {
+        return attentions;
+    }
+
+    public void setAttentions(String attentions) {
+        this.attentions = attentions;
     }
 }

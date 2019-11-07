@@ -25,6 +25,7 @@ public interface IRunningMatchMVP {
         void makeChangeInAdapter(MatchPlayer playerOut, MatchPlayer playerIn, int teamSideId);
         void showToast(String msg);
         void showPopUpWithConfirmTime(int teamId);
+        void showPopUpWithAttentions(String attentions);
         void resetAdapters();
         void showPopUpWithTeamPunish(int teamSideId);
         void showPopUpWithMemberPunish(MatchTeam team);
@@ -49,5 +50,6 @@ public interface IRunningMatchMVP {
         void onCardClicked(int teamSideId, boolean isTeamPun);
         void onPunishmentClicked(int teamSideId, int cardId);
         void onPunishmentClicked(MatchTeam team, int cardId, int memberId, int memberNb);
+        void onAttentionsSavedClicked(String attentions);
     }
 }

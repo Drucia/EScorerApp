@@ -80,5 +80,7 @@
     <string name="punishment_disqualification">Dyskwalifikacja</string>
     <string name="punishment_member_label">Wybierz osobę</string>
     <string name="punishment_label_punishment">Kara</string>
+    <string name="hint_attentions">Wprowadź uwagi</string>
+    <string name="label_attentions">Uwagi</string>
 
 </resources>

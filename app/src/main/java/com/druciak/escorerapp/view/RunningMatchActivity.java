@@ -32,6 +32,7 @@ import com.druciak.escorerapp.view.matchSettings.PlayersAdapter;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.textfield.TextInputLayout;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -324,6 +325,21 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         });
 
         builder.setNegativeButton("Anuluj", (dialogInterface, i) -> dialogInterface.dismiss());
+        builder.create().show();
+    }
+
+    @Override
+    public void showPopUpWithAttentions(String attentions) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Uwagi");
+        View root = getLayoutInflater().inflate(R.layout.pop_up_attentions, null);
+        TextInputLayout layout = root.findViewById(R.id.attentionsLayout);
+        builder.setView(root);
+        if (!attentions.equals(""))
+            layout.getEditText().setText(attentions);
+        builder.setPositiveButton("Zapisz", (dialogInterface, i) ->
+                presenter.onAttentionsSavedClicked(layout.getEditText().getText().toString()));
+        builder.setNegativeButton("Anuluj", (dialogInterface, i) -> {});
         builder.create().show();
     }
 
