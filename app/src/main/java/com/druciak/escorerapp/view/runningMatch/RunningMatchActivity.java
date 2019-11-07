@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Pair;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -251,9 +253,14 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
             } else
                 cardsLayout.setVisibility(View.GONE);
         };
+
         leftCards.setOnClickListener(listener);
         rightCards.setOnClickListener(listener);
 
+        Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        rotation.setFillAfter(true);
+        leftServe.startAnimation(rotation);
+        rightServe.startAnimation(rotation);
         findViewById(R.id.relativeLayout).setOnClickListener(view -> {
             if (cardsLayout != null && cardsLayout.getVisibility() == View.VISIBLE)
                 cardsLayout.setVisibility(View.GONE);
@@ -563,11 +570,11 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
 
     private void changeServeTeam(int teamWhichServe) {
         if (teamWhichServe == RIGHT_TEAM_ID) {
-            rightServe.setVisibility(View.VISIBLE);
-            leftServe.setVisibility(View.INVISIBLE);
+            rightServe.setAlpha(1f);
+            leftServe.setAlpha(0f);
         } else {
-            rightServe.setVisibility(View.INVISIBLE);
-            leftServe.setVisibility(View.VISIBLE);
+            rightServe.setAlpha(0f);
+            leftServe.setAlpha(1f);
         }
     }
 

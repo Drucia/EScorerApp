@@ -24,6 +24,7 @@ public class MatchInfo {
     public static final int MAX_TIMES_AMOUNT = 2;
     public static final int MAX_SHIFTS_AMOUNT = 6;
     public static final int TIME_LENGTH = 30;
+    public static final int TIEBREAK_POINTS_TO_SHIFT = 8;
     public static final String YOUNG_TYPE_OF_MATCH = "Młodzicy";
 
     private MatchTeam teamA;

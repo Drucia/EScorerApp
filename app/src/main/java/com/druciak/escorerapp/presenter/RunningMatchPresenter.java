@@ -22,6 +22,7 @@ import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS_IN_TIEBREAK;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_MIN_DIFFERENT_POINTS;
 import static com.druciak.escorerapp.model.entities.MatchInfo.TEAM_A_ID;
+import static com.druciak.escorerapp.model.entities.MatchInfo.TIEBREAK_POINTS_TO_SHIFT;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_NOT_TO_SHIFT;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_ON_DESK;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_SHIFTED;
@@ -38,6 +39,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     private MatchTeam rightTeam;
     private int actualSet;
     private boolean canPlay;
+    private boolean isTiebreak;
 
     public RunningMatchPresenter(IRunningMatchMVP.IView view, MatchInfo matchInfo) {
         this.view = view;
@@ -47,6 +49,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         this.rightTeam = matchInfo.getTeamB();
         this.actualSet = 1;
         this.canPlay = false;
+        this.isTiebreak = false;
     }
 
     @Override
@@ -57,7 +60,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     @Override
     public void onReturnActionClicked() {
         if (canPlay){
-
+            // todo
         } else
         {
             view.showToast(LINE_UP_NOT_SET);
@@ -82,10 +85,28 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
             Action action = new Point(teamSideId == RIGHT_TEAM_ID ? rightTeam : leftTeam,
                     teamSideId == RIGHT_TEAM_ID ? leftTeam.getPoints() : rightTeam.getPoints());
             updateMatchState(action);
+            if (isTiebreak && (leftTeam.getPoints() == TIEBREAK_POINTS_TO_SHIFT ||
+                    rightTeam.getPoints() == TIEBREAK_POINTS_TO_SHIFT))
+            {
+                changeTeamSides();
+                view.setScore(leftTeam.getPoints() + " : " + rightTeam.getPoints());
+                view.setSets(leftTeam.getSets(), rightTeam.getSets());
+                view.setFields(leftTeam.getFullName(), rightTeam.getFullName(),
+                        serveTeam == leftTeam ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
+                // todo set adapter
+            }
         } else
         {
             view.showToast(LINE_UP_NOT_SET);
         }
+    }
+
+    private void changeTeamSides() {
+        MatchTeam tmp = leftTeam;
+        leftTeam = rightTeam;
+        leftTeam.setTeamSideId(LEFT_TEAM_ID);
+        rightTeam = tmp;
+        rightTeam.setTeamSideId(RIGHT_TEAM_ID);
     }
 
     private void updateMatchState(Action action) {
@@ -168,15 +189,17 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
 
     @Override
     public void onNextSetClicked() {
+        isTiebreak = matchInfo.isTiebreak(++actualSet);
+        if (isTiebreak)
+        {
+            // todo
+        } else {
+            changeTeamSides();
+            serveTeam = getServeTeam(actualSet);
+        }
         setTeamsParams();
-        MatchTeam tmp = leftTeam;
-        leftTeam = rightTeam;
-        leftTeam.setTeamSideId(LEFT_TEAM_ID);
-        rightTeam = tmp;
-        rightTeam.setTeamSideId(RIGHT_TEAM_ID);
-        serveTeam = getServeTeam(++actualSet);
         canPlay = false;
-        view.setScore("0 : 0");
+        view.setScore(leftTeam.getPoints() + " : " + rightTeam.getPoints());
         view.setSets(leftTeam.getSets(), rightTeam.getSets());
         view.setFields(leftTeam.getFullName(), rightTeam.getFullName(),
                 serveTeam == leftTeam ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
