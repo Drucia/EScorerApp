@@ -10,18 +10,18 @@ public class TeamAdditionalMember implements Parcelable {
 
     private String name;
     private int teamId;
-    private int memberId;
+    private int memberTypeId;
 
     public TeamAdditionalMember(String name, int teamId, int memberId) {
         this.name = name;
         this.teamId = teamId;
-        this.memberId = memberId;
+        this.memberTypeId = memberId;
     }
 
     protected TeamAdditionalMember(Parcel in) {
         name = in.readString();
         teamId = in.readInt();
-        memberId = in.readInt();
+        memberTypeId = in.readInt();
     }
 
     public static final Creator<TeamAdditionalMember> CREATOR = new Creator<TeamAdditionalMember>() {
@@ -45,7 +45,7 @@ public class TeamAdditionalMember implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
         parcel.writeInt(teamId);
-        parcel.writeInt(memberId);
+        parcel.writeInt(memberTypeId);
     }
 
     public String getName() {
@@ -56,7 +56,7 @@ public class TeamAdditionalMember implements Parcelable {
         return teamId;
     }
 
-    public int getMemberId() {
-        return memberId;
+    public int getMemberTypeId() {
+        return memberTypeId;
     }
 }

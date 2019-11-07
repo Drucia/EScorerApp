@@ -60,7 +60,7 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
         TeamAdditionalMember member = members.stream()
                 .filter(teamAdditionalMember -> teamAdditionalMember.getName()
                 .equals(name) && teamAdditionalMember.getTeamId() == teamId &&
-                        teamAdditionalMember.getMemberId() == memberId).findAny().get();
+                        teamAdditionalMember.getMemberTypeId() == memberId).findAny().get();
         members.remove(member);
     }
 

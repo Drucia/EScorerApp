@@ -8,8 +8,10 @@ import com.druciak.escorerapp.model.entities.LineUp;
 import com.druciak.escorerapp.model.entities.MatchInfo;
 import com.druciak.escorerapp.model.entities.MatchPlayer;
 import com.druciak.escorerapp.model.entities.MatchTeam;
+import com.druciak.escorerapp.model.entities.PlayerPunishment;
 import com.druciak.escorerapp.model.entities.Point;
 import com.druciak.escorerapp.model.entities.Shift;
+import com.druciak.escorerapp.model.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.model.entities.TeamPunishment;
 import com.druciak.escorerapp.model.entities.Time;
 
@@ -21,7 +23,6 @@ import java.util.stream.Collectors;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS_IN_TIEBREAK;
 import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_MIN_DIFFERENT_POINTS;
-import static com.druciak.escorerapp.model.entities.MatchInfo.TEAM_A_ID;
 import static com.druciak.escorerapp.model.entities.MatchInfo.TIEBREAK_POINTS_TO_SHIFT;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_NOT_TO_SHIFT;
 import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_ON_DESK;
@@ -389,11 +390,6 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     }
 
     @Override
-    public void onPunishmentClicked(MatchTeam team, int cardId, int memberId, int memberNb) {
-
-    }
-
-    @Override
     public void onAttentionsSavedClicked(String attentions) {
         matchInfo.setAttentions(attentions);
     }
@@ -407,6 +403,20 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         serveTeam = leftTeam.getId() == leftTeamId ? leftTeam : rightTeam;
         setTeamsParams();
         setFieldsAfterFinishSet();
+    }
+
+    @Override
+    public void onPunishmentClicked(MatchTeam team, int cardId, TeamAdditionalMember member) {
+        Action action = new PlayerPunishment(cardId, team, member, getSecondTeam(team), actualSet);
+        Log.d(ACTION_TAG, action.toString());
+        updateMatchState(action);
+    }
+
+    @Override
+    public void onPunishmentClicked(MatchTeam team, int cardId, MatchPlayer player) {
+        Action action = new PlayerPunishment(cardId, team, player, getSecondTeam(team), actualSet);
+        Log.d(ACTION_TAG, action.toString());
+        updateMatchState(action);
     }
 
     private void updateCanPlay() {

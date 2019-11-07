@@ -8,7 +8,7 @@ public final class PlayerPunishment extends TeamPunishment {
     public PlayerPunishment(int cardId, MatchTeam team, TeamAdditionalMember member,
                             MatchTeam sndTeam, int set) {
         super(cardId, team, set, sndTeam);
-        this.memberId = member.getMemberId();
+        this.memberId = member.getMemberTypeId();
     }
 
     public PlayerPunishment(int cardId, MatchTeam team, MatchPlayer player,

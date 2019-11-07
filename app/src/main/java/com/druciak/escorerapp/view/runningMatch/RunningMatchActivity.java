@@ -57,6 +57,8 @@ import java.util.stream.Collectors;
 import static com.druciak.escorerapp.model.entities.MatchInfo.RED_CARD_ID;
 import static com.druciak.escorerapp.model.entities.MatchInfo.TIME_LENGTH;
 import static com.druciak.escorerapp.model.entities.MatchInfo.WARNING_ID;
+import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CARD_SEPARATELY_ID;
+import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CARD_TOGETHER_ID;
 import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_CARD_ID;
 import static com.druciak.escorerapp.model.entities.TeamAdditionalMember.COACH_MEMBER_ID;
 import static com.druciak.escorerapp.model.entities.TeamAdditionalMember.MASSEUR_MEMBER_ID;
@@ -344,17 +346,18 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         }
 
         List<TeamAdditionalMember> members = team.getMembers().stream()
-                .sorted(Comparator.comparingInt(TeamAdditionalMember::getMemberId))
+                .sorted(Comparator.comparingInt(TeamAdditionalMember::getMemberTypeId))
                 .collect(Collectors.toList());
         int coachCounter = 0;
         int medicineCounter = 0;
         int masseurCounter = 0;
+        final int SHIFT = 100;
         for (int i = 1; i <= members.size(); i++)
         {
             Chip newChip = (Chip) getLayoutInflater().inflate(R.layout.default_chip, memberGroup, false);
-            newChip.setId(100+i);
+            newChip.setId(SHIFT+i);
             TeamAdditionalMember m = members.get(i-1);
-            switch (m.getMemberId()) {
+            switch (m.getMemberTypeId()) {
                 case COACH_MEMBER_ID:
                     newChip.setText("C"+ (++coachCounter));
                     break;
@@ -372,10 +375,34 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         builder.setView(root);
         // todo if time allow - filter cards
         builder.setPositiveButton("Zatwierdź", (dialogInterface, i) -> {
-            int chipId = group.getCheckedChipId();
-            if (chipId != -1)
+            int chipIdForCards = group.getCheckedChipId();
+            int chipIdForMember = memberGroup.getCheckedChipId();
+            if (chipIdForCards != -1 && chipIdForMember != -1)
             {
-                dialogInterface.dismiss();
+                int cardId = -1;
+                switch (chipIdForCards){
+                    case R.id.chipYellowMem:
+                        cardId = YELLOW_CARD_ID;
+                        break;
+                    case R.id.chipRedMem:
+                        cardId = RED_CARD_ID;
+                        break;
+                    case R.id.chipExclusionMem:
+                        cardId = YELLOW_AND_RED_CARD_TOGETHER_ID;
+                        break;
+                    case R.id.chipDisqualificationMem:
+                        cardId = YELLOW_AND_RED_CARD_SEPARATELY_ID;
+                        break;
+                }
+
+                if (chipIdForMember > SHIFT) // additional
+                {
+                    TeamAdditionalMember member = members.get(chipIdForMember - SHIFT - 1);
+                    presenter.onPunishmentClicked(team, cardId, member);
+                } else {
+                    MatchPlayer player = team.getPlayerByNumber(chipIdForMember);
+                    presenter.onPunishmentClicked(team, cardId, player);
+                }
             } else
             {
                 Toast.makeText(RunningMatchActivity.this, "Wybierz karę",
@@ -417,10 +444,10 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         teamBLibero.setAdapter(new SimplyPlayersAdapter(liberoB));
 
         List<String> coachesA = teamA.getMembers().stream()
-                .filter(member -> member.getMemberId() == COACH_MEMBER_ID)
+                .filter(member -> member.getMemberTypeId() == COACH_MEMBER_ID)
                 .map(TeamAdditionalMember::getName).collect(Collectors.toList());
         List<String> coachesB = teamB.getMembers().stream()
-                .filter(member -> member.getMemberId() == COACH_MEMBER_ID)
+                .filter(member -> member.getMemberTypeId() == COACH_MEMBER_ID)
                 .map(TeamAdditionalMember::getName).collect(Collectors.toList());
         teamACoaches.setLayoutManager(new LinearLayoutManager(this));
         teamACoaches.setAdapter(new StringAdapter(coachesA));
@@ -428,10 +455,10 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         teamBCoaches.setAdapter(new StringAdapter(coachesB));
 
         List<String> membersA = teamA.getMembers().stream()
-                .filter(member -> member.getMemberId() != COACH_MEMBER_ID)
+                .filter(member -> member.getMemberTypeId() != COACH_MEMBER_ID)
                 .map(TeamAdditionalMember::getName).collect(Collectors.toList());
         List<String> membersB = teamB.getMembers().stream()
-                .filter(member -> member.getMemberId() != COACH_MEMBER_ID)
+                .filter(member -> member.getMemberTypeId() != COACH_MEMBER_ID)
                 .map(TeamAdditionalMember::getName).collect(Collectors.toList());
         teamAMembers.setLayoutManager(new LinearLayoutManager(this));
         teamAMembers.setAdapter(new StringAdapter(membersA));
