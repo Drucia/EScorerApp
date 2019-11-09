@@ -1,7 +1,7 @@
 package com.druciak.escorerapp.presenter;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.model.entities.GameType;
+import com.druciak.escorerapp.entities.GameType;
 
 import java.util.ArrayList;
 import java.util.List;

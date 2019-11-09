@@ -1,11 +1,11 @@
-package com.druciak.escorerapp.model.entities;
+package com.druciak.escorerapp.entities;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import static com.druciak.escorerapp.model.entities.MatchInfo.NO_CARD_ID;
-import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CARD_SEPARATELY_ID;
-import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CARD_TOGETHER_ID;
+import static com.druciak.escorerapp.entities.MatchInfo.NO_CARD_ID;
+import static com.druciak.escorerapp.entities.MatchInfo.YELLOW_AND_RED_CARD_SEPARATELY_ID;
+import static com.druciak.escorerapp.entities.MatchInfo.YELLOW_AND_RED_CARD_TOGETHER_ID;
 
 public class MatchPlayer extends Player implements Parcelable {
     public static final int STATUS_PLAYER_ON_COURT = 1;
@@ -30,6 +30,7 @@ public class MatchPlayer extends Player implements Parcelable {
     }
 
     protected MatchPlayer(Parcel in) {
+        super(in);
         statusId = in.readInt();
         shiftNumber = in.readInt();
         canPlay = in.readByte() != 0;
@@ -38,6 +39,15 @@ public class MatchPlayer extends Player implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(surname);
+        dest.writeInt((int) sex);
+        dest.writeParcelable(team, flags);
+        dest.writeByte((byte) (isLibero ? 1 : 0));
+        dest.writeByte((byte) (isCaptain ? 1 : 0));
+        dest.writeInt(number);
+
         dest.writeInt(statusId);
         dest.writeInt(shiftNumber);
         dest.writeByte((byte) (canPlay ? 1 : 0));

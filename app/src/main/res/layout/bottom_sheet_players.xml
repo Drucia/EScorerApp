@@ -10,7 +10,7 @@
     android:layout_marginRight="115dp"
     android:background="@drawable/pop_up"
     app:behavior_hideable="true"
-    app:behavior_peekHeight="10dp"
+    app:behavior_peekHeight="13dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 <LinearLayout
     android:layout_width="match_parent"

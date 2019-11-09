@@ -6,7 +6,7 @@ import android.util.Patterns;
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
 import com.druciak.escorerapp.interfaces.IUserInfo;
-import com.druciak.escorerapp.model.entities.LoggedInUser;
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.model.firebaseService.FirebaseManager;
 import com.druciak.escorerapp.model.firebaseService.Result;
 import com.druciak.escorerapp.model.internalApiService.InternalApiManager;

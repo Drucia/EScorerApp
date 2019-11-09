@@ -1,7 +1,7 @@
 package com.druciak.escorerapp.interfaces;
 
-import com.druciak.escorerapp.model.entities.MatchSettings;
-import com.druciak.escorerapp.model.entities.Player;
+import com.druciak.escorerapp.entities.MatchSettings;
+import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.model.firebaseService.Result;
 
 import java.util.List;

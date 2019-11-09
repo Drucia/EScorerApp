@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
-import com.druciak.escorerapp.model.entities.GameType;
+import com.druciak.escorerapp.entities.GameType;
 
 import java.util.List;
 

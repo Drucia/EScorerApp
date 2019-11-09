@@ -10,8 +10,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
-import com.druciak.escorerapp.model.entities.Match;
-import com.druciak.escorerapp.model.entities.Player;
+import com.druciak.escorerapp.entities.Match;
+import com.druciak.escorerapp.entities.Player;
 
 import java.util.List;
 import java.util.stream.Collectors;

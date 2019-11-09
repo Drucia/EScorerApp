@@ -1,7 +1,7 @@
 package com.druciak.escorerapp.interfaces;
 
-import com.druciak.escorerapp.model.entities.LoggedInUser;
-import com.druciak.escorerapp.model.entities.NewUser;
+import com.druciak.escorerapp.entities.LoggedInUser;
+import com.druciak.escorerapp.entities.NewUser;
 import com.druciak.escorerapp.model.firebaseService.Result;
 
 public interface ICreateAccountMVP {

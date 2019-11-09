@@ -1,10 +1,12 @@
-package com.druciak.escorerapp.model.entities;
+package com.druciak.escorerapp.entities;
+
+import android.os.Parcel;
 
 import java.util.Optional;
 
-import static com.druciak.escorerapp.model.entities.MatchPlayer.NO_SHIFT;
-import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_NOT_TO_SHIFT;
-import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_SHIFTED;
+import static com.druciak.escorerapp.entities.MatchPlayer.NO_SHIFT;
+import static com.druciak.escorerapp.entities.MatchPlayer.STATUS_PLAYER_NOT_TO_SHIFT;
+import static com.druciak.escorerapp.entities.MatchPlayer.STATUS_PLAYER_SHIFTED;
 
 public class Shift extends Action{
     private int outPlayerNb;
@@ -12,11 +14,11 @@ public class Shift extends Action{
     private int teamId;
 
     public Shift(MatchPlayer out, MatchPlayer enter, MatchTeam team, int sndTeamPoints) {
-
         enterPlayerNb = enter.getNumber();
         outPlayerNb = out.getNumber();
         this.teamId = team.getTeamId();
-        setScore(team.getPoints(), sndTeamPoints);
+        teamMadeActionPoints = team.getPoints();
+        this.sndTeamPoints = sndTeamPoints;
         if (out.getShiftNumber() != NO_SHIFT) {
             out.setStatusId(STATUS_PLAYER_NOT_TO_SHIFT);
             enter.setStatusId(STATUS_PLAYER_NOT_TO_SHIFT);
@@ -31,7 +33,40 @@ public class Shift extends Action{
         team.addShift();
     }
 
+    protected Shift(Parcel in) {
+        super.readFromParcel(in);
+        outPlayerNb = in.readInt();
+        enterPlayerNb = in.readInt();
+        teamId = in.readInt();
+    }
+
     @Override
+    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeInt(SHIFT_ID); // to know which create use
+        super.writeToParcel(dest, flags);
+        dest.writeInt(outPlayerNb);
+        dest.writeInt(enterPlayerNb);
+        dest.writeInt(teamId);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Shift> CREATOR = new Creator<Shift>() {
+        @Override
+        public Shift createFromParcel(Parcel in) {
+            return new Shift(in);
+        }
+
+        @Override
+        public Shift[] newArray(int size) {
+            return new Shift[size];
+        }
+    };
+
+        @Override
     public Optional<Integer> returnTeamIdIfIsPoint() {
         return Optional.empty();
     }

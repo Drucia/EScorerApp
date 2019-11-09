@@ -18,9 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
-import com.druciak.escorerapp.model.entities.Player;
-import com.druciak.escorerapp.model.entities.Team;
-import com.druciak.escorerapp.model.entities.TeamAdditionalMember;
+import com.druciak.escorerapp.entities.Player;
+import com.druciak.escorerapp.entities.Team;
+import com.druciak.escorerapp.entities.TeamAdditionalMember;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.switchmaterial.SwitchMaterial;

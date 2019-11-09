@@ -6,7 +6,7 @@ import android.util.Log;
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.ICreateAccountMVP;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
-import com.druciak.escorerapp.model.entities.NewUser;
+import com.druciak.escorerapp.entities.NewUser;
 import com.druciak.escorerapp.model.internalApiService.InternalApiManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

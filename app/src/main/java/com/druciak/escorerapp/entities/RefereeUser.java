@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.model.entities;
+package com.druciak.escorerapp.entities;
 
 public class RefereeUser extends LoggedInUser {
     private String certNumber;

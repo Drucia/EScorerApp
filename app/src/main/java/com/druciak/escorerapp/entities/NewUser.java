@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.model.entities;
+package com.druciak.escorerapp.entities;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -3,30 +3,30 @@ package com.druciak.escorerapp.presenter;
 import android.util.Log;
 
 import com.druciak.escorerapp.interfaces.IRunningMatchMVP;
-import com.druciak.escorerapp.model.entities.Action;
-import com.druciak.escorerapp.model.entities.LineUp;
-import com.druciak.escorerapp.model.entities.MatchInfo;
-import com.druciak.escorerapp.model.entities.MatchPlayer;
-import com.druciak.escorerapp.model.entities.MatchTeam;
-import com.druciak.escorerapp.model.entities.PlayerPunishment;
-import com.druciak.escorerapp.model.entities.Point;
-import com.druciak.escorerapp.model.entities.Shift;
-import com.druciak.escorerapp.model.entities.TeamAdditionalMember;
-import com.druciak.escorerapp.model.entities.TeamPunishment;
-import com.druciak.escorerapp.model.entities.Time;
+import com.druciak.escorerapp.entities.Action;
+import com.druciak.escorerapp.entities.LineUp;
+import com.druciak.escorerapp.entities.MatchInfo;
+import com.druciak.escorerapp.entities.MatchPlayer;
+import com.druciak.escorerapp.entities.MatchTeam;
+import com.druciak.escorerapp.entities.PlayerPunishment;
+import com.druciak.escorerapp.entities.Point;
+import com.druciak.escorerapp.entities.Shift;
+import com.druciak.escorerapp.entities.TeamAdditionalMember;
+import com.druciak.escorerapp.entities.TeamPunishment;
+import com.druciak.escorerapp.entities.Time;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS;
-import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_END_POINTS_IN_TIEBREAK;
-import static com.druciak.escorerapp.model.entities.MatchInfo.MATCH_MIN_DIFFERENT_POINTS;
-import static com.druciak.escorerapp.model.entities.MatchInfo.TIEBREAK_POINTS_TO_SHIFT;
-import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_NOT_TO_SHIFT;
-import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_ON_DESK;
-import static com.druciak.escorerapp.model.entities.MatchPlayer.STATUS_PLAYER_SHIFTED;
+import static com.druciak.escorerapp.entities.MatchInfo.MATCH_END_POINTS;
+import static com.druciak.escorerapp.entities.MatchInfo.MATCH_END_POINTS_IN_TIEBREAK;
+import static com.druciak.escorerapp.entities.MatchInfo.MATCH_MIN_DIFFERENT_POINTS;
+import static com.druciak.escorerapp.entities.MatchInfo.TIEBREAK_POINTS_TO_SHIFT;
+import static com.druciak.escorerapp.entities.MatchPlayer.STATUS_PLAYER_NOT_TO_SHIFT;
+import static com.druciak.escorerapp.entities.MatchPlayer.STATUS_PLAYER_ON_DESK;
+import static com.druciak.escorerapp.entities.MatchPlayer.STATUS_PLAYER_SHIFTED;
 import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.LEFT_TEAM_ID;
 import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.RIGHT_TEAM_ID;
 
@@ -206,19 +206,22 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
 
     @Override
     public void onNextSetClicked() {
-        isTiebreak = matchInfo.isTiebreak(++actualSet);
-        if (isTiebreak)
-        {
-            view.showDrawActivity(matchInfo.getSettings());
+        if (checkIfIsEndOfMatch()){
+            view.moveToSummary(matchInfo);
         } else {
-            changeTeamSides();
-            serveTeam = getServeTeam(actualSet);
-            setTeamsParams();
-            setFieldsAfterFinishSet();
+            isTiebreak = matchInfo.isTiebreak(++actualSet);
+            if (isTiebreak) {
+                view.showDrawActivity(matchInfo.getSettings());
+            } else {
+                changeTeamSides();
+                serveTeam = getServeTeam(actualSet);
+                setTeamsParams();
+                setFieldsAfterFinishSet();
+            }
+            canPlay = false;
+            view.resetTimes();
+            view.resetAdapters();
         }
-        canPlay = false;
-        view.resetTimes();
-        view.resetAdapters();
     }
 
     private void setFieldsAfterFinishSet()

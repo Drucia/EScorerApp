@@ -1,10 +1,10 @@
 package com.druciak.escorerapp.presenter;
 
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
-import com.druciak.escorerapp.model.entities.Match;
-import com.druciak.escorerapp.model.entities.MatchSettings;
-import com.druciak.escorerapp.model.entities.Player;
-import com.druciak.escorerapp.model.entities.TeamAdditionalMember;
+import com.druciak.escorerapp.entities.Match;
+import com.druciak.escorerapp.entities.MatchSettings;
+import com.druciak.escorerapp.entities.Player;
+import com.druciak.escorerapp.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.model.externalApiService.ExternalApiManager;
 import com.druciak.escorerapp.model.firebaseService.Result;
 

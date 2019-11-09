@@ -12,9 +12,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
-import com.druciak.escorerapp.model.entities.Match;
-import com.druciak.escorerapp.model.entities.MatchSettings;
-import com.druciak.escorerapp.model.entities.Player;
+import com.druciak.escorerapp.entities.Match;
+import com.druciak.escorerapp.entities.MatchSettings;
+import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.presenter.MatchSettingsPresenter;
 import com.druciak.escorerapp.view.DrawActivity;
 import com.google.android.material.tabs.TabLayout;

@@ -6,9 +6,9 @@ import androidx.annotation.RequiresApi;
 
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
-import com.druciak.escorerapp.model.entities.Match;
-import com.druciak.escorerapp.model.entities.Player;
-import com.druciak.escorerapp.model.entities.Team;
+import com.druciak.escorerapp.entities.Match;
+import com.druciak.escorerapp.entities.Player;
+import com.druciak.escorerapp.entities.Team;
 import com.druciak.escorerapp.model.firebaseService.Result;
 import com.druciak.escorerapp.presenter.MainPanelPresenter;
 

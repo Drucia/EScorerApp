@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.model.entities;
+package com.druciak.escorerapp.entities;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -24,6 +24,18 @@ public class TeamAdditionalMember implements Parcelable {
         memberTypeId = in.readInt();
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeInt(teamId);
+        dest.writeInt(memberTypeId);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
     public static final Creator<TeamAdditionalMember> CREATOR = new Creator<TeamAdditionalMember>() {
         @Override
         public TeamAdditionalMember createFromParcel(Parcel in) {
@@ -35,18 +47,6 @@ public class TeamAdditionalMember implements Parcelable {
             return new TeamAdditionalMember[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeInt(teamId);
-        parcel.writeInt(memberTypeId);
-    }
 
     public String getName() {
         return name;

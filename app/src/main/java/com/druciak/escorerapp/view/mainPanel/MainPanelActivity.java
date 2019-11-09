@@ -22,7 +22,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
-import com.druciak.escorerapp.model.entities.Match;
+import com.druciak.escorerapp.entities.Match;
 import com.druciak.escorerapp.presenter.GameTypesRepository;
 import com.druciak.escorerapp.presenter.MainPanelPresenter;
 import com.druciak.escorerapp.view.GoodbyeActivity;

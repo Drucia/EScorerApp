@@ -1,9 +1,10 @@
 package com.druciak.escorerapp.interfaces;
 
-import com.druciak.escorerapp.model.entities.MatchPlayer;
-import com.druciak.escorerapp.model.entities.MatchSettings;
-import com.druciak.escorerapp.model.entities.MatchTeam;
-import com.druciak.escorerapp.model.entities.TeamAdditionalMember;
+import com.druciak.escorerapp.entities.MatchInfo;
+import com.druciak.escorerapp.entities.MatchPlayer;
+import com.druciak.escorerapp.entities.MatchSettings;
+import com.druciak.escorerapp.entities.MatchTeam;
+import com.druciak.escorerapp.entities.TeamAdditionalMember;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public interface IRunningMatchMVP {
         void setInfoFields(MatchTeam teamA, MatchTeam teamB);
         void showTeamsInfo();
         void showDrawActivity(MatchSettings settings);
+        void moveToSummary(MatchInfo matchInfo);
     }
 
     interface IPresenter{

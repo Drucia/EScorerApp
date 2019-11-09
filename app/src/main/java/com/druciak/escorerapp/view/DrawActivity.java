@@ -10,8 +10,8 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.model.entities.Match;
-import com.druciak.escorerapp.model.entities.MatchSettings;
+import com.druciak.escorerapp.entities.Match;
+import com.druciak.escorerapp.entities.MatchSettings;
 import com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity;
 import com.druciak.escorerapp.view.runningMatch.RunningMatchActivity;
 import com.google.android.material.button.MaterialButton;

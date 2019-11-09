@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.ICreateAccountMVP;
-import com.druciak.escorerapp.model.entities.LoggedInUser;
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.presenter.CreateAccountPresenter;
 import com.druciak.escorerapp.view.mainPanel.MainPanelActivity;
 import com.google.android.material.button.MaterialButton;

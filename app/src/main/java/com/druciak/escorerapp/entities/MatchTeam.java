@@ -1,4 +1,7 @@
-package com.druciak.escorerapp.model.entities;
+package com.druciak.escorerapp.entities;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,14 +10,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.druciak.escorerapp.model.entities.MatchInfo.MAX_SHIFTS_AMOUNT;
-import static com.druciak.escorerapp.model.entities.MatchInfo.MAX_TIMES_AMOUNT;
-import static com.druciak.escorerapp.model.entities.MatchInfo.TEAM_A_ID;
-import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CARD_SEPARATELY_ID;
+import static com.druciak.escorerapp.entities.MatchInfo.MAX_SHIFTS_AMOUNT;
+import static com.druciak.escorerapp.entities.MatchInfo.MAX_TIMES_AMOUNT;
+import static com.druciak.escorerapp.entities.MatchInfo.TEAM_A_ID;
+import static com.druciak.escorerapp.entities.MatchInfo.YELLOW_AND_RED_CARD_SEPARATELY_ID;
 import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.LEFT_TEAM_ID;
 import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.RIGHT_TEAM_ID;
 
-public class MatchTeam extends Team {
+public class MatchTeam extends Team implements Parcelable {
     public static final int PLAYERS_ON_COURT = 6;
 
     private List<MatchPlayer> players;
@@ -41,6 +44,68 @@ public class MatchTeam extends Team {
         this.members = members.stream().filter(member -> member.getTeamId() == team.getId()).
                 collect(Collectors.toList());
     }
+
+    protected MatchTeam(Parcel in) {
+        super(in);
+        players = in.createTypedArrayList(MatchPlayer.CREATOR);
+        members = in.createTypedArrayList(TeamAdditionalMember.CREATOR);
+        int size = in.readInt();
+        lineUp = new HashMap<>();
+        for (int i = 0; i < size; i++)
+        {
+            int key = in.readInt();
+            lineUp.put(key, in.readParcelable(MatchPlayer.class.getClassLoader()));
+        }
+        points = in.readInt();
+        sets = in.readInt();
+        teamId = in.readInt();
+        teamSideId = in.readInt();
+        timesCounter = in.readInt();
+        shiftCounter = in.readInt();
+        isLineUpSet = in.readByte() != 0;
+        cardId = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(fullName);
+        dest.writeString(shortName);
+
+        dest.writeTypedList(players);
+        dest.writeTypedList(members);
+        dest.writeInt(lineUp.size());
+        for (Integer key : lineUp.keySet())
+        {
+            dest.writeInt(key);
+            dest.writeParcelable(lineUp.get(key), flags);
+        }
+        dest.writeInt(points);
+        dest.writeInt(sets);
+        dest.writeInt(teamId);
+        dest.writeInt(teamSideId);
+        dest.writeInt(timesCounter);
+        dest.writeInt(shiftCounter);
+        dest.writeByte((byte) (isLineUpSet ? 1 : 0));
+        dest.writeInt(cardId);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<MatchTeam> CREATOR = new Creator<MatchTeam>() {
+        @Override
+        public MatchTeam createFromParcel(Parcel in) {
+            return new MatchTeam(in);
+        }
+
+        @Override
+        public MatchTeam[] newArray(int size) {
+            return new MatchTeam[size];
+        }
+    };
 
     public List<TeamAdditionalMember> getMembers() {
         return members;

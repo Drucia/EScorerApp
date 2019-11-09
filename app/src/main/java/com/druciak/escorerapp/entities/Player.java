@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.model.entities;
+package com.druciak.escorerapp.entities;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,27 +9,27 @@ import com.google.gson.annotations.SerializedName;
 public class Player implements Parcelable {
     @SerializedName("id")
     @Expose
-    private int id;
+    protected int id;
 
     @SerializedName("name")
     @Expose
-    private String name;
+    protected String name;
 
     @SerializedName("surname")
     @Expose
-    private String surname;
+    protected String surname;
 
     @SerializedName("sex")
     @Expose
-    private char sex;
+    protected char sex;
 
     @SerializedName("team")
     @Expose
-    private Team team;
+    protected Team team;
 
-    private boolean isLibero;
-    private boolean isCaptain;
-    private int number = 0;
+    protected boolean isLibero;
+    protected boolean isCaptain;
+    protected int number = 0;
 
     public Player() {
     }
@@ -52,17 +52,6 @@ public class Player implements Parcelable {
         this.id = -1;
     }
 
-    protected Player(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        surname = in.readString();
-        sex = (char) in.readInt();
-        team = in.readParcelable(Team.class.getClassLoader());
-        isLibero = in.readByte() != 0;
-        isCaptain = in.readByte() != 0;
-        number = in.readInt();
-    }
-
     public Player(Player player) {
         id = player.getId();
         name = player.getName();
@@ -74,21 +63,15 @@ public class Player implements Parcelable {
         number = player.getNumber();
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(surname);
-        dest.writeInt((int) sex);
-        dest.writeParcelable(team, flags);
-        dest.writeByte((byte) (isLibero ? 1 : 0));
-        dest.writeByte((byte) (isCaptain ? 1 : 0));
-        dest.writeInt(number);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+    protected Player(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        surname = in.readString();
+        sex = (char) in.readInt();
+        team = in.readParcelable(Team.class.getClassLoader());
+        isLibero = in.readByte() != 0;
+        isCaptain = in.readByte() != 0;
+        number = in.readInt();
     }
 
     public static final Creator<Player> CREATOR = new Creator<Player>() {
@@ -170,5 +153,22 @@ public class Player implements Parcelable {
     @Override
     public String toString() {
         return surname + " " + name + "       " + number;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeString(surname);
+        parcel.writeInt((int) sex);
+        parcel.writeParcelable(team, i);
+        parcel.writeByte((byte) (isLibero ? 1 : 0));
+        parcel.writeByte((byte) (isCaptain ? 1 : 0));
+        parcel.writeInt(number);
     }
 }

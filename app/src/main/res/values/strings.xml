@@ -84,5 +84,6 @@
     <string name="label_attentions">Uwagi</string>
     <string name="label_team_info">Informacje o zespołach</string>
     <string name="rest_label">Pozostali</string>
+    <string name="title_summary">Podsumowanie</string>
 
 </resources>

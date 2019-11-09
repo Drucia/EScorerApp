@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.model.entities.MatchPlayer;
+import com.druciak.escorerapp.entities.MatchPlayer;
 
 import java.util.List;
 

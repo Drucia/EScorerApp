@@ -25,17 +25,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.entities.Match;
+import com.druciak.escorerapp.entities.MatchInfo;
+import com.druciak.escorerapp.entities.MatchPlayer;
+import com.druciak.escorerapp.entities.MatchSettings;
+import com.druciak.escorerapp.entities.MatchTeam;
+import com.druciak.escorerapp.entities.Player;
+import com.druciak.escorerapp.entities.Team;
+import com.druciak.escorerapp.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.interfaces.IRunningMatchMVP;
-import com.druciak.escorerapp.model.entities.Match;
-import com.druciak.escorerapp.model.entities.MatchInfo;
-import com.druciak.escorerapp.model.entities.MatchPlayer;
-import com.druciak.escorerapp.model.entities.MatchSettings;
-import com.druciak.escorerapp.model.entities.MatchTeam;
-import com.druciak.escorerapp.model.entities.Player;
-import com.druciak.escorerapp.model.entities.Team;
-import com.druciak.escorerapp.model.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.presenter.RunningMatchPresenter;
 import com.druciak.escorerapp.view.DrawActivity;
+import com.druciak.escorerapp.view.SummaryActivity;
 import com.druciak.escorerapp.view.matchSettings.PlayersAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
@@ -54,15 +55,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.druciak.escorerapp.model.entities.MatchInfo.RED_CARD_ID;
-import static com.druciak.escorerapp.model.entities.MatchInfo.TIME_LENGTH;
-import static com.druciak.escorerapp.model.entities.MatchInfo.WARNING_ID;
-import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CARD_SEPARATELY_ID;
-import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_AND_RED_CARD_TOGETHER_ID;
-import static com.druciak.escorerapp.model.entities.MatchInfo.YELLOW_CARD_ID;
-import static com.druciak.escorerapp.model.entities.TeamAdditionalMember.COACH_MEMBER_ID;
-import static com.druciak.escorerapp.model.entities.TeamAdditionalMember.MASSEUR_MEMBER_ID;
-import static com.druciak.escorerapp.model.entities.TeamAdditionalMember.MEDICINE_MEMBER_ID;
+import static com.druciak.escorerapp.entities.MatchInfo.RED_CARD_ID;
+import static com.druciak.escorerapp.entities.MatchInfo.TIME_LENGTH;
+import static com.druciak.escorerapp.entities.MatchInfo.WARNING_ID;
+import static com.druciak.escorerapp.entities.MatchInfo.YELLOW_AND_RED_CARD_SEPARATELY_ID;
+import static com.druciak.escorerapp.entities.MatchInfo.YELLOW_AND_RED_CARD_TOGETHER_ID;
+import static com.druciak.escorerapp.entities.MatchInfo.YELLOW_CARD_ID;
+import static com.druciak.escorerapp.entities.TeamAdditionalMember.COACH_MEMBER_ID;
+import static com.druciak.escorerapp.entities.TeamAdditionalMember.MASSEUR_MEMBER_ID;
+import static com.druciak.escorerapp.entities.TeamAdditionalMember.MEDICINE_MEMBER_ID;
 import static com.druciak.escorerapp.view.DrawActivity.SERVE_TEAM_ID;
 import static com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity.MACH_SETTINGS_ID;
 
@@ -479,6 +480,15 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         intent.putExtra(MACH_SETTINGS_ID, settings);
         intent.putExtra(IS_REQ_ID, true); // todo make draw activity always for result
         startActivityForResult(intent, DRAW_REQ);
+    }
+
+    @Override
+    public void moveToSummary(MatchInfo matchInfo) {
+        Intent intent = new Intent(this, SummaryActivity.class);
+        intent.putExtra("dupa", matchInfo);
+        MatchInfo i = intent.getParcelableExtra("dupa");
+        startActivity(intent);
+        finish();
     }
 
     @Override

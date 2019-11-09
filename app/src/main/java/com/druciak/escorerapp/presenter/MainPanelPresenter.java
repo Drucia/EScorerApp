@@ -2,9 +2,9 @@ package com.druciak.escorerapp.presenter;
 
 import com.druciak.escorerapp.interfaces.ILoginMVP;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
-import com.druciak.escorerapp.model.entities.LoggedInUser;
-import com.druciak.escorerapp.model.entities.Match;
-import com.druciak.escorerapp.model.entities.NewUser;
+import com.druciak.escorerapp.entities.LoggedInUser;
+import com.druciak.escorerapp.entities.Match;
+import com.druciak.escorerapp.entities.NewUser;
 import com.druciak.escorerapp.model.externalApiService.ExternalApiManager;
 import com.druciak.escorerapp.model.firebaseService.FirebaseManager;
 import com.druciak.escorerapp.model.firebaseService.Result;

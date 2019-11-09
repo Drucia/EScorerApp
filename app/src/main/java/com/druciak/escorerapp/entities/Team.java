@@ -1,4 +1,4 @@
-package com.druciak.escorerapp.model.entities;
+package com.druciak.escorerapp.entities;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,15 +9,15 @@ import com.google.gson.annotations.SerializedName;
 public class Team implements Parcelable {
     @SerializedName("id")
     @Expose
-    private int id;
+    protected int id;
 
     @SerializedName("fullName")
     @Expose
-    private String fullName;
+    protected String fullName;
 
     @SerializedName("shortName")
     @Expose
-    private String shortName;
+    protected String shortName;
 
     public Team(int id, String shortName, String fullName) {
         this.id = id;
@@ -25,7 +25,7 @@ public class Team implements Parcelable {
         this.shortName = shortName;
     }
 
-    public Team(Team team){
+    Team(Team team){
         this.id = team.getId();
         this.shortName = team.getShortName();
         this.fullName = team.getFullName();
@@ -35,6 +35,18 @@ public class Team implements Parcelable {
         id = in.readInt();
         fullName = in.readString();
         shortName = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(fullName);
+        dest.writeString(shortName);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Team> CREATOR = new Creator<Team>() {
@@ -71,17 +83,5 @@ public class Team implements Parcelable {
 
     public void setShortName(String shortName) {
         this.shortName = shortName;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
-        parcel.writeString(fullName);
-        parcel.writeString(shortName);
     }
 }

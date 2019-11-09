@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.ILoginMVP;
-import com.druciak.escorerapp.model.entities.LoggedInUser;
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.presenter.LoginFormState;
 import com.druciak.escorerapp.presenter.LoginPresenter;
 import com.druciak.escorerapp.view.createAccount.CreateAccountActivity;

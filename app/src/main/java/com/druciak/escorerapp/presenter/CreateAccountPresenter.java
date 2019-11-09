@@ -1,7 +1,7 @@
 package com.druciak.escorerapp.presenter;
 
 import com.druciak.escorerapp.interfaces.ICreateAccountMVP;
-import com.druciak.escorerapp.model.entities.LoggedInUser;
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.model.firebaseService.FirebaseManager;
 import com.druciak.escorerapp.model.firebaseService.Result;
 

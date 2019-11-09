@@ -1,9 +1,8 @@
-package com.druciak.escorerapp.model.entities;
+package com.druciak.escorerapp.entities;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class Match implements Parcelable {
+public class Match implements Serializable {
     private static int counter;
 
     private int id;
@@ -29,40 +28,6 @@ public class Match implements Parcelable {
         this.refereeId = refereeId;
         this.name = hostTeam.getShortName() + " vs " + guestTeam.getShortName();
     }
-
-    protected Match(Parcel in) {
-        id = in.readInt();
-        hostTeam = in.readParcelable(Team.class.getClassLoader());
-        guestTeam = in.readParcelable(Team.class.getClassLoader());
-        name = in.readString();
-        refereeId = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeParcelable(hostTeam, flags);
-        dest.writeParcelable(guestTeam, flags);
-        dest.writeString(name);
-        dest.writeString(refereeId);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Match> CREATOR = new Creator<Match>() {
-        @Override
-        public Match createFromParcel(Parcel in) {
-            return new Match(in);
-        }
-
-        @Override
-        public Match[] newArray(int size) {
-            return new Match[size];
-        }
-    };
 
     public String getName() {
         return hostTeam.getFullName() + " vs " + guestTeam.getFullName();

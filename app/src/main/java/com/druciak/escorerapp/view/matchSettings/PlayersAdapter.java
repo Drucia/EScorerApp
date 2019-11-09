@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.interfaces.IOnPlayerTouchCallback;
-import com.druciak.escorerapp.model.entities.MatchPlayer;
-import com.druciak.escorerapp.model.entities.Player;
+import com.druciak.escorerapp.entities.MatchPlayer;
+import com.druciak.escorerapp.entities.Player;
 
 import java.util.ArrayList;
 import java.util.Map;

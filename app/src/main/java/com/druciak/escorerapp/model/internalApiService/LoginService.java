@@ -1,6 +1,6 @@
 package com.druciak.escorerapp.model.internalApiService;
 
-import com.druciak.escorerapp.model.entities.NewUser;
+import com.druciak.escorerapp.entities.NewUser;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

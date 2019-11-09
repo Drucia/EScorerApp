@@ -1,6 +1,6 @@
 package com.druciak.escorerapp.model.externalApiService;
 
-import com.druciak.escorerapp.model.entities.Team;
+import com.druciak.escorerapp.entities.Team;
 
 import java.util.List;
 
