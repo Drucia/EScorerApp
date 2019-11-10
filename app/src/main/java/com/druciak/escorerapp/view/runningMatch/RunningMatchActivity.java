@@ -64,6 +64,7 @@ import static com.druciak.escorerapp.entities.MatchInfo.YELLOW_CARD_ID;
 import static com.druciak.escorerapp.entities.TeamAdditionalMember.COACH_MEMBER_ID;
 import static com.druciak.escorerapp.entities.TeamAdditionalMember.MASSEUR_MEMBER_ID;
 import static com.druciak.escorerapp.entities.TeamAdditionalMember.MEDICINE_MEMBER_ID;
+import static com.druciak.escorerapp.view.DrawActivity.MATCH_INFO_ID;
 import static com.druciak.escorerapp.view.DrawActivity.SERVE_TEAM_ID;
 import static com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity.MACH_SETTINGS_ID;
 
@@ -485,8 +486,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     @Override
     public void moveToSummary(MatchInfo matchInfo) {
         Intent intent = new Intent(this, SummaryActivity.class);
-        intent.putExtra("dupa", matchInfo);
-        MatchInfo i = intent.getParcelableExtra("dupa");
+        intent.putExtra(MATCH_INFO_ID, matchInfo);
         startActivity(intent);
         finish();
     }
@@ -677,7 +677,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         matchSettings.setStreet("Paderewskiego 36");
         matchSettings.setHall("SP 3");
         matchSettings.setRefereeFirst("Aleksandra Całka");
-        matchSettings.setRefereeFirst("Mateusz Iwańczak");
+        matchSettings.setRefereeSnd("Mateusz Iwańczak");
         matchSettings.setType("Kadeci");
         matchSettings.setMan(true);
         matchSettings.setZas(true);

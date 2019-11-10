@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.druciak.escorerapp.view.DrawActivity.MATCH_INFO_ID;
+
 public class SummaryActivity extends AppCompatActivity implements ISummaryMVP.IView {
     private ISummaryMVP.IPresenter presenter;
 
@@ -32,7 +34,7 @@ public class SummaryActivity extends AppCompatActivity implements ISummaryMVP.IV
         setContentView(R.layout.activity_summary);
 
         Intent intent = getIntent();
-        MatchInfo matchInfo = intent.getParcelableExtra("dupa");
+        MatchInfo matchInfo = intent.getParcelableExtra(MATCH_INFO_ID);
         presenter = new SummaryPresenter(this, matchInfo);
 
         teamAName = findViewById(R.id.teamAName);

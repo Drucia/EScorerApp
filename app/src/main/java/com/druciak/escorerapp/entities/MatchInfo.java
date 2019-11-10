@@ -65,6 +65,7 @@ public class MatchInfo implements Parcelable {
         teamA = in.readParcelable(MatchTeam.class.getClassLoader());
         teamB = in.readParcelable(MatchTeam.class.getClassLoader());
         serveTeam = in.readParcelable(MatchTeam.class.getClassLoader());
+        settings = in.readParcelable(MatchSettings.class.getClassLoader());
         attentions = in.readString();
         int size = in.readInt();
         actionsOfSets = new HashMap<>();
@@ -111,7 +112,14 @@ public class MatchInfo implements Parcelable {
                 actionsOfSets.put(key, actions);
             }
         }
-//        in.readMap(timesOfSets, Integer.class.getClassLoader());
+        size = in.readInt();
+        timesOfSets = new HashMap<>();
+        for (int i = 0; i < size; i++)
+        {
+            int key = in.readInt();
+            int value = in.readInt();
+            timesOfSets.put(key, value);
+        }
     }
 
     @Override
@@ -119,6 +127,7 @@ public class MatchInfo implements Parcelable {
         dest.writeParcelable(teamA, flags);
         dest.writeParcelable(teamB, flags);
         dest.writeParcelable(serveTeam, flags);
+        dest.writeParcelable(settings, flags);
         dest.writeString(attentions);
         dest.writeInt(actionsOfSets.size());
         for (Integer key : actionsOfSets.keySet())
@@ -143,7 +152,12 @@ public class MatchInfo implements Parcelable {
                 dest.writeParcelable(a, flags);
             }
         }
-//        dest.writeMap(timesOfSets);
+        dest.writeInt(timesOfSets.size());
+        for (Integer key : timesOfSets.keySet())
+        {
+            dest.writeInt(key);
+            dest.writeInt(timesOfSets.get(key));
+        }
     }
 
     @Override

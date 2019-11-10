@@ -33,6 +33,7 @@ public class MatchSettings implements Parcelable {
         type = in.readString();
         isMan = in.readByte() != 0;
         isZas = in.readByte() != 0;
+        match = in.readParcelable(Match.class.getClassLoader());
         players = in.createTypedArrayList(Player.CREATOR);
         members = in.createTypedArrayList(TeamAdditionalMember.CREATOR);
         lineReferees = in.createStringArrayList();
@@ -49,6 +50,7 @@ public class MatchSettings implements Parcelable {
         dest.writeString(type);
         dest.writeByte((byte) (isMan ? 1 : 0));
         dest.writeByte((byte) (isZas ? 1 : 0));
+        dest.writeParcelable(match, flags);
         dest.writeTypedList(players);
         dest.writeTypedList(members);
         dest.writeStringList(lineReferees);
