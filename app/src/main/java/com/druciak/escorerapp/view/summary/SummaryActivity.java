@@ -91,6 +91,7 @@ public class SummaryActivity extends AppCompatActivity implements ISummaryMVP.IV
         builder.setMessage("Czy jesteś pewny? Nie będzie już możliwości zmiany danych.");
         builder.setPositiveButton("TAK", (dialogInterface, i) -> presenter.onGenerateConfirm());
         builder.setNegativeButton("NIE", (dialogInterface, i) -> {});
+        builder.create().show();
     }
 
     @Override

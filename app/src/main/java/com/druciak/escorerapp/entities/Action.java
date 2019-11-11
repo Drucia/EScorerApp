@@ -63,5 +63,11 @@ public abstract class Action implements Parcelable {
     }
 
     @Override
-    public String toString() { return teamMadeActionPoints + " : " + sndTeamPoints; }
+    public String toString() {
+        return "Action{" +
+                "teamMadeActionId=" + teamMadeActionId +
+                ", score=" + teamMadeActionPoints +
+                " : " + sndTeamPoints +
+                '}';
+    }
 }

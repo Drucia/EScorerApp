@@ -79,4 +79,8 @@ public class Match implements Parcelable {
     public String getRefereeId() {
         return refereeId;
     }
+
+    public int getId() {
+        return id;
+    }
 }

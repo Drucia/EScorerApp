@@ -57,7 +57,7 @@ public class Point extends Action {
     @Override
     public String toString() {
         return "Point{" +
-                ", points=" + points +
+                "points=" + points +
                 ", score=" + super.toString() +
                 '}';
     }
