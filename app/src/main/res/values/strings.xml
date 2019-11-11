@@ -85,5 +85,10 @@
     <string name="label_team_info">Informacje o zespołach</string>
     <string name="rest_label">Pozostali</string>
     <string name="title_summary">Podsumowanie</string>
+    <string name="times">Czasy</string>
+    <string name="points">Punkty</string>
+    <string name="shifts">Zmiany</string>
+    <string name="set">Set</string>
+    <string name="label_generate_sheet">Generuj protokół</string>
 
 </resources>

@@ -25,7 +25,7 @@ public class MatchTeam extends Team implements Parcelable {
     private Map<Integer, MatchPlayer> lineUp;
     private int points;
     private int sets;
-    private int teamId;
+    private int teamId; // team A or team B
     private int teamSideId;
     private int timesCounter;
     private int shiftCounter;
@@ -146,6 +146,10 @@ public class MatchTeam extends Team implements Parcelable {
 
     public int getPoints() {
         return points;
+    }
+
+    public int getShiftCounter() {
+        return shiftCounter;
     }
 
     public int getSets() {

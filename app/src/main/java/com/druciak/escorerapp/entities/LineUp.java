@@ -7,10 +7,9 @@ import java.util.Optional;
 public class LineUp extends Action{
     private int enterNb;
     private int areaNb;
-    private int teamId;
 
     public LineUp(MatchTeam team, MatchPlayer enter, int areaNb) {
-        this.teamId = team.getTeamId();
+        teamMadeActionId = team.getTeamId();
         this.enterNb = enter.getNumber();
         this.areaNb = areaNb;
         enter.setStatusId(MatchPlayer.STATUS_PLAYER_ON_COURT);
@@ -20,7 +19,7 @@ public class LineUp extends Action{
     protected LineUp(Parcel in) {
         enterNb = in.readInt();
         areaNb = in.readInt();
-        teamId = in.readInt();
+        teamMadeActionId = in.readInt();
         teamMadeActionPoints = in.readInt();
         sndTeamPoints = in.readInt();
     }
@@ -29,7 +28,7 @@ public class LineUp extends Action{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(enterNb);
         dest.writeInt(areaNb);
-        dest.writeInt(teamId);
+        dest.writeInt(teamMadeActionId);
         dest.writeInt(teamMadeActionPoints);
         dest.writeInt(sndTeamPoints);
     }
@@ -57,7 +56,7 @@ public class LineUp extends Action{
     }
 
     public int getTeamId() {
-        return teamId;
+        return teamMadeActionId;
     }
 
     public int getEnterNb() {
@@ -73,7 +72,6 @@ public class LineUp extends Action{
         return "LineUp{" +
                 "enterNb=" + enterNb +
                 ", areaNb=" + areaNb +
-                ", teamId=" + teamId +
                 ", score=" + super.toString() +
                 '}';
     }

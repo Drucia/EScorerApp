@@ -11,12 +11,12 @@ import static com.druciak.escorerapp.entities.MatchPlayer.STATUS_PLAYER_SHIFTED;
 public class Shift extends Action{
     private int outPlayerNb;
     private int enterPlayerNb;
-    private int teamId;
+    private int teamShiftNumber;
 
     public Shift(MatchPlayer out, MatchPlayer enter, MatchTeam team, int sndTeamPoints) {
         enterPlayerNb = enter.getNumber();
         outPlayerNb = out.getNumber();
-        this.teamId = team.getTeamId();
+        teamMadeActionId = team.getTeamId();
         teamMadeActionPoints = team.getPoints();
         this.sndTeamPoints = sndTeamPoints;
         if (out.getShiftNumber() != NO_SHIFT) {
@@ -31,22 +31,20 @@ public class Shift extends Action{
         enter.setShiftNumber(outPlayerNb);
         out.setOnCourt(true);
         team.addShift();
+        teamShiftNumber = team.getShiftCounter();
     }
 
     protected Shift(Parcel in) {
         super.readFromParcel(in);
         outPlayerNb = in.readInt();
         enterPlayerNb = in.readInt();
-        teamId = in.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeInt(SHIFT_ID); // to know which create use
         super.writeToParcel(dest, flags);
         dest.writeInt(outPlayerNb);
         dest.writeInt(enterPlayerNb);
-        dest.writeInt(teamId);
     }
 
     @Override
@@ -71,9 +69,10 @@ public class Shift extends Action{
         return Optional.empty();
     }
 
-    public int getTeamId() {
-        return teamId;
+    public int getTeamShiftNumber() {
+        return teamShiftNumber;
     }
+
 
     public int getOutPlayerNb() {
         return outPlayerNb;
@@ -83,12 +82,13 @@ public class Shift extends Action{
         return enterPlayerNb;
     }
 
+
+
     @Override
     public String toString() {
         return "Shift{" +
                 "outPlayerNb=" + outPlayerNb +
                 ", enterPlayerNb=" + enterPlayerNb +
-                ", teamId=" + teamId +
                 ", score=" + super.toString() +
                 '}';
     }

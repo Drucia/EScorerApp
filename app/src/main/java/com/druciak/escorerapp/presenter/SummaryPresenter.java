@@ -5,8 +5,8 @@ import com.druciak.escorerapp.entities.SetInfo;
 import com.druciak.escorerapp.interfaces.ISummaryMVP;
 import com.druciak.escorerapp.model.SummaryModel;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SummaryPresenter implements ISummaryMVP.IPresenter {
     private ISummaryMVP.IView view;
@@ -19,8 +19,29 @@ public class SummaryPresenter implements ISummaryMVP.IPresenter {
 
     @Override
     public void onActivityCreated() {
-        HashMap<Integer, SetInfo> sets = model.getSetsInfo();
+        Map<Integer, SetInfo> sets = model.getSetsInfo();
         List<String> teamNames = model.getTeamsNames();
-        view.setFields(teamNames, sets);
+        List<Integer> setsScore = model.getSetsScores();
+        view.setFields(teamNames, sets, setsScore);
+    }
+
+    @Override
+    public void onAttentionsClicked() {
+        view.showPopUpWithAttentions(model.getAttentions());
+    }
+
+    @Override
+    public void onGenerateClicked() {
+        view.showPopUpWithConfirmGeneration();
+    }
+
+    @Override
+    public void onAttentionsSavedClicked(String attentions) {
+        model.updateAttentions(attentions);
+    }
+
+    @Override
+    public void onGenerateConfirm() {
+        view.goToGenerateActivity(model.getMatchInfo());
     }
 }

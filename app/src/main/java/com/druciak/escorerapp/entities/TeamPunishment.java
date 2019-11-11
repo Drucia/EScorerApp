@@ -10,13 +10,12 @@ import static com.druciak.escorerapp.entities.MatchInfo.TEAM_B_ID;
 
 public class TeamPunishment extends Action {
     private int cardId;
-    private int teamId;
     private int set;
 
     public TeamPunishment(int cardId, MatchTeam team, int set, MatchTeam sndTeam){
         this.cardId = cardId;
-        this.teamId = team.getTeamId();
         this.set = set;
+        teamMadeActionId = team.getTeamId();
         teamMadeActionPoints = team.getPoints();
         sndTeamPoints = sndTeam.getPoints();
         team.setCardId(cardId);
@@ -25,15 +24,21 @@ public class TeamPunishment extends Action {
     }
 
     protected TeamPunishment(Parcel in) {
+        teamMadeActionId = in.readInt();
+        teamMadeActionPoints = in.readInt();
+        sndTeamPoints = in.readInt();
+
         cardId = in.readInt();
-        teamId = in.readInt();
         set = in.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(teamMadeActionId);
+        dest.writeInt(teamMadeActionPoints);
+        dest.writeInt(sndTeamPoints);
+
         dest.writeInt(cardId);
-        dest.writeInt(teamId);
         dest.writeInt(set);
     }
 
@@ -57,7 +62,7 @@ public class TeamPunishment extends Action {
         @Override
     public Optional<Integer> returnTeamIdIfIsPoint() {
         if (cardId == RED_CARD_ID)
-            return Optional.of(teamId == TEAM_A_ID ? TEAM_B_ID : TEAM_A_ID);
+            return Optional.of(teamMadeActionId == TEAM_A_ID ? TEAM_B_ID : TEAM_A_ID);
         else
             return Optional.empty();
     }
@@ -66,7 +71,6 @@ public class TeamPunishment extends Action {
     public String toString() {
         return "TeamPunishment{" +
                 "cardId=" + cardId +
-                ", teamId=" + teamId +
                 ", set=" + set +
                 ", score=" + super.toString() +
                 '}';

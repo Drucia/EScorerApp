@@ -36,7 +36,7 @@ import com.druciak.escorerapp.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.interfaces.IRunningMatchMVP;
 import com.druciak.escorerapp.presenter.RunningMatchPresenter;
 import com.druciak.escorerapp.view.DrawActivity;
-import com.druciak.escorerapp.view.SummaryActivity;
+import com.druciak.escorerapp.view.summary.SummaryActivity;
 import com.druciak.escorerapp.view.matchSettings.PlayersAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;

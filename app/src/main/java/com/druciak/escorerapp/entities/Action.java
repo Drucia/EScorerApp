@@ -18,6 +18,7 @@ public abstract class Action implements Parcelable {
     public static final int TEAM_PUNISHMENT_ID = 4;
     public static final int TIME_ID = 5;
 
+    int teamMadeActionId;
     int teamMadeActionPoints;
     int sndTeamPoints;
 
@@ -30,12 +31,14 @@ public abstract class Action implements Parcelable {
     }
 
     public void readFromParcel(Parcel in){
+        teamMadeActionId = in.readInt();
         teamMadeActionPoints = in.readInt();
         sndTeamPoints = in.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(teamMadeActionId);
         dest.writeInt(teamMadeActionPoints);
         dest.writeInt(sndTeamPoints);
     }
@@ -46,6 +49,18 @@ public abstract class Action implements Parcelable {
     }
 
     public abstract Optional<Integer> returnTeamIdIfIsPoint();
+
+    public int getTeamMadeActionId() {
+        return teamMadeActionId;
+    }
+
+    public int getTeamMadeActionPoints() {
+        return teamMadeActionPoints;
+    }
+
+    public int getSndTeamPoints() {
+        return sndTeamPoints;
+    }
 
     @Override
     public String toString() { return teamMadeActionPoints + " : " + sndTeamPoints; }

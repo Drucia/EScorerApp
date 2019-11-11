@@ -2,7 +2,6 @@ package com.druciak.escorerapp.presenter;
 
 import android.util.Log;
 
-import com.druciak.escorerapp.interfaces.IRunningMatchMVP;
 import com.druciak.escorerapp.entities.Action;
 import com.druciak.escorerapp.entities.LineUp;
 import com.druciak.escorerapp.entities.MatchInfo;
@@ -14,6 +13,7 @@ import com.druciak.escorerapp.entities.Shift;
 import com.druciak.escorerapp.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.entities.TeamPunishment;
 import com.druciak.escorerapp.entities.Time;
+import com.druciak.escorerapp.interfaces.IRunningMatchMVP;
 
 import java.util.List;
 import java.util.Map;
@@ -43,6 +43,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     private boolean canPlay;
     private boolean isTiebreak;
     private boolean isAfterShift;
+    private double timeOfStartSet;
 
     public RunningMatchPresenter(IRunningMatchMVP.IView view, MatchInfo matchInfo) {
         this.view = view;
@@ -54,6 +55,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         this.canPlay = false;
         this.isTiebreak = false;
         this.isAfterShift = false;
+        this.timeOfStartSet = 0;
     }
 
     @Override
@@ -157,7 +159,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
             view.addTimeFor(teamId == leftTeam.getTeamId() ?
                     LEFT_TEAM_ID : RIGHT_TEAM_ID, team.getTimesCounter());
         } else if (action instanceof Shift) {
-            int teamId = ((Shift) action).getTeamId();
+            int teamId = action.getTeamMadeActionId();
             MatchTeam team = teamId == leftTeam.getTeamId() ? leftTeam : rightTeam;
             view.makeChangeInAdapter(team.getPlayerByNumber(((Shift) action).getOutPlayerNb()),
                     team.getPlayerByNumber(((Shift) action).getEnterPlayerNb()),
@@ -174,6 +176,9 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     }
 
     private void isEndOfSet() {
+        double endOfSet = System.currentTimeMillis();
+        int timeInMin = (int) Math.ceil((endOfSet - timeOfStartSet) / (1000 * 60));
+        matchInfo.addTimeForSet(actualSet, timeInMin);
         view.showPopUpWithEndOf(getWinner().getShortName(), "Koniec seta", false);
     }
 
@@ -192,6 +197,9 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     }
 
     private void isEndOfMatch() {
+        double endOfSet = System.currentTimeMillis();
+        int timeInMin = (int) Math.ceil((endOfSet - timeOfStartSet) / (1000 * 60));
+        matchInfo.addTimeForSet(actualSet, timeInMin);
         view.showPopUpWithEndOf(getWinner().getFullName(), "Koniec meczu", true);
     }
 
@@ -207,6 +215,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     @Override
     public void onNextSetClicked() {
         if (checkIfIsEndOfMatch()){
+            getWinner().addSet();
             view.moveToSummary(matchInfo);
         } else {
             isTiebreak = matchInfo.isTiebreak(++actualSet);
@@ -219,6 +228,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
                 setFieldsAfterFinishSet();
             }
             canPlay = false;
+            timeOfStartSet = 0;
             view.resetTimes();
             view.resetAdapters();
         }
@@ -404,6 +414,8 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         leftTeam = leftTeamId == left.getId() ? left : right;
         rightTeam = leftTeamId == left.getId() ? right : left;
         serveTeam = leftTeam.getId() == leftTeamId ? leftTeam : rightTeam;
+        leftTeam.setTeamSideId(LEFT_TEAM_ID);
+        rightTeam.setTeamSideId(RIGHT_TEAM_ID);
         setTeamsParams();
         setFieldsAfterFinishSet();
     }
@@ -424,6 +436,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
 
     private void updateCanPlay() {
         canPlay = leftTeam.getIsLineUpSet() && rightTeam.getIsLineUpSet();
+        timeOfStartSet = System.currentTimeMillis();
     }
 
     private MatchTeam getServeTeam(int set) {

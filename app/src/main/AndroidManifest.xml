@@ -12,10 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.SummaryActivity"></activity>
+        <activity android:name=".view.generateSheet.GenerateSheetActivity"></activity>
+        <activity
+            android:name=".view.summary.SummaryActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.runningMatch.RunningMatchActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +31,7 @@
         </activity>
         <activity
             android:name=".view.DrawActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.matchSettings.MatchSettingsActivity"
             android:label="@string/title_activity_match_settings"

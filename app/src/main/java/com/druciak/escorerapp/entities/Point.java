@@ -5,25 +5,30 @@ import android.os.Parcel;
 import java.util.Optional;
 
 public class Point extends Action {
-    private int teamId;
     private int points;
 
     public Point(MatchTeam team, int pointsOtherTeam) {
         team.addPoint();
         this.points = team.getPoints();
-        this.teamId = team.getTeamId();
+        teamMadeActionId = team.getTeamId();
         teamMadeActionPoints = team.getPoints();
         sndTeamPoints = pointsOtherTeam;
     }
 
         protected Point(Parcel in) {
-            teamId = in.readInt();
+            teamMadeActionId = in.readInt();
+            teamMadeActionPoints = in.readInt();
+            sndTeamPoints = in.readInt();
+
             points = in.readInt();
         }
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(teamId);
+            dest.writeInt(teamMadeActionId);
+            dest.writeInt(teamMadeActionPoints);
+            dest.writeInt(sndTeamPoints);
+
             dest.writeInt(points);
         }
 
@@ -46,13 +51,12 @@ public class Point extends Action {
 
         @Override
     public Optional<Integer> returnTeamIdIfIsPoint() {
-        return Optional.of(teamId);
+        return Optional.of(teamMadeActionId);
     }
 
     @Override
     public String toString() {
         return "Point{" +
-                "teamId=" + teamId +
                 ", points=" + points +
                 ", score=" + super.toString() +
                 '}';
