@@ -3,6 +3,8 @@ package com.druciak.escorerapp.model.generateSheetService;
 import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.interfaces.IGenerateSheetMVP;
 
+import java.io.File;
+
 public class GenerateSheetModel implements IGenerateSheetMVP.IModel{
     private SheetGenerator sheetGenerator;
     private IGenerateSheetMVP.IPresenter presenter;
@@ -15,5 +17,10 @@ public class GenerateSheetModel implements IGenerateSheetMVP.IModel{
     @Override
     public void generateSheet() {
         sheetGenerator.generateSheet();
+    }
+
+    @Override
+    public void sheetGeneratedIn(File file) {
+        presenter.onSheetGenerated(file);
     }
 }

@@ -1,15 +1,19 @@
 package com.druciak.escorerapp.presenter;
 
+import android.content.Context;
+
 import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.interfaces.IGenerateSheetMVP;
 import com.druciak.escorerapp.model.generateSheetService.GenerateSheetModel;
+
+import java.io.File;
 
 public class GenerateSheetPresenter implements IGenerateSheetMVP.IPresenter {
     private IGenerateSheetMVP.IView view;
     private IGenerateSheetMVP.IModel model;
 
-    public GenerateSheetPresenter(IGenerateSheetMVP.IView context, MatchInfo matchInfo) {
-        this.view = context;
+    public GenerateSheetPresenter(Context context, MatchInfo matchInfo) {
+        this.view = (IGenerateSheetMVP.IView) context;
         model = new GenerateSheetModel(this, matchInfo);
     }
 
@@ -17,5 +21,10 @@ public class GenerateSheetPresenter implements IGenerateSheetMVP.IPresenter {
     public void onActivityCreated() {
         view.showProgressBarPopUp();
         model.generateSheet();
+    }
+
+    @Override
+    public void onSheetGenerated(File file) {
+        view.makeIntentWithPdfReader(file);
     }
 }

@@ -10,12 +10,16 @@ import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.interfaces.IGenerateSheetMVP;
 import com.druciak.escorerapp.presenter.GenerateSheetPresenter;
+import com.github.barteksc.pdfviewer.PDFView;
+
+import java.io.File;
 
 import static com.druciak.escorerapp.view.DrawActivity.MATCH_INFO_ID;
 
 public class GenerateSheetActivity extends AppCompatActivity implements IGenerateSheetMVP.IView {
     private IGenerateSheetMVP.IPresenter presenter;
     private AlertDialog progressDialog;
+    private PDFView pdfView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,7 @@ public class GenerateSheetActivity extends AppCompatActivity implements IGenerat
         builder.setView(getLayoutInflater().inflate(R.layout.pop_up_progress_bar, null));
         builder.setCancelable(false);
         progressDialog = builder.create();
+        pdfView = findViewById(R.id.pdfView);
 
         presenter = new GenerateSheetPresenter(this, matchInfo);
         presenter.onActivityCreated();
@@ -38,5 +43,11 @@ public class GenerateSheetActivity extends AppCompatActivity implements IGenerat
     @Override
     public void showProgressBarPopUp() {
         progressDialog.show();
+    }
+
+    @Override
+    public void makeIntentWithPdfReader(File file) {
+        progressDialog.dismiss();
+        pdfView.fromFile(file).load();
     }
 }

@@ -16,6 +16,7 @@ public class MatchSettings implements Parcelable {
     private boolean isMan;
     private boolean isZas;
     private Match match;
+    private String startTime;
     private List<Player> players;
     private List<TeamAdditionalMember> members;
     private List<String> lineReferees;
@@ -34,6 +35,7 @@ public class MatchSettings implements Parcelable {
         isMan = in.readByte() != 0;
         isZas = in.readByte() != 0;
         match = in.readParcelable(Match.class.getClassLoader());
+        startTime = in.readString();
         players = in.createTypedArrayList(Player.CREATOR);
         members = in.createTypedArrayList(TeamAdditionalMember.CREATOR);
         lineReferees = in.createStringArrayList();
@@ -51,6 +53,7 @@ public class MatchSettings implements Parcelable {
         dest.writeByte((byte) (isMan ? 1 : 0));
         dest.writeByte((byte) (isZas ? 1 : 0));
         dest.writeParcelable(match, flags);
+        dest.writeString(startTime);
         dest.writeTypedList(players);
         dest.writeTypedList(members);
         dest.writeStringList(lineReferees);
@@ -72,6 +75,14 @@ public class MatchSettings implements Parcelable {
             return new MatchSettings[size];
         }
     };
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
 
     public String getTournamentName() {
         return tournamentName;

@@ -26,7 +26,7 @@ public class MatchTeam extends Team implements Parcelable {
     private int points;
     private int sets;
     private int teamId; // team A or team B
-    private int teamSideId;
+    private int teamSideId; // left or right
     private int timesCounter;
     private int shiftCounter;
     private boolean isLineUpSet;

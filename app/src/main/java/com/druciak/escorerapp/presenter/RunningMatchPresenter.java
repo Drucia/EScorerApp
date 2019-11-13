@@ -15,6 +15,8 @@ import com.druciak.escorerapp.entities.TeamPunishment;
 import com.druciak.escorerapp.entities.Time;
 import com.druciak.escorerapp.interfaces.IRunningMatchMVP;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -129,6 +131,9 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
 
     private void updateMatchState(Action action) {
         makeAction(action);
+        matchInfo.addAction(actualSet, action);
+        view.setScore(leftTeam.getPoints() + " : " + rightTeam.getPoints());
+
         if (checkIfIsEndOfSet()) {
             if (checkIfIsEndOfMatch()) {
                 isEndOfMatch();
@@ -147,13 +152,11 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
                 }
             }
         }
-        view.setScore(leftTeam.getPoints() + " : " + rightTeam.getPoints());
-        matchInfo.addAction(actualSet, action);
     }
 
     private void makeAction(Action action) {
         if (action instanceof Time){
-            int teamId = ((Time) action).getTeamId();
+            int teamId = action.getTeamMadeActionId();
             MatchTeam team = teamId == leftTeam.getTeamId() ? leftTeam : rightTeam;
             view.showTimeCountDown(team.getShortName());
             view.addTimeFor(teamId == leftTeam.getTeamId() ?
@@ -166,7 +169,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
                     teamId == leftTeam.getTeamId() ? LEFT_TEAM_ID : RIGHT_TEAM_ID);
         } else if (action instanceof LineUp) {
             LineUp lineUp = (LineUp) action;
-            int teamId = lineUp.getTeamId();
+            int teamId = action.getTeamMadeActionId();
             MatchTeam team = teamId == leftTeam.getTeamId() ? leftTeam : rightTeam;
             view.updateAdapterWithPlayersLineUp(team.getPlayerByNumber(lineUp.getEnterNb()),
                     lineUp.getAreaNb(), team.getTeamSideId());
@@ -224,6 +227,8 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
             } else {
                 changeTeamSides();
                 serveTeam = getServeTeam(actualSet);
+                if (!matchInfo.getServesOfSets().containsKey(actualSet))
+                    matchInfo.addServeOfSet(actualSet, serveTeam.getTeamId());
                 setTeamsParams();
                 setFieldsAfterFinishSet();
             }
@@ -261,7 +266,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     public void onTimeConfirmClicked(int teamId) {
         MatchTeam team = teamId == LEFT_TEAM_ID ? leftTeam : rightTeam;
         Action action = new Time(team,
-                teamId == LEFT_TEAM_ID ? leftTeam.getPoints() : rightTeam.getPoints());
+                teamId == LEFT_TEAM_ID ? rightTeam.getPoints() : leftTeam.getPoints());
         Log.d(ACTION_TAG, action.toString());
         updateMatchState(action);
     }
@@ -413,7 +418,9 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         MatchTeam right = rightTeam;
         leftTeam = leftTeamId == left.getId() ? left : right;
         rightTeam = leftTeamId == left.getId() ? right : left;
-        serveTeam = leftTeam.getId() == leftTeamId ? leftTeam : rightTeam;
+        serveTeam = leftTeam.getId() == serveTeamId ? leftTeam : rightTeam;
+        if (!matchInfo.getServesOfSets().containsKey(actualSet))
+            matchInfo.addServeOfSet(actualSet, serveTeam.getTeamId());
         leftTeam.setTeamSideId(LEFT_TEAM_ID);
         rightTeam.setTeamSideId(RIGHT_TEAM_ID);
         setTeamsParams();
@@ -436,6 +443,9 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
 
     private void updateCanPlay() {
         canPlay = leftTeam.getIsLineUpSet() && rightTeam.getIsLineUpSet();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:ss");
+        LocalDateTime now = LocalDateTime.now();
+        matchInfo.getSettings().setStartTime(dtf.format(now));
         timeOfStartSet = System.currentTimeMillis();
     }
 

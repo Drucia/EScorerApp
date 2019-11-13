@@ -24,6 +24,15 @@ public class TeamAdditionalMember implements Parcelable {
         memberTypeId = in.readInt();
     }
 
+    public String toStringId() {
+        switch (memberTypeId)
+        {
+            case COACH_MEMBER_ID: return "C";
+            case MEDICINE_MEMBER_ID: return "L";
+            case MASSEUR_MEMBER_ID: return "M";
+            default: return "";
+        }
+    }
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);

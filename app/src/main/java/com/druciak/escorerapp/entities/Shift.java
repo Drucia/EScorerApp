@@ -2,6 +2,8 @@ package com.druciak.escorerapp.entities;
 
 import android.os.Parcel;
 
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.druciak.escorerapp.entities.MatchPlayer.NO_SHIFT;
@@ -29,8 +31,12 @@ public class Shift extends Action{
         out.setShiftNumber(enterPlayerNb);
         out.setOnCourt(false);
         enter.setShiftNumber(outPlayerNb);
-        out.setOnCourt(true);
+        enter.setOnCourt(true);
         team.addShift();
+        int area = team.getLineUp().entrySet().stream()
+                .filter(entry -> Objects.equals(entry.getValue(), out))
+                .map(Map.Entry::getKey).findAny().orElse(-1);
+        team.setLineUp(area, enter);
         teamShiftNumber = team.getShiftCounter();
     }
 

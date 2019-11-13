@@ -44,6 +44,7 @@ public class MatchInfo implements Parcelable {
     private String attentions;
     private Map<Integer, ArrayList<Action>> actionsOfSets;
     private Map<Integer, Integer> timesOfSets;
+    private Map<Integer, Integer> servesOfSets;
 
     public MatchInfo(Team teamA, List<Player> playersA, Team teamB, List<Player> playersB,
                      boolean isAServe, MatchSettings settings) {
@@ -59,6 +60,8 @@ public class MatchInfo implements Parcelable {
         actionsOfSets.put(4, new ArrayList<>());
         actionsOfSets.put(5, new ArrayList<>());
         timesOfSets = new HashMap<>();
+        servesOfSets = new HashMap<>();
+        servesOfSets.put(1, serveTeam.getTeamId());
     }
 
     protected MatchInfo(Parcel in) {
@@ -120,6 +123,14 @@ public class MatchInfo implements Parcelable {
             int value = in.readInt();
             timesOfSets.put(key, value);
         }
+        size = in.readInt();
+        servesOfSets = new HashMap<>();
+        for (int i = 0; i < size; i++)
+        {
+            int key = in.readInt();
+            int value = in.readInt();
+            servesOfSets.put(key, value);
+        }
     }
 
     @Override
@@ -158,6 +169,12 @@ public class MatchInfo implements Parcelable {
             dest.writeInt(key);
             dest.writeInt(timesOfSets.get(key));
         }
+        dest.writeInt(servesOfSets.size());
+        for (Integer key : servesOfSets.keySet())
+        {
+            dest.writeInt(key);
+            dest.writeInt(servesOfSets.get(key));
+        }
     }
 
     @Override
@@ -176,6 +193,15 @@ public class MatchInfo implements Parcelable {
             return new MatchInfo[size];
         }
     };
+
+    public Map<Integer, Integer> getServesOfSets() {
+        return servesOfSets;
+    }
+
+    public void addServeOfSet(int set, int teamId)
+    {
+        servesOfSets.put(set, teamId);
+    }
 
     public MatchTeam getTeamA() {
         return teamA;

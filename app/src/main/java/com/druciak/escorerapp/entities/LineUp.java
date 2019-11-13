@@ -55,10 +55,6 @@ public class LineUp extends Action{
         return Optional.empty();
     }
 
-    public int getTeamId() {
-        return teamMadeActionId;
-    }
-
     public int getEnterNb() {
         return enterNb;
     }

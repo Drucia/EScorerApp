@@ -58,9 +58,21 @@ public class DrawActivity extends AppCompatActivity {
                 Intent i = new Intent();
                 int leftTeamId = leftTeam.getSelectedItem().toString().equals(match.getHostTeam()
                         .getShortName()) ? match.getHostTeam().getId() : match.getGuestTeam().getId();
-                int serveTeam = leftTeamChoice == SERVE_ID ? match.getHostTeam().getId() == leftTeamId
-                        ? leftTeamId : match.getGuestTeam().getId() :
-                        match.getHostTeam().getId() != leftTeamId ? match.getGuestTeam().getId() : leftTeamId;
+                int serveTeam;
+
+                if (leftTeamChoice == SERVE_ID)
+                {
+                    if (leftTeamId == match.getHostTeam().getId())
+                        serveTeam = leftTeamId;
+                    else
+                        serveTeam = match.getGuestTeam().getId();
+                } else {
+                    if (leftTeamId == match.getHostTeam().getId())
+                        serveTeam = match.getGuestTeam().getId();
+                    else
+                        serveTeam = leftTeamId;
+                }
+
                 i.putExtra(SERVE_TEAM_ID, serveTeam); //todo
                 i.putExtra(LEFT_TEAM_ID, leftTeamId); //todo
                 setResult(RESULT_OK, i);

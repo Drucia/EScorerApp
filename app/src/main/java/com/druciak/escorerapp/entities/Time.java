@@ -49,10 +49,6 @@ public class Time extends Action {
         }
     };
 
-    public int getTeamId() {
-    return teamMadeActionId;
-}
-
     @Override
     public Optional<Integer> returnTeamIdIfIsPoint() {
         return Optional.empty();
