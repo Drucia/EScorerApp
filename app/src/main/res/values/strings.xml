@@ -98,5 +98,7 @@
     <string name="msg_generated_sheet">Protokół zapisano w</string>
     <string name="msg_attention_after_generate">Czy jesteś pewny, że chcesz wrócić do panelu głównego?
         Nie będziesz już mógł wysłać protokołu na serwer.</string>
+    <string name="msg_succ_on_send_sheet">Wysłano protokół na serwer</string>
+    <string name="msg_failed_on_send_sheet">Coś poszło nie tak z wysłaniem protokołu na serwer</string>
 
 </resources>

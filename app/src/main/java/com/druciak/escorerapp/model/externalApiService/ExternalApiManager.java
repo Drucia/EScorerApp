@@ -4,14 +4,15 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.druciak.escorerapp.interfaces.IMainPanelMVP;
-import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.entities.Match;
 import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.entities.Team;
+import com.druciak.escorerapp.interfaces.IGenerateSheetMVP;
+import com.druciak.escorerapp.interfaces.IMainPanelMVP;
+import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.model.firebaseService.Result;
-import com.druciak.escorerapp.presenter.MainPanelPresenter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,7 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
     private Retrofit retrofit;
     private IMatchSettingsMVP.IPresenter presenter;
     private IMainPanelMVP.IPresenter mainPanelPresenter;
+    private IGenerateSheetMVP.IModel generatedSheetModel;
 
     public ExternalApiManager(IMatchSettingsMVP.IPresenter presenter) {
         this.presenter = presenter;
@@ -59,7 +61,7 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
         playersOfTeams.put(4, poloniaPlayers);
     }
 
-    public ExternalApiManager(MainPanelPresenter mainPanelPresenter) {
+    public ExternalApiManager(IMainPanelMVP.IPresenter mainPanelPresenter) {
         this.mainPanelPresenter = mainPanelPresenter;
 
         // prepare teams
@@ -82,6 +84,11 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
         matches.add(new Match(teams.get(1), teams.get(0), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
     }
 
+    public ExternalApiManager(IGenerateSheetMVP.IModel model)
+    {
+        this.generatedSheetModel = model;
+    }
+
     private void initializeRetrofit(String serverUrl)
     {
         retrofit = new Retrofit.Builder()
@@ -99,6 +106,12 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
     {
         initializeRetrofit(BASE_DZPS_SERVER_URL);
         return retrofit.create(PlayerService.class);
+    }
+
+    public void sendSheetToServer(File file, String referee, String certificate)
+    {
+        // todo send sheet
+        generatedSheetModel.onSendSheetCompleted(new Result.Success<>(""));
     }
 
     @Override

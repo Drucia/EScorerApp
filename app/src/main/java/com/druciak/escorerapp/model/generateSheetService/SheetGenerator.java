@@ -104,7 +104,7 @@ public class SheetGenerator {
             if (doc != null)
                 doc.close();
         }
-        callback.sheetGeneratedIn(file);
+        callback.sheetGenerated(file);
     }
 
     private void generateSetsTables(Table mainTable) {

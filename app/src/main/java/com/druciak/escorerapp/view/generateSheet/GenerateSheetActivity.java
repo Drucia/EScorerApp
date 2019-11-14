@@ -14,6 +14,7 @@ import com.druciak.escorerapp.interfaces.IGenerateSheetMVP;
 import com.druciak.escorerapp.presenter.GenerateSheetPresenter;
 import com.druciak.escorerapp.view.mainPanel.MainPanelActivity;
 import com.github.barteksc.pdfviewer.PDFView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 
@@ -41,7 +42,8 @@ public class GenerateSheetActivity extends AppCompatActivity implements IGenerat
         builder.setCancelable(false);
         progressDialog = builder.create();
         pdfView = findViewById(R.id.pdfView);
-
+        FloatingActionButton send = findViewById(R.id.sendToServer);
+        send.setOnClickListener(view -> presenter.onSendClicked());
         presenter = new GenerateSheetPresenter(this, matchInfo, user);
         presenter.onActivityCreated();
     }
@@ -66,6 +68,11 @@ public class GenerateSheetActivity extends AppCompatActivity implements IGenerat
         intent.putExtra(LOGGED_IN_USER_ID, user);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void showToast(int stringRes) {
+        Toast.makeText(this, getString(stringRes), Toast.LENGTH_SHORT).show();
     }
 
     @Override
