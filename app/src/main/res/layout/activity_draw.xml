@@ -16,7 +16,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="LOSOWANIE"
         android:textSize="40sp"
@@ -26,9 +26,11 @@
     <ImageView
         android:id="@+id/courtDraw"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="190dp"
         android:layout_below="@+id/textView9"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:scaleType="centerCrop"
         app:srcCompat="@drawable/small_court" />
 
     <LinearLayout
@@ -45,8 +47,8 @@
             android:id="@+id/leftAdoptingLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <ImageView
@@ -61,8 +63,8 @@
             android:id="@+id/leftServeLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <ImageView
@@ -156,14 +158,14 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/drawOptions"
+        android:layout_below="@id/courtDraw"
         android:layout_centerInParent="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:enabled="false"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="Rozpocznij mecz"
-        android:textSize="24sp"
+        android:text="Rozpocznij"
+        android:textSize="21sp"
         app:cornerRadius="15dp" />
 
 </RelativeLayout>

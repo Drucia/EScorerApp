@@ -32,6 +32,7 @@ import com.druciak.escorerapp.entities.MatchPlayer;
 import com.druciak.escorerapp.entities.MatchSettings;
 import com.druciak.escorerapp.entities.MatchTeam;
 import com.druciak.escorerapp.entities.Player;
+import com.druciak.escorerapp.entities.RefereeUser;
 import com.druciak.escorerapp.entities.Team;
 import com.druciak.escorerapp.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.interfaces.IRunningMatchMVP;
@@ -145,13 +146,13 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-//        Intent intent = getIntent();
-//        LoggedInUser user = intent.getParcelableExtra(LOGGED_IN_USER_ID);
-//        MatchInfo info = intent.getParcelableExtra(MATCH_INFO_ID);
+        Intent intent = getIntent();
+        LoggedInUser user = intent.getParcelableExtra(LOGGED_IN_USER_ID);
+        MatchInfo matchInfo = intent.getParcelableExtra(MATCH_INFO_ID);
 
         // mocked
-        MatchInfo matchInfo = mockMatchInfo();
-        LoggedInUser user = mockLoggedInUser();
+//        MatchInfo matchInfo = mockMatchInfo();
+//        LoggedInUser user = mockLoggedInUser();
 
         recyclerViewLeft = findViewById(R.id.leftPlayersRecyclerView);
         recyclerViewRight = findViewById(R.id.rightPlayersRecyclerView);
@@ -288,7 +289,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     }
 
     private LoggedInUser mockLoggedInUser() {
-        LoggedInUser user = new LoggedInUser();
+        LoggedInUser user = new RefereeUser();
         user.setName("Maciej");
         user.setSurname("Bielawski");
 

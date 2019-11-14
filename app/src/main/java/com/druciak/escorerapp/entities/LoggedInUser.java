@@ -7,11 +7,11 @@ import android.os.Parcelable;
  * Data class that captures user information for logged in users retrieved from LoginRepository
  */
 public class LoggedInUser implements Parcelable {
-    private String userId;
-    private String name;
-    private String surname;
-    private String email;
-    private Boolean isReferee;
+    String userId;
+    String name;
+    String surname;
+    String email;
+    Boolean isReferee;
 
     public LoggedInUser() {} // todo only for mock
 

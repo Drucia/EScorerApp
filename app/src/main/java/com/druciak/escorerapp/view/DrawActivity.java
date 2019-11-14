@@ -1,6 +1,7 @@
 package com.druciak.escorerapp.view;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -54,6 +55,8 @@ public class DrawActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         Intent intent = getIntent();
         boolean isRequest = intent.getBooleanExtra(IS_REQ_ID, false);
