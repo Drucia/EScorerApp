@@ -35,53 +35,56 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
     public ExternalApiManager(IMatchSettingsMVP.IPresenter presenter) {
         this.presenter = presenter;
 
-        // prepare players
-        ArrayList<Player> poloniaPlayers = new ArrayList<>();
-        poloniaPlayers.add(new Player(1, "Aleksandra", "Druciak", 'K', teams.get(1)));
-        poloniaPlayers.add(new Player(2, "Aleksandra", "Nowak", 'K', teams.get(1)));
-        poloniaPlayers.add(new Player(3, "Aleksandra", "Kowalska", 'K', teams.get(1)));
-        poloniaPlayers.add(new Player(4, "Aleksandra", "Drucia", 'K', teams.get(1)));
-        poloniaPlayers.add(new Player(5, "Paulina", "Druciak", 'K', teams.get(1)));
-        poloniaPlayers.add(new Player(6, "Karolina", "Druciak", 'K', teams.get(1)));
+        if (playersOfTeams.isEmpty()) {
+            // prepare players
+            ArrayList<Player> poloniaPlayers = new ArrayList<>();
+            poloniaPlayers.add(new Player(1, "Aleksandra", "Druciak", 'K', teams.get(1)));
+            poloniaPlayers.add(new Player(2, "Aleksandra", "Nowak", 'K', teams.get(1)));
+            poloniaPlayers.add(new Player(3, "Aleksandra", "Kowalska", 'K', teams.get(1)));
+            poloniaPlayers.add(new Player(4, "Aleksandra", "Drucia", 'K', teams.get(1)));
+            poloniaPlayers.add(new Player(5, "Paulina", "Druciak", 'K', teams.get(1)));
+            poloniaPlayers.add(new Player(6, "Karolina", "Druciak", 'K', teams.get(1)));
 
-        // prepare players
-        ArrayList<Player> chelmiecPlayers = new ArrayList<>();
-        chelmiecPlayers.add(new Player(7, "Aleksandra", "Druciak", 'K', teams.get(0)));
-        chelmiecPlayers.add(new Player(8, "Aleksandra", "Nowak", 'K', teams.get(0)));
-        chelmiecPlayers.add(new Player(9, "Aleksandra", "Kowalska", 'K', teams.get(0)));
-        chelmiecPlayers.add(new Player(10, "Aleksandra", "Drucia", 'K', teams.get(0)));
-        chelmiecPlayers.add(new Player(11, "Paulina", "Druciak", 'K', teams.get(0)));
-        chelmiecPlayers.add(new Player(12, "Karolina", "Druciak", 'K', teams.get(0)));
-        chelmiecPlayers.add(new Player(13, "Kar", "Druci", 'K', teams.get(0)));
-        chelmiecPlayers.add(new Player(14, "Karo", "Druciak", 'K', teams.get(0)));
+            // prepare players
+            ArrayList<Player> chelmiecPlayers = new ArrayList<>();
+            chelmiecPlayers.add(new Player(7, "Aleksandra", "Druciak", 'K', teams.get(0)));
+            chelmiecPlayers.add(new Player(8, "Aleksandra", "Nowak", 'K', teams.get(0)));
+            chelmiecPlayers.add(new Player(9, "Aleksandra", "Kowalska", 'K', teams.get(0)));
+            chelmiecPlayers.add(new Player(10, "Aleksandra", "Drucia", 'K', teams.get(0)));
+            chelmiecPlayers.add(new Player(11, "Paulina", "Druciak", 'K', teams.get(0)));
+            chelmiecPlayers.add(new Player(12, "Karolina", "Druciak", 'K', teams.get(0)));
+            chelmiecPlayers.add(new Player(13, "Kar", "Druci", 'K', teams.get(0)));
+            chelmiecPlayers.add(new Player(14, "Karo", "Druciak", 'K', teams.get(0)));
 
-        playersOfTeams.put(1, poloniaPlayers);
-        playersOfTeams.put(2, chelmiecPlayers);
-        playersOfTeams.put(3, chelmiecPlayers);
-        playersOfTeams.put(4, poloniaPlayers);
+            playersOfTeams.put(1, poloniaPlayers);
+            playersOfTeams.put(2, chelmiecPlayers);
+            playersOfTeams.put(3, chelmiecPlayers);
+            playersOfTeams.put(4, poloniaPlayers);
+        }
     }
 
     public ExternalApiManager(IMainPanelMVP.IPresenter mainPanelPresenter) {
         this.mainPanelPresenter = mainPanelPresenter;
+        if (matches.isEmpty()) {
+            // prepare teams
+            Team polonia = new Team(1, "Polonia", "MKS Polonia Świdnica");
+            Team chelmiec = new Team(2, "Chełmiec", "MKS Chełmiec Wodociągi Wałbrzych");
+            Team tygrysy = new Team(3, "Tygrysy", "MKS Tygrysy Strzelin");
+            Team gwardia = new Team(4, "Gwardia", "UKS Gwardia Wrocław");
 
-        // prepare teams
-        Team polonia = new Team(1, "Polonia", "MKS Polonia Świdnica");
-        Team chelmiec = new Team(2, "Chełmiec", "MKS Chełmiec Wodociągi Wałbrzych");
-        Team tygrysy = new Team(3, "Tygrysy", "MKS Tygrysy Strzelin");
-        Team gwardia = new Team(4, "Gwardia", "UKS Gwardia Wrocław");
+            teams.add(polonia);
+            teams.add(chelmiec);
+            teams.add(tygrysy);
+            teams.add(gwardia);
 
-        teams.add(polonia);
-        teams.add(chelmiec);
-        teams.add(tygrysy);
-        teams.add(gwardia);
+            // prepare matches
+            // 5YAYc3t7jWea1SnDXYyQEH3gQ1p1 - Tomasz
 
-        // prepare matches
-        // 5YAYc3t7jWea1SnDXYyQEH3gQ1p1 - Tomasz
-
-        matches.add(new Match(teams.get(0), teams.get(1), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
-        matches.add(new Match(teams.get(1), teams.get(2), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
-        matches.add(new Match(teams.get(0), teams.get(2), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
-        matches.add(new Match(teams.get(1), teams.get(0), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+            matches.add(new Match(teams.get(0), teams.get(1), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+            matches.add(new Match(teams.get(1), teams.get(2), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+            matches.add(new Match(teams.get(0), teams.get(2), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+            matches.add(new Match(teams.get(1), teams.get(0), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+        }
     }
 
     public ExternalApiManager(IGenerateSheetMVP.IModel model)
@@ -108,10 +111,15 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
         return retrofit.create(PlayerService.class);
     }
 
-    public void sendSheetToServer(File file, String referee, String certificate)
+    public void sendSheetToServer(int matchId, File file, String referee, String certificate)
     {
         // todo send sheet
-        generatedSheetModel.onSendSheetCompleted(new Result.Success<>(""));
+        boolean status = matches.removeIf(match -> match.getId() == matchId);
+        if (status)
+            generatedSheetModel.onSendSheetCompleted(new Result.Success<>(""));
+        else
+            generatedSheetModel.onSendSheetCompleted(new Result.Error(
+                    new Exception("Nie udało się zapisać")));
     }
 
     @Override
@@ -142,7 +150,8 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
     @Override
     public void getMatchedForReferee(final String refereeId) {
         // TODO mock server!!!
-        List<Match> filteredMatches = matches.stream().filter(match -> match.getRefereeId().equals(refereeId)).collect(Collectors.toList());
+        List<Match> filteredMatches = matches.stream().filter(match -> match.getRefereeId()
+                .equals(refereeId)).collect(Collectors.toList());
         mainPanelPresenter.onPrepareMatchesListCompleted(new Result.Success<>(filteredMatches));
     }
 }

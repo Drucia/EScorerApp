@@ -22,10 +22,10 @@ import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 
@@ -83,16 +83,17 @@ public class SheetGenerator {
             doc.add(generateTeamsTable());
             doc.add(generateMatchInfoTable());
             Table setsTable = new Table(UnitValue.createPercentArray(new float[]{1, 1}))
-                    .setHorizontalAlignment(HorizontalAlignment.CENTER);
+                    .setTextAlignment(TextAlignment.CENTER);
             generateSetsTables(setsTable);
             doc.add(setsTable);
-            Table infoTable = new Table(4);
-            infoTable.addCell(new Cell(1, 1).add(generateMatchInfoTimeTable()
-                    .useAllAvailableWidth()));
-            infoTable.addCell(new Cell(1, 2).add(generateAttentionTable()
+            Table infoTable = new Table(2);
+//            infoTable.addCell(new Cell(1, 1).add(generateMatchInfoTimeTable()
+//                    .useAllAvailableWidth()));
+            infoTable.addCell(new Cell(1, 1).add(generateAttentionTable()
                     .useAllAvailableWidth()));
             infoTable.addCell(new Cell(2,1).add(generatePlayersTable()));
-            infoTable.addCell(new Cell(1,3).add(generateMatchScoreTable()));
+            infoTable.addCell(new Cell(1,1).add(generateMatchScoreTable()
+                    .useAllAvailableWidth()));
             doc.add(infoTable);
             doc.close();
 
@@ -126,7 +127,7 @@ public class SheetGenerator {
     private Table generateSet(int set, ArrayList<Action> actions, MatchTeam left, MatchTeam right,
                               boolean isLeftServe) {
         Table table = new Table(UnitValue.createPercentArray(new float[]{ 1, 2, 1, 1, 2, 2, 2, 1, 1,
-                2, 2, 1, 1, 2, 2, 2, 1, 1, 2, 2, 2})).setHorizontalAlignment(HorizontalAlignment.CENTER);
+                2, 2, 1, 1, 2, 2, 2, 1, 1, 2, 2, 2})).setTextAlignment(TextAlignment.CENTER);
 
         // set number
         Cell title = new Cell(9, 1);
@@ -200,11 +201,13 @@ public class SheetGenerator {
 
     private void generateTimes(Table table, List<Action> leftTimes, List<Action> rightTimes) {
         // ----- LEFT SIDE ----- //
-        table.addCell(new Cell(3, 8).add(new Paragraph("in the future ...")));
+        table.addCell(new Cell(3, 8).add(new Paragraph("in the future ..."))
+                .setTextAlignment(TextAlignment.LEFT));
         table.addCell(new Cell(1, 2).add(new Paragraph("CZASY")));
 
         // ----- RIGHT SIDE ----- //
-        table.addCell(new Cell(3, 8).add(new Paragraph("in the future ...")));
+        table.addCell(new Cell(3, 8).add(new Paragraph("in the future ..."))
+                .setTextAlignment(TextAlignment.LEFT));
         table.addCell(new Cell(1, 2).add(new Paragraph("CZASY")));
 
         for (int i = 0; i < 2; i++) {
@@ -366,10 +369,9 @@ public class SheetGenerator {
 
     private Table generateAttentionTable() {
         Table table = new Table(UnitValue.createPercentArray(new float[]{1, 1, 1, 1, 2}));
-        table.addCell(new Cell(1, 5).add(new Paragraph("UWAGI"))
-                .setHorizontalAlignment(HorizontalAlignment.CENTER));
-        table.addCell(new Cell(1, 5)
-                .setMinHeight(70).add(new Paragraph(matchInfo.getAttentions())));
+        table.addCell(new Cell(1, 5).add(new Paragraph("UWAGI")));
+        table.addCell(new Cell(3, 4).add(new Paragraph(matchInfo.getAttentions())));
+        table.addCell(new Cell(3, 1).add(generateMatchInfoTable()));
         table.addCell(new Cell(1, 2).add(new Paragraph("SEDZIA I")));
         table.addCell(new Cell(1, 3).add(new Paragraph(matchInfo.getSettings().getRefereeFirst())));
         table.addCell(new Cell(1, 2).add(new Paragraph("SEDZIA II")));
@@ -377,7 +379,8 @@ public class SheetGenerator {
         table.addCell(new Cell(1, 2).add(new Paragraph("SEKRETARZ")));
         table.addCell(new Cell(1, 3).add(new Paragraph(scorerName)));
 
-        List<String> lines = matchInfo.getSettings().getLineReferees();
+        List<String> lines = matchInfo.getSettings().getLineReferees().stream()
+                .filter(s -> !s.equals("")).collect(Collectors.toList());
         if (!lines.isEmpty())
         {
             table.addCell(new Cell(1, 1).add(new Paragraph("LINIOWY I")));
@@ -397,11 +400,17 @@ public class SheetGenerator {
     }
 
     private Table generateTeamsTable() {
-        Table table = new Table(4);
+        Table main = new Table(UnitValue.createPercentArray(new float[]{1, 1, 1}))
+                .setBorder(Border.NO_BORDER)
+                .useAllAvailableWidth();
+        main.addCell(new Cell()).useAllAvailableWidth();
+        Table table = new Table(4).setTextAlignment(TextAlignment.CENTER);
         table.addCell(new String(" A ".getBytes(StandardCharsets.UTF_8)));
         table.addCell(matchInfo.getTeamA().getFullName());
         table.addCell(matchInfo.getTeamB().getFullName());
         table.addCell(" B ");
+        main.addCell(table.useAllAvailableWidth());
+        main.addCell(new Cell()).useAllAvailableWidth();
         return table;
     }
 

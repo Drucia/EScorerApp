@@ -12,6 +12,7 @@ import java.io.File;
 public class GenerateSheetModel implements IGenerateSheetMVP.IModel{
     private SheetGenerator sheetGenerator;
     private LoggedInUser user;
+    private MatchInfo matchInfo;
     private File file;
     private ExternalApiManager apiManager;
     private IGenerateSheetMVP.IPresenter presenter;
@@ -20,6 +21,7 @@ public class GenerateSheetModel implements IGenerateSheetMVP.IModel{
                               LoggedInUser user) {
         this.presenter = presenter;
         this.user = user;
+        this.matchInfo = matchInfo;
         this.file = null;
         this.sheetGenerator = new SheetGenerator(matchInfo, this, user.getFullName());
         this.apiManager = new ExternalApiManager(this);
@@ -43,7 +45,8 @@ public class GenerateSheetModel implements IGenerateSheetMVP.IModel{
 
     @Override
     public void sendSheetToServer() {
-        apiManager.sendSheetToServer(file, user.getFullName(), ((RefereeUser) user).getCertNumber());
+        apiManager.sendSheetToServer(matchInfo.getSettings().getMatch().getId(),
+                file, user.getFullName(), ((RefereeUser) user).getCertNumber());
     }
 
     @Override

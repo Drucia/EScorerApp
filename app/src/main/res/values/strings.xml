@@ -100,5 +100,6 @@
         Nie będziesz już mógł wysłać protokołu na serwer.</string>
     <string name="msg_succ_on_send_sheet">Wysłano protokół na serwer</string>
     <string name="msg_failed_on_send_sheet">Coś poszło nie tak z wysłaniem protokołu na serwer</string>
+    <string name="save_button">Zapisz</string>
 
 </resources>

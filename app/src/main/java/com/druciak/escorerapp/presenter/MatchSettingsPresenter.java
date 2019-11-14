@@ -113,6 +113,8 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
         String error = msgError.toString();
 
         if (error.equals("")) {
+            matchSettings.setMatch(match);
+            matchSettings.setPlayers(players);
             matchSettings.setMembers(members);
             view.startMatch(matchSettings, loggedInUser);
         }
