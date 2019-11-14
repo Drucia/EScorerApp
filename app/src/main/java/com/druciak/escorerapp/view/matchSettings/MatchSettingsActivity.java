@@ -18,6 +18,7 @@ import com.druciak.escorerapp.entities.MatchSettings;
 import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.presenter.MatchSettingsPresenter;
 import com.druciak.escorerapp.view.DrawActivity;
+import com.druciak.escorerapp.view.mainPanel.MainPanelActivity;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.MATCH_ID;
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.MATCH_KIND_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.USER_ADDITIONAL_INFO_ID;
 
 public class MatchSettingsActivity extends AppCompatActivity implements IMatchSettingsMVP.IView {
     public static final String MACH_SETTINGS_ID = "settings";
@@ -124,5 +126,26 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
                                        String sLine2, String sLine3, String sLine4, boolean isMan) {
         presenter.setMatchSettingsParams(sTournamentName, sType, isZas, sTown, sStreet,
                 sHall, sRefereeFirst, sRefereeSnd, sLine1, sLine2, sLine3, sLine4, isMan);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.label_attention));
+        builder.setMessage(getString(R.string.msg_attention));
+        builder.setPositiveButton(getString(R.string.yes), (dialogInterface, i) ->
+                presenter.onDiscardClicked());
+        builder.setNegativeButton(getString(R.string.no), (dialogInterface, i) -> {});
+        builder.create().show();
+    }
+
+    @Override
+    public void goToMainPanel(LoggedInUser user) {
+        Intent intent = new Intent(this, MainPanelActivity.class);
+        intent.putExtra(USER_ADDITIONAL_INFO_ID, true);
+        intent.putExtra(LOGGED_IN_USER_ID, user);
+        startActivity(intent);
+        finish();
     }
 }

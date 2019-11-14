@@ -26,6 +26,7 @@ public interface IMatchSettingsMVP{
                 sTown, String sStreet, String sHall, String sRefereeFirst, String sRefereeSnd,
                                     String sLine1, String sLine2, String sLine3, String sLine4,
                                     boolean isMan);
+        void goToMainPanel(LoggedInUser user);
     }
 
     interface IPresenter{
@@ -40,6 +41,7 @@ public interface IMatchSettingsMVP{
                                     String sTown, String sStreet, String sHall,
                                     String sRefereeFirst, String sRefereeSnd, String sLine1,
                                     String sLine2, String sLine3, String sLine4, boolean isMan);
+        void onDiscardClicked();
     }
 
     interface IFragmentView extends IOnPlayerTouchCallback{

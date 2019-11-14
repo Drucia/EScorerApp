@@ -139,4 +139,9 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
         matchSettings.setLineReferees(lineReferees);
         matchSettings.setMan(isMan);
     }
+
+    @Override
+    public void onDiscardClicked() {
+        view.goToMainPanel(loggedInUser);
+    }
 }

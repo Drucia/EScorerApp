@@ -80,15 +80,18 @@ public class SheetGenerator {
             doc = new Document(pdfDoc);
             PdfFont font = PdfFontFactory.createFont(StandardFonts.COURIER, PdfEncodings.UTF8);
             doc.setFont(font);
-            doc.add(generateTeamsTable());
-            doc.add(generateMatchInfoTable());
+            Table infoTable = new Table(UnitValue.createPercentArray(new float[]{1, 1, 1}))
+                    .setBorder(Border.NO_BORDER)
+                    .useAllAvailableWidth();
+            infoTable.addCell(new Cell(4, 1).add(generateMatchInfoTable().useAllAvailableWidth()));
+            infoTable.addCell(new Cell(4, 1).add(generateTeamsTable().useAllAvailableWidth()));
+            infoTable.addCell(new Cell(4, 1).add(generateMatchInfoTimeTable().useAllAvailableWidth()));
+            doc.add(infoTable);
             Table setsTable = new Table(UnitValue.createPercentArray(new float[]{1, 1}))
-                    .setTextAlignment(TextAlignment.CENTER);
+                    .setTextAlignment(TextAlignment.CENTER).setBorder(Border.NO_BORDER);
             generateSetsTables(setsTable);
             doc.add(setsTable);
-            Table infoTable = new Table(2);
-//            infoTable.addCell(new Cell(1, 1).add(generateMatchInfoTimeTable()
-//                    .useAllAvailableWidth()));
+            infoTable = new Table(2);
             infoTable.addCell(new Cell(1, 1).add(generateAttentionTable()
                     .useAllAvailableWidth()));
             infoTable.addCell(new Cell(2,1).add(generatePlayersTable()));
@@ -345,7 +348,8 @@ public class SheetGenerator {
         table.addCell("V");
         table.addCell(new Cell(1, 2).add(new Paragraph("VI")));
         table.addCell(new Cell(5, 2).add(new Paragraph(
-                generateStringForPoints(leftPoints))));
+                generateStringForPoints(leftPoints)).setTextAlignment(TextAlignment.LEFT)
+                .setPaddingLeft(5).setPaddingRight(5)));
 
         // ----- RIGHT SIDE ----- //
         table.addCell(new Cell(1, 2).add(new Paragraph("I")));
@@ -355,7 +359,8 @@ public class SheetGenerator {
         table.addCell(new Cell(1, 2).add(new Paragraph("V")));
         table.addCell("VI");
         table.addCell(new Cell(5, 2).add(new Paragraph(
-                generateStringForPoints(rightPoints))));
+                generateStringForPoints(rightPoints)).setTextAlignment(TextAlignment.LEFT)
+                .setPaddingLeft(5).setPaddingRight(5)));
     }
 
     private String generateStringForPoints(int points) {
@@ -370,8 +375,8 @@ public class SheetGenerator {
     private Table generateAttentionTable() {
         Table table = new Table(UnitValue.createPercentArray(new float[]{1, 1, 1, 1, 2}));
         table.addCell(new Cell(1, 5).add(new Paragraph("UWAGI")));
-        table.addCell(new Cell(3, 4).add(new Paragraph(matchInfo.getAttentions())));
-        table.addCell(new Cell(3, 1).add(generateMatchInfoTable()));
+        table.addCell(new Cell(3, 5).add(new Paragraph(matchInfo.getAttentions())
+                .setMinHeight(70).setTextAlignment(TextAlignment.LEFT)));
         table.addCell(new Cell(1, 2).add(new Paragraph("SEDZIA I")));
         table.addCell(new Cell(1, 3).add(new Paragraph(matchInfo.getSettings().getRefereeFirst())));
         table.addCell(new Cell(1, 2).add(new Paragraph("SEDZIA II")));
@@ -400,17 +405,11 @@ public class SheetGenerator {
     }
 
     private Table generateTeamsTable() {
-        Table main = new Table(UnitValue.createPercentArray(new float[]{1, 1, 1}))
-                .setBorder(Border.NO_BORDER)
-                .useAllAvailableWidth();
-        main.addCell(new Cell()).useAllAvailableWidth();
         Table table = new Table(4).setTextAlignment(TextAlignment.CENTER);
         table.addCell(new String(" A ".getBytes(StandardCharsets.UTF_8)));
         table.addCell(matchInfo.getTeamA().getFullName());
         table.addCell(matchInfo.getTeamB().getFullName());
         table.addCell(" B ");
-        main.addCell(table.useAllAvailableWidth());
-        main.addCell(new Cell()).useAllAvailableWidth();
         return table;
     }
 
@@ -453,7 +452,10 @@ public class SheetGenerator {
         LocalDateTime now = LocalDateTime.now();
         table.addCell(dtf.format(now));
 
-        table.addCell("Godzina");
+        table.addCell("Rozpoczecie");
+        table.addCell(matchInfo.getSettings().getStartTime());
+
+        table.addCell("Zakonczenie");
         table.addCell(matchInfo.getSettings().getStartTime());
 
         table.addCell("Nr meczu");

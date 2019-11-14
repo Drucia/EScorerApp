@@ -8,6 +8,7 @@ import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.entities.MatchPlayer;
 import com.druciak.escorerapp.entities.MatchTeam;
+import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.entities.PlayerPunishment;
 import com.druciak.escorerapp.entities.Point;
 import com.druciak.escorerapp.entities.Shift;
@@ -18,6 +19,7 @@ import com.druciak.escorerapp.interfaces.IRunningMatchMVP;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -293,6 +295,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
             view.showPopUpWithShift(team.getPlayers().stream()
                     .filter(player -> player.getStatusId() == STATUS_PLAYER_ON_DESK &&
                             !player.isLibero())
+                    .sorted(Comparator.comparingInt(Player::getNumber))
                     .collect(Collectors.toList()), adapterPosition, teamSideId, canPlay);
         }
     }
@@ -309,6 +312,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
                 List<MatchPlayer> players = team.getPlayers().stream()
                         .filter(player -> player.getStatusId() == STATUS_PLAYER_ON_DESK &&
                                 !player.isLibero() && player.isCanPlay())
+                        .sorted(Comparator.comparingInt(Player::getNumber))
                         .collect(Collectors.toList());
                 if (mPlayer.getStatusId() == STATUS_PLAYER_SHIFTED)
                 {

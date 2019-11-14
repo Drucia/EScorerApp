@@ -203,6 +203,7 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
             intent.putExtra(MATCH_ID, matches.get(i));
             intent.putExtra(LOGGED_IN_USER_ID, user);
             startActivity(intent);
+            finish();
         });
         builder.create().show();
     }

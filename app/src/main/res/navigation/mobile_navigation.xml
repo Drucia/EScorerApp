@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/nav_user_data"
-        android:name="com.druciak.escorerapp.view.mainPanel.tools.ToolsFragment"
+        android:name="com.druciak.escorerapp.view.mainPanel.userData.UserDataFragment"
         android:label="@string/menu_user_data"
         tools:layout="@layout/fragment_user_data" />
 
     <fragment
         android:id="@+id/nav_matches"
-        android:name="com.druciak.escorerapp.view.mainPanel.tools.ToolsFragment"
+        android:name="com.druciak.escorerapp.view.mainPanel.matches.MatchesFragment"
         android:label="@string/menu_matches"
         tools:layout="@layout/fragment_matches" />
 
