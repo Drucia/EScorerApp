@@ -28,11 +28,11 @@ public interface ILoginMVP {
         void onGetUserLoggedInEventCompleteSuccess(FirebaseUser loggedInUser);
     }
 
-    interface IModel{
+    interface IModel {
         void initializeGoogleService(Context context);
         void login(String username, String password);
-        Result<FirebaseUser> getLoggedIn();
         void logout();
+        Result<FirebaseUser> getLoggedIn();
         void loginWithGoogle(GoogleSignInAccount account);
         GoogleSignInClient getGoogleClient();
     }

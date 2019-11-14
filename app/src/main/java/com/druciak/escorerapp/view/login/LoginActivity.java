@@ -28,6 +28,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
 
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.USER_ADDITIONAL_INFO_ID;
+
 public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView {
 
     private static final int SIGN_IN_BY_GOOGLE_REQ = 0;
@@ -165,7 +168,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
     @Override
     public void onGetUserLoggedInEventCompleteSuccess(FirebaseUser loggedInUser) {
         Intent intent = new Intent(this, MainPanelActivity.class);
-        intent.putExtra("additional_info", false);
+        intent.putExtra(USER_ADDITIONAL_INFO_ID, false);
         startActivity(intent);
         finish();
     }
@@ -186,8 +189,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
     @Override
     public void onGetUserAdditionalInfoEventSuccess(LoggedInUser loggedInUser) {
         Intent intent = new Intent(this, MainPanelActivity.class);
-        intent.putExtra("user", loggedInUser);
-        intent.putExtra("additional_info", true);
+        intent.putExtra(LOGGED_IN_USER_ID, loggedInUser);
+        intent.putExtra(USER_ADDITIONAL_INFO_ID, true);
         startActivity(intent);
         finish();
     }

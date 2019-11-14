@@ -1,5 +1,6 @@
 package com.druciak.escorerapp.presenter;
 
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.entities.SetInfo;
 import com.druciak.escorerapp.interfaces.ISummaryMVP;
@@ -12,9 +13,9 @@ public class SummaryPresenter implements ISummaryMVP.IPresenter {
     private ISummaryMVP.IView view;
     private ISummaryMVP.IModel model;
 
-    public SummaryPresenter(ISummaryMVP.IView view, MatchInfo matchInfo) {
+    public SummaryPresenter(ISummaryMVP.IView view, MatchInfo matchInfo, LoggedInUser user) {
         this.view = view;
-        model = new SummaryModel(this, matchInfo);
+        model = new SummaryModel(this, matchInfo, user);
     }
 
     @Override
@@ -42,6 +43,12 @@ public class SummaryPresenter implements ISummaryMVP.IPresenter {
 
     @Override
     public void onGenerateConfirm() {
-        view.goToGenerateActivity(model.getMatchInfo());
+        view.goToGenerateActivity(model.getMatchInfo(),
+                model.getUser());
+    }
+
+    @Override
+    public void discardMatch() {
+        view.goToMainPanel(model.getUser());
     }
 }

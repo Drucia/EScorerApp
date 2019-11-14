@@ -21,6 +21,9 @@ import com.druciak.escorerapp.view.mainPanel.MainPanelActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.USER_ADDITIONAL_INFO_ID;
+
 public class CreateAccountActivity extends AppCompatActivity implements ICreateAccountMVP.IView, View.OnClickListener {
 
     private ICreateAccountMVP.IPresenter presenter;
@@ -137,8 +140,8 @@ public class CreateAccountActivity extends AppCompatActivity implements ICreateA
     @Override
     public void onCreateAccountSuccess(LoggedInUser data) {
         Intent intent = new Intent(this, MainPanelActivity.class);
-        intent.putExtra("user", data);
-        intent.putExtra("additional_info", true);
+        intent.putExtra(LOGGED_IN_USER_ID, data);
+        intent.putExtra(USER_ADDITIONAL_INFO_ID, true);
         startActivity(intent);
         finish();
     }

@@ -51,10 +51,12 @@ public class SheetGenerator {
 
     private MatchInfo matchInfo;
     private IGenerateSheetMVP.IModel callback;
+    private String scorerName;
 
-    public SheetGenerator(MatchInfo matchInfo, IGenerateSheetMVP.IModel callback) {
+    public SheetGenerator(MatchInfo matchInfo, IGenerateSheetMVP.IModel callback, String scorerName) {
         this.matchInfo = matchInfo;
         this.callback = callback;
+        this.scorerName = scorerName;
     }
 
     public void generateSheet() {
@@ -373,7 +375,7 @@ public class SheetGenerator {
         table.addCell(new Cell(1, 2).add(new Paragraph("SEDZIA II")));
         table.addCell(new Cell(1, 3).add(new Paragraph(matchInfo.getSettings().getRefereeSnd())));
         table.addCell(new Cell(1, 2).add(new Paragraph("SEKRETARZ")));
-        table.addCell(new Cell(1, 3).add(new Paragraph(" TODO ")));
+        table.addCell(new Cell(1, 3).add(new Paragraph(scorerName)));
 
         List<String> lines = matchInfo.getSettings().getLineReferees();
         if (!lines.isEmpty())

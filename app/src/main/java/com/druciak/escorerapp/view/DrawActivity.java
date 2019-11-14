@@ -10,15 +10,21 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.Match;
+import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.entities.MatchSettings;
+import com.druciak.escorerapp.entities.Player;
+import com.druciak.escorerapp.entities.Team;
 import com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity;
 import com.druciak.escorerapp.view.runningMatch.RunningMatchActivity;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
 import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.IS_REQ_ID;
 
 public class DrawActivity extends AppCompatActivity {
@@ -37,9 +43,12 @@ public class DrawActivity extends AppCompatActivity {
     private ImageView leftServe;
     private ImageView rightServe;
     private MaterialButton startMatchButton;
+    private Spinner leftTeam;
+    private Spinner rightTeam;
 
     private int leftTeamChoice = NO_CHOICE_MADE_ID;
     private int rightTeamChoice = NO_CHOICE_MADE_ID;
+    private MatchSettings matchSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,45 +57,34 @@ public class DrawActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         boolean isRequest = intent.getBooleanExtra(IS_REQ_ID, false);
-        MatchSettings ms = intent.getParcelableExtra(MatchSettingsActivity.MACH_SETTINGS_ID);
-        Match match = ms.getMatch();
-        Spinner leftTeam = findViewById(R.id.leftTeamSpinner);
-        Spinner rightTeam = findViewById(R.id.rightTeamSpinner);
+        matchSettings = intent.getParcelableExtra(MatchSettingsActivity.MACH_SETTINGS_ID);
+        LoggedInUser user = intent.getParcelableExtra(LOGGED_IN_USER_ID);
+        leftTeam = findViewById(R.id.leftTeamSpinner);
+        rightTeam = findViewById(R.id.rightTeamSpinner);
         startMatchButton = findViewById(R.id.startMatch);
         startMatchButton.setOnClickListener(view -> {
+            int leftTeamId = getLeftTeamId();
+            int serveTeam = getServeTeamId(leftTeamId);
+
             if (isRequest){
                 Intent i = new Intent();
-                int leftTeamId = leftTeam.getSelectedItem().toString().equals(match.getHostTeam()
-                        .getShortName()) ? match.getHostTeam().getId() : match.getGuestTeam().getId();
-                int serveTeam;
-
-                if (leftTeamChoice == SERVE_ID)
-                {
-                    if (leftTeamId == match.getHostTeam().getId())
-                        serveTeam = leftTeamId;
-                    else
-                        serveTeam = match.getGuestTeam().getId();
-                } else {
-                    if (leftTeamId == match.getHostTeam().getId())
-                        serveTeam = match.getGuestTeam().getId();
-                    else
-                        serveTeam = leftTeamId;
-                }
-
-                i.putExtra(SERVE_TEAM_ID, serveTeam); //todo
-                i.putExtra(LEFT_TEAM_ID, leftTeamId); //todo
+                i.putExtra(SERVE_TEAM_ID, serveTeam);
+                i.putExtra(LEFT_TEAM_ID, leftTeamId);
+                i.putExtra(LOGGED_IN_USER_ID, user);
                 setResult(RESULT_OK, i);
             } else
             {
                 Intent i = new Intent(this, RunningMatchActivity.class);
-                i.putExtra(MATCH_INFO_ID, ""); // todo
+                i.putExtra(MATCH_INFO_ID, generateMatchInfo(leftTeamId, serveTeam));
+                i.putExtra(LOGGED_IN_USER_ID, user);
                 startActivity(i);
             }
             finish();
         });
-        List<String> teamsNames = Arrays.asList(match.getHostTeam().getShortName(), match.getGuestTeam().getShortName());
-//        List<String> teamsNames = Arrays.asList("Chełmiec", "Polonia"); // todo remove hardcode
-        ArrayAdapter<String> data = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, teamsNames);
+        List<String> teamsNames = Arrays.asList(matchSettings.getMatch().getHostTeam().getShortName(),
+                matchSettings.getMatch().getGuestTeam().getShortName());
+        ArrayAdapter<String> data = new ArrayAdapter<>(this,
+                R.layout.support_simple_spinner_dropdown_item, teamsNames);
         leftTeam.setAdapter(data);
         rightTeam.setAdapter(data);
         rightTeam.setSelection(1);
@@ -157,6 +155,44 @@ public class DrawActivity extends AppCompatActivity {
         leftServe.setOnClickListener(listener);
         rightAdopt.setOnClickListener(listener);
         rightServe.setOnClickListener(listener);
+    }
+
+    private MatchInfo generateMatchInfo(int leftTeamId, int serveTeamId) {
+        Match match = matchSettings.getMatch();
+        Team teamA = match.getHostTeam().getId() == leftTeamId ? match.getHostTeam() :
+                match.getGuestTeam();
+        Team teamB = match.getHostTeam().getId() != leftTeamId ? match.getHostTeam() :
+                match.getGuestTeam();
+        List<Player> playersA = matchSettings.getPlayers().stream()
+                .filter(player -> player.getTeam().getId() == teamA.getId())
+                .collect(Collectors.toList());
+        List<Player> playersB = matchSettings.getPlayers().stream()
+                .filter(player -> player.getTeam().getId() == teamB.getId())
+                .collect(Collectors.toList());
+        return new MatchInfo(teamA, playersA, teamB, playersB,
+                serveTeamId == teamA.getId(), matchSettings);
+    }
+
+    private int getServeTeamId(int leftTeamId) {
+        Match match = matchSettings.getMatch();
+        if (leftTeamChoice == SERVE_ID)
+        {
+            if (leftTeamId == match.getHostTeam().getId())
+                return leftTeamId;
+            else
+                return match.getGuestTeam().getId();
+        } else {
+            if (leftTeamId == match.getHostTeam().getId())
+                return match.getGuestTeam().getId();
+            else
+                return leftTeamId;
+        }
+    }
+
+    private int getLeftTeamId() {
+        Match match = matchSettings.getMatch();
+        return leftTeam.getSelectedItem().toString().equals(match.getHostTeam()
+                .getShortName()) ? match.getHostTeam().getId() : match.getGuestTeam().getId();
     }
 
     private void changeSize(ImageView toResize, int size){

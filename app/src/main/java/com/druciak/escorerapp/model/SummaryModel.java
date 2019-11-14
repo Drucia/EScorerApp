@@ -1,6 +1,7 @@
 package com.druciak.escorerapp.model;
 
 import com.druciak.escorerapp.entities.Action;
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.entities.MatchTeam;
 import com.druciak.escorerapp.entities.SetInfo;
@@ -17,10 +18,12 @@ import java.util.Map;
 public class SummaryModel implements ISummaryMVP.IModel {
     private ISummaryMVP.IPresenter presenter;
     private MatchInfo matchInfo;
+    private LoggedInUser user;
 
-    public SummaryModel(ISummaryMVP.IPresenter presenter, MatchInfo matchInfo) {
+    public SummaryModel(ISummaryMVP.IPresenter presenter, MatchInfo matchInfo, LoggedInUser user) {
         this.presenter = presenter;
         this.matchInfo = matchInfo;
+        this.user = user;
     }
 
     @Override
@@ -81,4 +84,7 @@ public class SummaryModel implements ISummaryMVP.IModel {
     public MatchInfo getMatchInfo() {
         return matchInfo;
     }
+
+    @Override
+    public LoggedInUser getUser() { return user; };
 }

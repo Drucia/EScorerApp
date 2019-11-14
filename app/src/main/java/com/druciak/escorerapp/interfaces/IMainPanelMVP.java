@@ -11,7 +11,6 @@ import java.util.List;
 public interface IMainPanelMVP {
     interface IPresenter{
         void logout();
-        void createdActivity();
         void onGetUserEventComplete(Result<LoggedInUser> user);
         void onCustomUserFieldsSaveClicked(String name, String surname, String certificate,
                                            String class_);
@@ -26,11 +25,10 @@ public interface IMainPanelMVP {
         void onLogoutCompleted();
         void showErrorMsgAndFinish(String msg);
         void setLoggedInUserFields(String fullName, String email);
-        void showPopUpWithMatchToChoose(List<Match> matches);
+        void showPopUpWithMatchToChoose(List<Match> matches, LoggedInUser user);
     }
 
     interface ILoggedInUserModel{
-        void getUserInformation(FirebaseUser firebaseUser);
         void setUserInformation(FirebaseUser firebaseUser, NewUser user);
     }
 

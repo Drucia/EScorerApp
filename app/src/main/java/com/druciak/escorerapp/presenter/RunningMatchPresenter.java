@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.druciak.escorerapp.entities.Action;
 import com.druciak.escorerapp.entities.LineUp;
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.entities.MatchPlayer;
 import com.druciak.escorerapp.entities.MatchTeam;
@@ -37,6 +38,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     private static final String LINE_UP_NOT_SET = "Nie wprowadzono ustawień początkowych zespołów.";
 
     private IRunningMatchMVP.IView view;
+    private LoggedInUser user;
     private MatchInfo matchInfo;
     private MatchTeam serveTeam;
     private MatchTeam leftTeam;
@@ -47,8 +49,9 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     private boolean isAfterShift;
     private double timeOfStartSet;
 
-    public RunningMatchPresenter(IRunningMatchMVP.IView view, MatchInfo matchInfo) {
+    public RunningMatchPresenter(IRunningMatchMVP.IView view, MatchInfo matchInfo, LoggedInUser user) {
         this.view = view;
+        this.user = user;
         this.matchInfo = matchInfo;
         this.serveTeam = matchInfo.getServeTeam();
         this.leftTeam = matchInfo.getTeamA();
@@ -219,7 +222,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     public void onNextSetClicked() {
         if (checkIfIsEndOfMatch()){
             getWinner().addSet();
-            view.moveToSummary(matchInfo);
+            view.moveToSummary(matchInfo, user);
         } else {
             isTiebreak = matchInfo.isTiebreak(++actualSet);
             if (isTiebreak) {
@@ -439,6 +442,11 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         Action action = new PlayerPunishment(cardId, team, player, getSecondTeam(team), actualSet);
         Log.d(ACTION_TAG, action.toString());
         updateMatchState(action);
+    }
+
+    @Override
+    public void onDiscardClicked() {
+        view.goToMainPanel(user);
     }
 
     private void updateCanPlay() {

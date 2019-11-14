@@ -91,34 +91,34 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
         });
     }
 
-    @Override
-    public void getUserInformation(final FirebaseUser firebaseUser) {
-//        getLoginService().getUser(firebaseUser.getUid()).enqueue(new Callback<NewUser>() {
-//            @Override
-//            public void onResponse(Call<NewUser> call, Response<NewUser> response) {
-//                NewUser userInfo = response.body();
-//                if (userInfo != null)
-//                {
-//                    if (userInfo.getIsReferee())
-//                    {
-//                        RefereeUser refereeUser = new RefereeUser(userInfo, firebaseUser.getEmail());
-//                        mainPanelPresenter.onGetUserEventComplete(new Result.Success(refereeUser));
-//                    } else
-//                    {
-//                        LoggedInUser user = new LoggedInUser(userInfo, firebaseUser.getEmail());
-//                        mainPanelPresenter.onGetUserEventComplete(new Result.Success(user));
-//                    }
-//                }
-//                else
-//                    mainPanelPresenter.onGetUserEventComplete(new Result.Error(new Exception(String.valueOf(response.code()))));
-//            }
-//
-//            @Override
-//            public void onFailure(Call<NewUser> call, Throwable t) {
-//                    mainPanelPresenter.onGetUserEventComplete(new Result.Error(new Exception(t.getMessage())));
-//            }
-//        });
-    }
+//    @Override
+//    public void getUserInformation(final FirebaseUser firebaseUser) {
+////        getLoginService().getUser(firebaseUser.getUid()).enqueue(new Callback<NewUser>() {
+////            @Override
+////            public void onResponse(Call<NewUser> call, Response<NewUser> response) {
+////                NewUser userInfo = response.body();
+////                if (userInfo != null)
+////                {
+////                    if (userInfo.getIsReferee())
+////                    {
+////                        RefereeUser refereeUser = new RefereeUser(userInfo, firebaseUser.getEmail());
+////                        mainPanelPresenter.onGetUserEventComplete(new Result.Success(refereeUser));
+////                    } else
+////                    {
+////                        LoggedInUser user = new LoggedInUser(userInfo, firebaseUser.getEmail());
+////                        mainPanelPresenter.onGetUserEventComplete(new Result.Success(user));
+////                    }
+////                }
+////                else
+////                    mainPanelPresenter.onGetUserEventComplete(new Result.Error(new Exception(String.valueOf(response.code()))));
+////            }
+////
+////            @Override
+////            public void onFailure(Call<NewUser> call, Throwable t) {
+////                    mainPanelPresenter.onGetUserEventComplete(new Result.Error(new Exception(t.getMessage())));
+////            }
+////        });
+//    }
 
     @Override
     public void setUserInformation(final FirebaseUser firebaseUser, NewUser user) {

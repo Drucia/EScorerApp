@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.entities.Match;
 import com.druciak.escorerapp.entities.MatchSettings;
@@ -20,6 +21,10 @@ import com.druciak.escorerapp.view.DrawActivity;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
+
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.MATCH_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.MATCH_KIND_ID;
 
 public class MatchSettingsActivity extends AppCompatActivity implements IMatchSettingsMVP.IView {
     public static final String MACH_SETTINGS_ID = "settings";
@@ -33,14 +38,16 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_settings);
         Intent intent = getIntent();
-        Match match = intent.getParcelableExtra("match");
+        Match match = intent.getParcelableExtra(MATCH_ID);
+        LoggedInUser loggedInUser = intent.getParcelableExtra(LOGGED_IN_USER_ID);
+        int matchKind = intent.getIntExtra(MATCH_KIND_ID, -1); // todo
         sectionsPagerAdapter = new SectionsPagerAdapter(this,
                 getSupportFragmentManager(), match);
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        presenter = new MatchSettingsPresenter(this, match);
+        presenter = new MatchSettingsPresenter(this, match, loggedInUser);
         presenter.preparePlayersOfTeams(match.getHostTeam().getId(), match.getGuestTeam().getId());
     }
 
@@ -81,7 +88,7 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     }
 
     @Override
-    public void startMatch(MatchSettings matchSettings) {
+    public void startMatch(MatchSettings matchSettings, LoggedInUser loggedInUser) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Przejście do losowania");
         builder.setMessage("Wprowadzone dane nie będą mogły ulec zmianie," +
@@ -89,6 +96,7 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         builder.setPositiveButton("TAK", (dialogInterface, i) -> {
             Intent intent = new Intent(this, DrawActivity.class);
             intent.putExtra(MACH_SETTINGS_ID, matchSettings);
+            intent.putExtra(LOGGED_IN_USER_ID, loggedInUser);
             MatchSettingsActivity.this.startActivity(intent);
             MatchSettingsActivity.this.finish();
         });

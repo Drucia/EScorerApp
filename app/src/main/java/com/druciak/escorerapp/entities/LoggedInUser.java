@@ -13,6 +13,8 @@ public class LoggedInUser implements Parcelable {
     private String email;
     private Boolean isReferee;
 
+    public LoggedInUser() {} // todo only for mock
+
     public LoggedInUser(NewUser user, String email){
         userId = user.getId();
         name = user.getName();

@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.Match;
 import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.entities.MatchPlayer;
@@ -36,6 +37,7 @@ import com.druciak.escorerapp.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.interfaces.IRunningMatchMVP;
 import com.druciak.escorerapp.presenter.RunningMatchPresenter;
 import com.druciak.escorerapp.view.DrawActivity;
+import com.druciak.escorerapp.view.mainPanel.MainPanelActivity;
 import com.druciak.escorerapp.view.summary.SummaryActivity;
 import com.druciak.escorerapp.view.matchSettings.PlayersAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -66,6 +68,8 @@ import static com.druciak.escorerapp.entities.TeamAdditionalMember.MASSEUR_MEMBE
 import static com.druciak.escorerapp.entities.TeamAdditionalMember.MEDICINE_MEMBER_ID;
 import static com.druciak.escorerapp.view.DrawActivity.MATCH_INFO_ID;
 import static com.druciak.escorerapp.view.DrawActivity.SERVE_TEAM_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.USER_ADDITIONAL_INFO_ID;
 import static com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity.MACH_SETTINGS_ID;
 
 public class RunningMatchActivity extends AppCompatActivity implements IRunningMatchMVP.IView{
@@ -142,10 +146,12 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
 //        Intent intent = getIntent();
+//        LoggedInUser user = intent.getParcelableExtra(LOGGED_IN_USER_ID);
 //        MatchInfo info = intent.getParcelableExtra(MATCH_INFO_ID);
 
-        // mocked match info
+        // mocked
         MatchInfo matchInfo = mockMatchInfo();
+        LoggedInUser user = mockLoggedInUser();
 
         recyclerViewLeft = findViewById(R.id.leftPlayersRecyclerView);
         recyclerViewRight = findViewById(R.id.rightPlayersRecyclerView);
@@ -277,8 +283,16 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
                 cardsLayout.setVisibility(View.GONE);
         });
 
-        presenter = new RunningMatchPresenter(this, matchInfo);
+        presenter = new RunningMatchPresenter(this, matchInfo, user);
         presenter.onActivityCreated();
+    }
+
+    private LoggedInUser mockLoggedInUser() {
+        LoggedInUser user = new LoggedInUser();
+        user.setName("Maciej");
+        user.setSurname("Bielawski");
+
+        return user;
     }
 
     public void showPopUpWithConfirmTime(int teamId) {
@@ -484,9 +498,19 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     }
 
     @Override
-    public void moveToSummary(MatchInfo matchInfo) {
+    public void moveToSummary(MatchInfo matchInfo, LoggedInUser user) {
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(MATCH_INFO_ID, matchInfo);
+        intent.putExtra(LOGGED_IN_USER_ID, user);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void goToMainPanel(LoggedInUser user) {
+        Intent intent = new Intent(this, MainPanelActivity.class);
+        intent.putExtra(USER_ADDITIONAL_INFO_ID, true);
+        intent.putExtra(LOGGED_IN_USER_ID, user);
         startActivity(intent);
         finish();
     }
@@ -785,5 +809,16 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
             }
         }.start();
         dialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.label_attention));
+        builder.setMessage(getString(R.string.msg_attention));
+        builder.setPositiveButton(getString(R.string.yes), (dialogInterface, i) ->
+                presenter.onDiscardClicked());
+        builder.setNegativeButton(getString(R.string.no), (dialogInterface, i) -> {});
+        builder.create().show();
     }
 }

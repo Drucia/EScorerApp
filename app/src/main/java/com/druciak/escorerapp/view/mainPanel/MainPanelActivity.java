@@ -21,6 +21,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.entities.Match;
 import com.druciak.escorerapp.presenter.GameTypesRepository;
@@ -35,6 +36,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainPanelActivity extends AppCompatActivity implements IMainPanelMVP.IView {
+    public static final String MATCH_KIND_ID = "kind";
+    public static final String MATCH_ID = "match";
+    public static final String LOGGED_IN_USER_ID = "user";
+    public static final String USER_ADDITIONAL_INFO_ID = "additional_info";
+
     private AppBarConfiguration mAppBarConfiguration;
     private IMainPanelMVP.IPresenter presenter;
     private TextView fullName;
@@ -64,11 +70,11 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
 
         presenter = new MainPanelPresenter(this);
         Intent intent = getIntent();
-        boolean isAdditionalInfo = intent.getBooleanExtra("additional_info", false);
+        boolean isAdditionalInfo = intent.getBooleanExtra(USER_ADDITIONAL_INFO_ID, false);
         if (!isAdditionalInfo)
             showPopUpWithSetUserFields();
         else
-            presenter.setLoggedInUser(intent.getParcelableExtra("user"));
+            presenter.setLoggedInUser(intent.getParcelableExtra(LOGGED_IN_USER_ID));
     }
 
     @Override
@@ -186,15 +192,16 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
     }
 
     @Override
-    public void showPopUpWithMatchToChoose(List<Match> matches) {
+    public void showPopUpWithMatchToChoose(List<Match> matches, LoggedInUser user) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Wybierz mecz");
         List<String> names = matches.stream().map(Match::getName).collect(Collectors.toList());
         CharSequence[] items = names.toArray(new CharSequence[names.size()]);
         builder.setItems(items, (dialogInterface, i) -> {
             Intent intent = new Intent(this, MatchSettingsActivity.class);
-            intent.putExtra("kind", GameTypesRepository.DZPS_VOLLEYBALL_ID);
-            intent.putExtra("match", matches.get(i));
+            intent.putExtra(MATCH_KIND_ID, GameTypesRepository.DZPS_VOLLEYBALL_ID);
+            intent.putExtra(MATCH_ID, matches.get(i));
+            intent.putExtra(LOGGED_IN_USER_ID, user);
             startActivity(intent);
         });
         builder.create().show();

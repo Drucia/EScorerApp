@@ -1,5 +1,6 @@
 package com.druciak.escorerapp.interfaces;
 
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.MatchSettings;
 import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.model.firebaseService.Result;
@@ -19,7 +20,7 @@ public interface IMatchSettingsMVP{
         void removeAdditionalMember(String name, int teamId, int memberId);
         void addAdditionalMember(String name, int teamId, int memberId);
         void onMatchStartClicked();
-        void startMatch(MatchSettings matchSettings);
+        void startMatch(MatchSettings matchSettings, LoggedInUser user);
         void showPopUpWithErrorMatchSettings(String error);
         void setMatchSettingsParams(String sTournamentName, String sType, boolean isZas, String
                 sTown, String sStreet, String sHall, String sRefereeFirst, String sRefereeSnd,

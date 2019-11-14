@@ -1,5 +1,6 @@
 package com.druciak.escorerapp.presenter;
 
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.entities.Match;
 import com.druciak.escorerapp.entities.MatchSettings;
@@ -18,14 +19,16 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     private IMatchSettingsMVP.IModel externalManager;
     private IMatchSettingsMVP.IView view;
     private Match match;
+    private LoggedInUser loggedInUser;
     private List<Player> players;
     private List<TeamAdditionalMember> members;
     private MatchSettings matchSettings;
 
-    public MatchSettingsPresenter(IMatchSettingsMVP.IView view, Match match) {
+    public MatchSettingsPresenter(IMatchSettingsMVP.IView view, Match match, LoggedInUser user) {
         this.externalManager = new ExternalApiManager(this);
         this.view = view;
         this.match = match;
+        this.loggedInUser = user;
         matchSettings = new MatchSettings();
         members = new ArrayList<>();
     }
@@ -111,7 +114,7 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
 
         if (error.equals("")) {
             matchSettings.setMembers(members);
-            view.startMatch(matchSettings);
+            view.startMatch(matchSettings, loggedInUser);
         }
         else
             view.showPopUpWithErrorMatchSettings(error);

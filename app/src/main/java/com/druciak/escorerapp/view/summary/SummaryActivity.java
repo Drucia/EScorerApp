@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
+import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.entities.SetInfo;
 import com.druciak.escorerapp.interfaces.ISummaryMVP;
 import com.druciak.escorerapp.presenter.SummaryPresenter;
 import com.druciak.escorerapp.view.generateSheet.GenerateSheetActivity;
+import com.druciak.escorerapp.view.mainPanel.MainPanelActivity;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -25,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.druciak.escorerapp.view.DrawActivity.MATCH_INFO_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.USER_ADDITIONAL_INFO_ID;
 
 public class SummaryActivity extends AppCompatActivity implements ISummaryMVP.IView {
     private ISummaryMVP.IPresenter presenter;
@@ -43,7 +47,9 @@ public class SummaryActivity extends AppCompatActivity implements ISummaryMVP.IV
 
         Intent intent = getIntent();
         MatchInfo matchInfo = intent.getParcelableExtra(MATCH_INFO_ID);
-        presenter = new SummaryPresenter(this, matchInfo);
+        LoggedInUser user = intent.getParcelableExtra(LOGGED_IN_USER_ID);
+
+        presenter = new SummaryPresenter(this, matchInfo, user);
 
         teamAName = findViewById(R.id.teamAName);
         teamBName = findViewById(R.id.teamBName);
@@ -95,10 +101,32 @@ public class SummaryActivity extends AppCompatActivity implements ISummaryMVP.IV
     }
 
     @Override
-    public void goToGenerateActivity(MatchInfo matchInfo) {
+    public void goToGenerateActivity(MatchInfo matchInfo, LoggedInUser user) {
         Intent intent = new Intent(this, GenerateSheetActivity.class);
         intent.putExtra(MATCH_INFO_ID, matchInfo);
+        intent.putExtra(LOGGED_IN_USER_ID, user);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void goToMainPanel(LoggedInUser user) {
+        Intent intent = new Intent(this, MainPanelActivity.class);
+        intent.putExtra(USER_ADDITIONAL_INFO_ID, true);
+        intent.putExtra(LOGGED_IN_USER_ID, user);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.label_attention));
+        builder.setMessage(getString(R.string.msg_attention));
+        builder.setPositiveButton(getString(R.string.yes), (dialogInterface, i) ->
+                presenter.discardMatch());
+        builder.setNegativeButton(getString(R.string.no), (dialogInterface, i) -> {});
+        builder.create().show();
     }
 }

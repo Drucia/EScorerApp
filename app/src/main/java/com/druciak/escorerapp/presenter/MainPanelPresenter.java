@@ -36,11 +36,6 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
     }
 
     @Override
-    public void createdActivity() {
-        userManager.getUserInformation(user);
-    }
-
-    @Override
     public void onGetUserEventComplete(Result<LoggedInUser> user) {
         if (user instanceof Result.Success) {
             loggedInUser = ((Result.Success<LoggedInUser>) user).getData();
@@ -68,7 +63,8 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
     @Override
     public void onPrepareMatchesListCompleted(Result<List<Match>> result) {
         if (result instanceof Result.Success) {
-            view.showPopUpWithMatchToChoose(((Result.Success<List<Match>>) result).getData());
+            view.showPopUpWithMatchToChoose(((Result.Success<List<Match>>) result).getData(),
+                    loggedInUser);
         }
     }
 
