@@ -105,4 +105,6 @@
     <string name="label_error">Błąd</string>
     <string name="ok">OK</string>
     <string name="match_settings_title">Ustawienia przedmeczowe</string>
+    <string name="label_no_items">Nie masz jeszcze drużyn.\n Utwórz nową.</string>
+    <string name="label_new">Nowa</string>
 </resources>
