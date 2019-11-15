@@ -17,6 +17,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -191,7 +193,6 @@
                 android:layout_marginRight="90dp"
                 android:minHeight="50dp"
                 app:chipSpacingVertical="2dp" />
-
         </RelativeLayout>
     </ScrollView>
 
@@ -201,4 +202,4 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         app:sdMainFabClosedSrc="@drawable/plus" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

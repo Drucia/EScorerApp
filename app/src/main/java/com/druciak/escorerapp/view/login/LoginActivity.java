@@ -7,14 +7,13 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.interfaces.ILoginMVP;
 import com.druciak.escorerapp.entities.LoggedInUser;
+import com.druciak.escorerapp.interfaces.ILoginMVP;
 import com.druciak.escorerapp.presenter.LoginFormState;
 import com.druciak.escorerapp.presenter.LoginPresenter;
 import com.druciak.escorerapp.view.createAccount.CreateAccountActivity;
@@ -128,7 +127,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
 
     private void showLoginFailed(String errorString) {
         loginProgress.dismiss();
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+        makeErrorAlert(errorString).setPositiveButton(getString(R.string.ok),
+                (dialogInterface, i) -> {}).create().show();
     }
 
     @Override
@@ -182,8 +182,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
     @Override
     public void onGetUserAdditionalInfoEventFailure(String message) {
         loginProgress.dismiss();
-        finish();
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder dialog = makeErrorAlert(message);
+        dialog.setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> finish());
+        dialog.create().show();
     }
 
     @Override
@@ -193,5 +194,12 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
         intent.putExtra(USER_ADDITIONAL_INFO_ID, true);
         startActivity(intent);
         finish();
+    }
+
+    private AlertDialog.Builder makeErrorAlert(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.label_error));
+        builder.setMessage(message);
+        return builder;
     }
 }

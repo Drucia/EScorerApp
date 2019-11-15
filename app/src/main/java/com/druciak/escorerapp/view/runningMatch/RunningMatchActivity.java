@@ -705,7 +705,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         matchSettings.setRefereeSnd("Mateusz Iwańczak");
         matchSettings.setType("Kadeci");
         matchSettings.setMan(true);
-        matchSettings.setZas(true);
+        matchSettings.setFin(true);
         matchSettings.setMatch(new Match(polonia, chelmiec, "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
         List<Player> players = new ArrayList<>();
         players.addAll(poloniaPlayers);

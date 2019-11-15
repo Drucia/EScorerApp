@@ -24,6 +24,7 @@ public class MatchInfo implements Parcelable {
     public static final int WARNING_ID = 5;
     public static final int TEAM_A_ID = 6;
     public static final int TEAM_B_ID = 7;
+
     public static final int MATCH_END_POINTS = 25;
     public static final int MATCH_END_POINTS_IN_TIEBREAK = 15;
     public static final int MATCH_MIN_DIFFERENT_POINTS = 2;

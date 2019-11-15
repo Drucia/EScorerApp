@@ -38,6 +38,12 @@ public class Match implements Parcelable {
         refereeId = in.readString();
     }
 
+    public Match(Team hostTeam, Team guestTeam) {
+        this.id = -1;
+        this.hostTeam = hostTeam;
+        this.guestTeam = guestTeam;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);

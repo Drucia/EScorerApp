@@ -73,4 +73,14 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
         this.loggedInUser = user;
         view.setLoggedInUserFields(user.getFullName(), user.getEmail());
     }
+
+    @Override
+    public boolean isRefereeUser() {
+        return loggedInUser.getReferee();
+    }
+
+    @Override
+    public void clickOnVolleyballMatch() {
+        view.goToMatchSettings(loggedInUser);
+    }
 }

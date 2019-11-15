@@ -30,6 +30,7 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
         this.match = match;
         this.loggedInUser = user;
         matchSettings = new MatchSettings();
+        players = new ArrayList<>();
         members = new ArrayList<>();
     }
 
@@ -123,13 +124,13 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     }
 
     @Override
-    public void setMatchSettingsParams(String sTournamentName, String sType, boolean isZas, String
+    public void setMatchSettingsParams(String sTournamentName, String sType, boolean isFin, String
             sTown, String sStreet, String sHall, String sRefereeFirst, String sRefereeSnd,
                                        String sLine1, String sLine2, String sLine3,
                                        String sLine4, boolean isMan) {
         matchSettings.setTournamentName(sTournamentName);
         matchSettings.setType(sType);
-        matchSettings.setZas(isZas);
+        matchSettings.setFin(isFin);
         matchSettings.setTown(sTown);
         matchSettings.setStreet(sStreet);
         matchSettings.setHall(sHall);
@@ -143,5 +144,10 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     @Override
     public void onDiscardClicked() {
         view.goToMainPanel(loggedInUser);
+    }
+
+    @Override
+    public MatchSettings getMatchSettings() {
+        return matchSettings;
     }
 }

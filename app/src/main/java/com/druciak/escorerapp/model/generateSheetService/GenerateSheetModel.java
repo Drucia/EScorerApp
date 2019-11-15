@@ -2,7 +2,6 @@ package com.druciak.escorerapp.model.generateSheetService;
 
 import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.MatchInfo;
-import com.druciak.escorerapp.entities.RefereeUser;
 import com.druciak.escorerapp.interfaces.IGenerateSheetMVP;
 import com.druciak.escorerapp.model.externalApiService.ExternalApiManager;
 import com.druciak.escorerapp.model.firebaseService.Result;
@@ -46,7 +45,7 @@ public class GenerateSheetModel implements IGenerateSheetMVP.IModel{
     @Override
     public void sendSheetToServer() {
         apiManager.sendSheetToServer(matchInfo.getSettings().getMatch().getId(),
-                file, user.getFullName(), ((RefereeUser) user).getCertNumber());
+                file, user.getUserId(), user.getFullName());
     }
 
     @Override

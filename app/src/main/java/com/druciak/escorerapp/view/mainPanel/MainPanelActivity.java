@@ -117,8 +117,14 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
 
     @Override
     public void onClick(int gameId) {
-        if (gameId == GameTypesRepository.DZPS_VOLLEYBALL_ID) {
-            presenter.clickOnDZPSMatch();
+        switch (gameId)
+        {
+            case GameTypesRepository.DZPS_VOLLEYBALL_ID:
+                presenter.clickOnDZPSMatch();
+                break;
+            case GameTypesRepository.VOLLEYBALL_ID:
+                presenter.clickOnVolleyballMatch();
+                break;
         }
     }
 
@@ -206,5 +212,19 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
             finish();
         });
         builder.create().show();
+    }
+
+    @Override
+    public boolean isRefereeUser() {
+        return presenter.isRefereeUser();
+    }
+
+    @Override
+    public void goToMatchSettings(LoggedInUser loggedInUser) {
+        Intent intent = new Intent(this, MatchSettingsActivity.class);
+        intent.putExtra(MATCH_KIND_ID, GameTypesRepository.VOLLEYBALL_ID);
+        intent.putExtra(LOGGED_IN_USER_ID, loggedInUser);
+        startActivity(intent);
+        finish();
     }
 }

@@ -42,6 +42,7 @@ public interface IMatchSettingsMVP{
                                     String sRefereeFirst, String sRefereeSnd, String sLine1,
                                     String sLine2, String sLine3, String sLine4, boolean isMan);
         void onDiscardClicked();
+        MatchSettings getMatchSettings();
     }
 
     interface IFragmentView extends IOnPlayerTouchCallback{

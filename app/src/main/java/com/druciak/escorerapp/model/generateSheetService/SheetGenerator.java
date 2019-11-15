@@ -439,7 +439,7 @@ public class SheetGenerator {
                 .add(new Paragraph(matchInfo.getSettings().getType())));
         table.addCell(new Cell(1, 1).add(new Paragraph("Faza")));
         table.addCell(new Cell(1, 1).setTextAlignment(TextAlignment.CENTER)
-                .add(new Paragraph(matchInfo.getSettings().isZas()
+                .add(new Paragraph(matchInfo.getSettings().isFin()
                 ? "ZAS" : "FIN")));
         return table;
     }

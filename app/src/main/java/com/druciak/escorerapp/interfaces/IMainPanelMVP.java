@@ -18,6 +18,8 @@ public interface IMainPanelMVP {
         void clickOnDZPSMatch();
         void onPrepareMatchesListCompleted(Result<List<Match>> result);
         void setLoggedInUser(LoggedInUser user);
+        boolean isRefereeUser();
+        void clickOnVolleyballMatch();
     }
 
     interface IView{
@@ -26,6 +28,8 @@ public interface IMainPanelMVP {
         void showErrorMsgAndFinish(String msg);
         void setLoggedInUserFields(String fullName, String email);
         void showPopUpWithMatchToChoose(List<Match> matches, LoggedInUser user);
+        boolean isRefereeUser();
+        void goToMatchSettings(LoggedInUser loggedInUser);
     }
 
     interface ILoggedInUserModel{

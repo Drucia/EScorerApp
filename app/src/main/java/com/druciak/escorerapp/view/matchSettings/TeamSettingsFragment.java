@@ -17,10 +17,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
-import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.entities.Team;
 import com.druciak.escorerapp.entities.TeamAdditionalMember;
+import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
+import com.druciak.escorerapp.interfaces.ISaveData;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -33,7 +34,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.IFragmentView {
+public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.IFragmentView,
+        ISaveData {
     private static final int MAX_NUMBER_OF_COACH = 3;
     private static final int MAX_NUMBER_OF_MEDICINE = 2;
     private static final int MAX_NUMBER_OF_LIBERO = 2;
@@ -116,9 +118,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         });
         ((TextInputLayout) root.findViewById(R.id.teamName)).getEditText().setText(team.getFullName());
         ImageView playerShirtImage = root.findViewById(R.id.playerShirtImage);
-        playerShirtImage.setOnClickListener(view -> {
-            showPopUpWithColors();
-        });
+        playerShirtImage.setOnClickListener(view -> showPopUpWithColors());
 
         LinearLayout liberoLayout = root.findViewById(R.id.liberoLayout);
         LinearLayout captainLayout = root.findViewById(R.id.captainLayout);
@@ -429,5 +429,10 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         int size = playersAdapter.getItemCount();
         this.players.addAll(players);
         playersAdapter.notifyItemRangeChanged(size, players.size());
+    }
+
+    @Override
+    public void save() {
+        // do nothing
     }
 }

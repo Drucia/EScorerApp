@@ -11,13 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="25dp">
+        android:padding="25dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tournamentName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="7dp"
             android:hint="Nazwa rozgrywek">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -31,14 +34,16 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:layout_marginTop="7dp"
-            android:text="Runda" />
+            android:text="Runda"
+            tools:visibility="visible" />
 
         <RadioGroup
             android:id="@+id/roundRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:visibility="visible">
 
             <RadioButton
                 android:id="@+id/radioButtonZas"
@@ -68,7 +73,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:visibility="visible">
 
                 <TextView
                     android:layout_width="wrap_content"

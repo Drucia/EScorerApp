@@ -61,6 +61,7 @@
     <string name="tab_text_host">Gospodarz</string>
     <string name="tab_text_guest">Gość</string>
     <string name="tab_text_rest">Pozostałe</string>
+    <string name="tab_text_different">Różne</string>
 
     <!-- ERRORS  -->
     <string name="get_user_info_error">Nie udało się pobrać danych użytkownika</string>
@@ -101,5 +102,10 @@
     <string name="msg_succ_on_send_sheet">Wysłano protokół na serwer</string>
     <string name="msg_failed_on_send_sheet">Coś poszło nie tak z wysłaniem protokołu na serwer</string>
     <string name="save_button">Zapisz</string>
+    <string name="label_error">Błąd</string>
+    <string name="ok">OK</string>
+    <string name="title_activity_nanananan">nanananan</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 
 </resources>

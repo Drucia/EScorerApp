@@ -22,8 +22,10 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         RecyclerView recyclerView = root.findViewById(R.id.recyclerCardView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        GameTypesAdapter adapter = new GameTypesAdapter((IMainPanelMVP.IView) getActivity(),
-                GameTypesRepository.getGameTypesListForReferee());
+        IMainPanelMVP.IView view = ((IMainPanelMVP.IView) getActivity());
+        GameTypesAdapter adapter = new GameTypesAdapter(view, view.isRefereeUser() ?
+                GameTypesRepository.getGameTypesListForReferee() :
+                GameTypesRepository.getGameTypesListForOrganizer());
         recyclerView.setAdapter(adapter);
         return root;
     }

@@ -111,7 +111,7 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
         return retrofit.create(PlayerService.class);
     }
 
-    public void sendSheetToServer(int matchId, File file, String referee, String certificate)
+    public void sendSheetToServer(int matchId, File file, String refereeId, String refereeFullName)
     {
         // todo send sheet
         boolean status = matches.removeIf(match -> match.getId() == matchId);

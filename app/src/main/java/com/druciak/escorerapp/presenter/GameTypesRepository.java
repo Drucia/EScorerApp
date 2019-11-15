@@ -15,16 +15,20 @@ public abstract class GameTypesRepository {
     {
         return new ArrayList<GameType>(){
             {
-                add(new GameType(VOLLEYBALL_ID, "PIŁKA HALOWA", R.drawable.volleyball, false));
-                add(new GameType(BEACH_VOLLEYBALL_ID, "PIŁKA PLAŻOWA", R.drawable.beach_volleyball, false));
+                add(new GameType(VOLLEYBALL_ID, "PIŁKA HALOWA",
+                        R.drawable.volleyball, true));
+                add(new GameType(BEACH_VOLLEYBALL_ID, "PIŁKA PLAŻOWA",
+                        R.drawable.beach_volleyball, false));
             }
         };
     }
 
     public static List<GameType> getGameTypesListForReferee()
     {
-        ArrayList<GameType> list = (ArrayList<GameType>) getGameTypesListForOrganizer();
-        list.add(new GameType(DZPS_VOLLEYBALL_ID, "", R.drawable.logo_dzps, true));
+        ArrayList<GameType> list = new ArrayList<>();
+        list.add(new GameType(DZPS_VOLLEYBALL_ID,
+                "", R.drawable.logo_dzps, true));
+        list.addAll(getGameTypesListForOrganizer());
         return list;
     }
 }

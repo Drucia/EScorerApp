@@ -12,10 +12,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.entities.LoggedInUser;
-import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.entities.Match;
 import com.druciak.escorerapp.entities.MatchSettings;
 import com.druciak.escorerapp.entities.Player;
+import com.druciak.escorerapp.entities.Team;
+import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
+import com.druciak.escorerapp.presenter.GameTypesRepository;
 import com.druciak.escorerapp.presenter.MatchSettingsPresenter;
 import com.druciak.escorerapp.view.DrawActivity;
 import com.druciak.escorerapp.view.mainPanel.MainPanelActivity;
@@ -40,17 +42,41 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_settings);
         Intent intent = getIntent();
+        int matchKind = intent.getIntExtra(MATCH_KIND_ID, -1);
         Match match = intent.getParcelableExtra(MATCH_ID);
         LoggedInUser loggedInUser = intent.getParcelableExtra(LOGGED_IN_USER_ID);
-        int matchKind = intent.getIntExtra(MATCH_KIND_ID, -1); // todo
-        sectionsPagerAdapter = new SectionsPagerAdapter(this,
-                getSupportFragmentManager(), match);
+        presenter = new MatchSettingsPresenter(this, match, loggedInUser);
+        if (matchKind == GameTypesRepository.DZPS_VOLLEYBALL_ID) {
+            sectionsPagerAdapter = new SectionsPagerAdapter(this,
+                    getSupportFragmentManager(), match, presenter.getMatchSettings());
+            presenter.preparePlayersOfTeams(match.getHostTeam().getId(),
+                    match.getGuestTeam().getId());
+        }
+        else {
+            Match newMatch = new Match(new Team(1), new Team(2));
+            sectionsPagerAdapter = new SectionsPagerAdapter(this,
+                    getSupportFragmentManager(), newMatch, matchKind,
+                    presenter.getMatchSettings());
+        }
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                sectionsPagerAdapter.saveData();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        presenter = new MatchSettingsPresenter(this, match, loggedInUser);
-        presenter.preparePlayersOfTeams(match.getHostTeam().getId(), match.getGuestTeam().getId());
     }
 
     @Override
@@ -109,7 +135,7 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     @Override
     public void showPopUpWithErrorMatchSettings(String error) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Błąd");
+        builder.setTitle(getString(R.string.label_error));
         View root = getLayoutInflater().inflate(R.layout.pop_up_msg, null);
         TextView msg = root.findViewById(R.id.msg);
         msg.setTextColor(getResources().getColor(R.color.design_default_color_error));
@@ -120,24 +146,27 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     }
 
     @Override
-    public void setMatchSettingsParams(String sTournamentName, String sType, boolean isZas,
+    public void setMatchSettingsParams(String sTournamentName, String sType, boolean isFin,
                                        String sTown, String sStreet, String sHall,
                                        String sRefereeFirst, String sRefereeSnd, String sLine1,
                                        String sLine2, String sLine3, String sLine4, boolean isMan) {
-        presenter.setMatchSettingsParams(sTournamentName, sType, isZas, sTown, sStreet,
+        presenter.setMatchSettingsParams(sTournamentName, sType, isFin, sTown, sStreet,
                 sHall, sRefereeFirst, sRefereeSnd, sLine1, sLine2, sLine3, sLine4, isMan);
     }
 
-
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.label_attention));
-        builder.setMessage(getString(R.string.msg_attention));
-        builder.setPositiveButton(getString(R.string.yes), (dialogInterface, i) ->
-                presenter.onDiscardClicked());
-        builder.setNegativeButton(getString(R.string.no), (dialogInterface, i) -> {});
-        builder.create().show();
+        if (viewPager.getCurrentItem() == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.label_attention));
+            builder.setMessage(getString(R.string.msg_attention));
+            builder.setPositiveButton(getString(R.string.yes), (dialogInterface, i) ->
+                    presenter.onDiscardClicked());
+            builder.setNegativeButton(getString(R.string.no), (dialogInterface, i) -> {});
+            builder.create().show();
+        } else {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        }
     }
 
     @Override
