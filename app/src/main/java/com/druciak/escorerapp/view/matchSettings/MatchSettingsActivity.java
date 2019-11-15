@@ -77,6 +77,11 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         });
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+        tabs.getTabAt(0).setIcon(R.drawable.home);
+        tabs.getTabAt(1).setIcon(R.drawable.person);
+        tabs.getTabAt(2).setIcon(R.drawable.star);
+        if (tabs.getTabAt(3) != null)
+            tabs.getTabAt(3).setIcon(R.drawable.circle_settings);
     }
 
     @Override
