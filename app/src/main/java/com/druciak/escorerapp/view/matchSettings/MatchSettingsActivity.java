@@ -34,6 +34,8 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     public static final String MACH_SETTINGS_ID = "settings";
 
     private ViewPager viewPager;
+    private TabLayout tabLayout;
+    private TabLayoutAdapter tabLayoutAdapter;
     private IMatchSettingsMVP.IPresenter presenter;
     private SectionsPagerAdapter sectionsPagerAdapter;
 
@@ -67,6 +69,7 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
 
             @Override
             public void onPageSelected(int position) {
+                highLightCurrentTab(position);
                 sectionsPagerAdapter.saveData();
             }
 
@@ -75,13 +78,30 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
 
             }
         });
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
-        tabs.getTabAt(0).setIcon(R.drawable.home);
-        tabs.getTabAt(1).setIcon(R.drawable.person);
-        tabs.getTabAt(2).setIcon(R.drawable.star);
-        if (tabs.getTabAt(3) != null)
-            tabs.getTabAt(3).setIcon(R.drawable.circle_settings);
+        findViewById(R.id.backArrow).setOnClickListener(view -> showConfirmBack());
+        tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayoutAdapter = new TabLayoutAdapter(this);
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            assert tab != null;
+            tab.setCustomView(null);
+            tab.setCustomView(tabLayoutAdapter.getTabView(i));
+        }
+        highLightCurrentTab(0);
+    }
+
+    private void highLightCurrentTab(int position) {
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            assert tab != null;
+            tab.setCustomView(null);
+            tab.setCustomView(tabLayoutAdapter.getTabView(i));
+        }
+        TabLayout.Tab tab = tabLayout.getTabAt(position);
+        assert tab != null;
+        tab.setCustomView(null);
+        tab.setCustomView(tabLayoutAdapter.getSelectedTabView(position));
     }
 
     @Override
@@ -162,13 +182,7 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     @Override
     public void onBackPressed() {
         if (viewPager.getCurrentItem() == 0) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.label_attention));
-            builder.setMessage(getString(R.string.msg_attention));
-            builder.setPositiveButton(getString(R.string.yes), (dialogInterface, i) ->
-                    presenter.onDiscardClicked());
-            builder.setNegativeButton(getString(R.string.no), (dialogInterface, i) -> {});
-            builder.create().show();
+            showConfirmBack();
         } else {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
@@ -181,5 +195,16 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         intent.putExtra(LOGGED_IN_USER_ID, user);
         startActivity(intent);
         finish();
+    }
+
+    private void showConfirmBack()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.label_attention));
+        builder.setMessage(getString(R.string.msg_attention));
+        builder.setPositiveButton(getString(R.string.yes), (dialogInterface, i) ->
+                presenter.onDiscardClicked());
+        builder.setNegativeButton(getString(R.string.no), (dialogInterface, i) -> {});
+        builder.create().show();
     }
 }

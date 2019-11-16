@@ -218,7 +218,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
                         .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.black_overlay, getTheme()))
                         .create());
         speedDial.addActionItem(
-                new SpeedDialActionItem.Builder(R.id.returnAction, R.drawable.back)
+                new SpeedDialActionItem.Builder(R.id.returnAction, R.drawable.back_arrow)
                         .setLabel("Cofinj Akcję")
                         .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.black_overlay, getTheme()))
                         .create());

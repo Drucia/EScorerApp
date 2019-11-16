@@ -300,7 +300,7 @@ public class SheetGenerator {
         for (Action action : shifts)
         {
             Shift s = (Shift) action;
-            if (s.getEnterPlayerNb() == startNumber) // come back shift
+            if (s.getEnterPlayerNb() == startNumber) // come back_arrow shift
             {
                 shiftMap.put(COME_BACK, "!");
                 shiftMap.put(COME_BACK_SCORE, s.getTeamMadeActionPoints()

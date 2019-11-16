@@ -4,7 +4,7 @@
     <string name="title_activity_main_panel">MainPanelActivity</string>
     <string name="title_activity_goodbye">GoodbyeActivity</string>
     <string name="title_activity_create_account">Rejestracja</string>
-    <string name="title_activity_match_settings">MatchSettingsActivity</string>
+    <string name="title_activity_match_settings">Ustawienia przedmeczowe</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -60,8 +60,8 @@
     <!-- Strings related to match settings  -->
     <string name="tab_text_host">Gospodarz</string>
     <string name="tab_text_guest">Gość</string>
-    <string name="tab_text_rest">Pozostałe</string>
-    <string name="tab_text_different">Różne</string>
+    <string name="tab_text_rest">Opis</string>
+    <string name="tab_text_different">Ustawienia</string>
 
     <!-- ERRORS  -->
     <string name="get_user_info_error">Nie udało się pobrać danych użytkownika</string>
@@ -104,7 +104,22 @@
     <string name="save_button">Zapisz</string>
     <string name="label_error">Błąd</string>
     <string name="ok">OK</string>
-    <string name="match_settings_title">Ustawienia przedmeczowe</string>
     <string name="label_no_items">Nie masz jeszcze drużyn.\n Utwórz nową.</string>
     <string name="label_new">Nowa</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

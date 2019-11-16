@@ -28,7 +28,7 @@
             android:name=".view.runningMatch.RunningMatchActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.DrawActivity"
             android:configChanges="orientation|screenSize"
@@ -37,7 +37,6 @@
         <activity
             android:name=".view.matchSettings.MatchSettingsActivity"
             android:label="@string/title_activity_match_settings"
-            android:parentActivityName=".view.mainPanel.MainPanelActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.WelcomeActivity"

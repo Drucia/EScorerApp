@@ -140,7 +140,7 @@ public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelM
 //            }
 //        });
         // TODO mock server
-        List<Player> players = playersOfTeams.get(hostId);
+        List<Player> players = new ArrayList<>(playersOfTeams.get(hostId));
         players.addAll(playersOfTeams.get(guestId));
         presenter.onPreparePlayersListEventCompleted(
                 new Result.Success<>(players));
