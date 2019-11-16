@@ -18,8 +18,8 @@ class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> {
     private ITeamCallback callback;
     private ArrayList<Team> teams;
 
-    public TeamsAdapter(ITeamCallback teamSettingsFragment) {
-        callback = teamSettingsFragment;
+    public TeamsAdapter(ITeamCallback callback) {
+        this.callback = callback;
         teams = new ArrayList<>();
     }
 

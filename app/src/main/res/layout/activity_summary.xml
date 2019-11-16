@@ -42,7 +42,8 @@
                     android:layout_marginRight="15dp"
                     android:layout_weight="3"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:id="@+id/infoLayout"
@@ -83,7 +84,8 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
             </TableRow>
 

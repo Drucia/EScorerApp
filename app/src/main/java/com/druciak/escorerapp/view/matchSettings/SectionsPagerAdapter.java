@@ -31,7 +31,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private List<Player> players;
     private Match match;
     private MatchSettings matchSettings;
-    private Fragment currentFragment;
+    private List<Fragment> fragments = new ArrayList<>();
+    private int currentFragment = 0;
     private boolean isSimplyMatch = false;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm, Match match,
@@ -51,7 +52,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         this.match = match;
         tabTitles = new int[]{R.string.tab_text_host, R.string.tab_text_guest,
                 R.string.tab_text_rest, R.string.tab_text_different};
-        players = new ArrayList<>();
         this.matchSettings = matchSettings;
         isSimplyMatch = true;
     }
@@ -59,8 +59,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
-        if (currentFragment instanceof TeamSettingsFragment)
-            ((TeamSettingsFragment) currentFragment).updatePlayersAdapter(players);
+        if (!fragments.isEmpty()) {
+            if (fragments.get(currentFragment) instanceof TeamSettingsFragment)
+                ((TeamSettingsFragment) fragments.get(currentFragment)).updatePlayersAdapter(players);
+        }
     }
 
     @Override
@@ -71,25 +73,26 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 List<Player> playersOfHost = players.stream()
                         .filter(player -> player.getTeam().getId() == match.getHostTeam().getId())
                         .collect(Collectors.toList());
-                currentFragment = new TeamSettingsFragment((IMatchSettingsMVP.IView) mContext,
-                        match.getHostTeam(), playersOfHost, isSimplyMatch);
-                return currentFragment;
+                fragments.add(new TeamSettingsFragment(mContext,
+                        match.getHostTeam(), playersOfHost, isSimplyMatch));
+                break;
             case 1:
                 List<Player> playersOfGuest = players.stream()
                         .filter(player -> player.getTeam().getId() == match.getGuestTeam().getId())
                         .collect(Collectors.toList());
-                currentFragment = new TeamSettingsFragment((IMatchSettingsMVP.IView) mContext,
-                        match.getGuestTeam(), playersOfGuest, isSimplyMatch);
-                return currentFragment;
+                fragments.add(new TeamSettingsFragment(mContext,
+                        match.getGuestTeam(), playersOfGuest, isSimplyMatch));
+                break;
             case 2:
-                currentFragment = new MatchSettingsFragment((IMatchSettingsMVP.IView) mContext,
-                        matchSettings);
-                return currentFragment;
+                fragments.add(new MatchSettingsFragment((IMatchSettingsMVP.IView) mContext,
+                        matchSettings));
+                break;
             case 3:
-                currentFragment = new MatchConfigsFragment((IMatchSettingsMVP.IView) mContext);
-                return currentFragment;
+                fragments.add(new MatchConfigsFragment((IMatchSettingsMVP.IView) mContext));
+                break;
         }
-        return new MatchSettingsFragment((IMatchSettingsMVP.IView) mContext, matchSettings);
+
+        return fragments.get(position);
     }
 
     @Nullable
@@ -107,8 +110,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         this.players = players;
     }
 
-    public void saveData() {
-        if (currentFragment != null)
-            ((ISaveData) currentFragment).save();
+    public void saveData(int fromPos) {
+        if (fragments.get(fromPos) != null)
+            ((ISaveData) fragments.get(currentFragment)).save();
+        currentFragment = fromPos++;
     }
 }

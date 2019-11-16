@@ -28,7 +28,8 @@
             android:layout_marginEnd="5dp"
             android:layout_toStartOf="@+id/infoLayout"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/infoLayout"
@@ -111,7 +112,8 @@
             android:layout_marginEnd="25dp"
             android:layout_toEndOf="@+id/infoLayout"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 

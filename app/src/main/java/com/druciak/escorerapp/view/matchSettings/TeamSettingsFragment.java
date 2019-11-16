@@ -1,6 +1,7 @@
 package com.druciak.escorerapp.view.matchSettings;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,23 +56,27 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     private PlayersAdapter playersAdapter;
     private ArrayList<Player> players;
     private IMatchSettingsMVP.IView matchSettingsView;
+    private Context context;
     private ChipGroup coachChipGroup;
     private ChipGroup medicineChipGroup;
     private Team team;
     private TextView captainShirtNumber;
+    private TextInputLayout teamName;
 
     private HashMap<Team, List<Player>> teamsWithPlayers = new HashMap<>();
     private View teamsPopUpLayout;
     private AlertDialog teamsDialog;
     private boolean isFirstShow;
+    private boolean isSimplyMatch;
 
-    public TeamSettingsFragment(IMatchSettingsMVP.IView mContext, Team team,
+    public TeamSettingsFragment(Context context, Team team,
                                 List<Player> playersOfHost, boolean isSimplyMatch) {
-        matchSettingsView = mContext;
+        matchSettingsView = (IMatchSettingsMVP.IView) context;
+        this.context = context;
         this.team = team;
         players = new ArrayList<>(playersOfHost);
         playersAdapter = new PlayersAdapter(this, players);
-        isFirstShow = isSimplyMatch;
+        this.isSimplyMatch = isFirstShow = isSimplyMatch;
     }
 
     @Override
@@ -125,7 +130,9 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
             }
             return false;
         });
-        ((TextInputLayout) root.findViewById(R.id.teamName)).getEditText().setText(team.getFullName());
+
+        teamName = root.findViewById(R.id.teamName);
+        teamName.getEditText().setText(team.getFullName());
         ImageView playerShirtImage = root.findViewById(R.id.playerShirtImage);
         playerShirtImage.setOnClickListener(view -> showPopUpWithColors());
 
@@ -144,7 +151,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     }
 
     private void showPopUpWithChooseTeam() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         teamsPopUpLayout = getLayoutInflater().inflate(R.layout.pop_up_teams, null);
         RecyclerView recyclerView = teamsPopUpLayout.findViewById(R.id.teamsRecycler);
         recyclerView.setAdapter(new TeamsAdapter(this));
@@ -246,7 +253,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         View view = getLayoutInflater().inflate(R.layout.pop_up_colors, null);
         dialogBuilder.setView(view);
         dialogBuilder.setTitle("Wybierz kolor koszulki");
-        dialogBuilder.setCancelable(true);
+        dialogBuilder.setPositiveButton("Anuluj", (dialogInterface, i) -> {});
         // todo set on click
         dialogBuilder.create().show();
     }
@@ -464,7 +471,9 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
 
     @Override
     public void save() {
-        // do nothing
+        if (isSimplyMatch)
+            matchSettingsView.updateTeamName(teamName.getEditText().getText().toString(),
+                    team.getId());
     }
 
     @Override

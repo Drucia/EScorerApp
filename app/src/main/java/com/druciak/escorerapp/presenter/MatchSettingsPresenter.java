@@ -1,11 +1,12 @@
 package com.druciak.escorerapp.presenter;
 
 import com.druciak.escorerapp.entities.LoggedInUser;
-import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.entities.Match;
 import com.druciak.escorerapp.entities.MatchSettings;
 import com.druciak.escorerapp.entities.Player;
+import com.druciak.escorerapp.entities.Team;
 import com.druciak.escorerapp.entities.TeamAdditionalMember;
+import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.model.externalApiService.ExternalApiManager;
 import com.druciak.escorerapp.model.firebaseService.Result;
 
@@ -47,6 +48,11 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     @Override
     public void preparePlayersOfTeams(int hostId, int guestId) {
         externalManager.getAllPlayersOfTeams(hostId, guestId);
+    }
+
+    @Override
+    public void preparePlayersOfTeams() {
+        view.onPreparePlayerListsEventSucceeded(players);
     }
 
     @Override
@@ -149,5 +155,12 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     @Override
     public MatchSettings getMatchSettings() {
         return matchSettings;
+    }
+
+    @Override
+    public void updateTeamName(String name, int teamId) {
+        Team team = match.getHostTeam().getId() == teamId ? match.getHostTeam() : match.getGuestTeam();
+        team.setFullName(name);
+        team.setShortName(name);
     }
 }

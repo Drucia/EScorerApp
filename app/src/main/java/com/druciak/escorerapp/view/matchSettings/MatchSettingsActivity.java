@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.druciak.escorerapp.R;
@@ -17,10 +18,12 @@ import com.druciak.escorerapp.entities.MatchSettings;
 import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.entities.Team;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
+import com.druciak.escorerapp.interfaces.ITeamCallback;
 import com.druciak.escorerapp.presenter.GameTypesRepository;
 import com.druciak.escorerapp.presenter.MatchSettingsPresenter;
 import com.druciak.escorerapp.view.DrawActivity;
 import com.druciak.escorerapp.view.mainPanel.MainPanelActivity;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -30,7 +33,8 @@ import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.MATCH_ID;
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.MATCH_KIND_ID;
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.USER_ADDITIONAL_INFO_ID;
 
-public class MatchSettingsActivity extends AppCompatActivity implements IMatchSettingsMVP.IView {
+public class MatchSettingsActivity extends AppCompatActivity implements IMatchSettingsMVP.IView,
+        ITeamCallback {
     public static final String MACH_SETTINGS_ID = "settings";
 
     private ViewPager viewPager;
@@ -38,6 +42,9 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     private TabLayoutAdapter tabLayoutAdapter;
     private IMatchSettingsMVP.IPresenter presenter;
     private SectionsPagerAdapter sectionsPagerAdapter;
+
+    private boolean firstShowGuest;
+    private AlertDialog teamsDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +54,9 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         int matchKind = intent.getIntExtra(MATCH_KIND_ID, -1);
         Match match = intent.getParcelableExtra(MATCH_ID);
         LoggedInUser loggedInUser = intent.getParcelableExtra(LOGGED_IN_USER_ID);
-        presenter = new MatchSettingsPresenter(this, match, loggedInUser);
+
         if (matchKind == GameTypesRepository.DZPS_VOLLEYBALL_ID) {
+            presenter = new MatchSettingsPresenter(this, match, loggedInUser);
             sectionsPagerAdapter = new SectionsPagerAdapter(this,
                     getSupportFragmentManager(), match, presenter.getMatchSettings());
             presenter.preparePlayersOfTeams(match.getHostTeam().getId(),
@@ -56,9 +64,12 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         }
         else {
             Match newMatch = new Match(new Team(1), new Team(2));
+            presenter = new MatchSettingsPresenter(this, newMatch, loggedInUser);
             sectionsPagerAdapter = new SectionsPagerAdapter(this,
                     getSupportFragmentManager(), newMatch, matchKind,
                     presenter.getMatchSettings());
+            firstShowGuest = true;
+            presenter.preparePlayersOfTeams();
         }
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -70,7 +81,12 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
             @Override
             public void onPageSelected(int position) {
                 highLightCurrentTab(position);
-                sectionsPagerAdapter.saveData();
+                if (position == 1 && firstShowGuest)
+                {
+                    showPopUpWithChooseTeam();
+                    firstShowGuest = false;
+                }
+                sectionsPagerAdapter.saveData(position);
             }
 
             @Override
@@ -102,6 +118,20 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         assert tab != null;
         tab.setCustomView(null);
         tab.setCustomView(tabLayoutAdapter.getSelectedTabView(position));
+    }
+
+    private void showPopUpWithChooseTeam() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View teamsPopUpLayout = getLayoutInflater().inflate(R.layout.pop_up_teams, null);
+        RecyclerView recyclerView = teamsPopUpLayout.findViewById(R.id.teamsRecycler);
+        recyclerView.setAdapter(new TeamsAdapter(this));
+        ExtendedFloatingActionButton fab = teamsPopUpLayout.findViewById(R.id.buttonNew);
+        builder.setTitle("Wybierz swoją drużynę");
+        builder.setCancelable(false);
+        builder.setView(teamsPopUpLayout);
+        teamsDialog = builder.create();
+        fab.setOnClickListener(view -> teamsDialog.dismiss());
+        teamsDialog.show();
     }
 
     @Override
@@ -197,6 +227,11 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         finish();
     }
 
+    @Override
+    public void updateTeamName(String name, int teamId) {
+        presenter.updateTeamName(name, teamId);
+    }
+
     private void showConfirmBack()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -206,5 +241,11 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
                 presenter.onDiscardClicked());
         builder.setNegativeButton(getString(R.string.no), (dialogInterface, i) -> {});
         builder.create().show();
+    }
+
+    @Override
+    public void onTeamClicked(Team team) {
+        // on team clicked todo
+        teamsDialog.dismiss();
     }
 }

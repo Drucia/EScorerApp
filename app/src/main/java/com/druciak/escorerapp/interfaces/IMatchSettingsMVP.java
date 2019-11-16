@@ -27,11 +27,15 @@ public interface IMatchSettingsMVP{
                                     String sLine1, String sLine2, String sLine3, String sLine4,
                                     boolean isMan);
         void goToMainPanel(LoggedInUser user);
+        void updateTeamName(String name, int teamId);
     }
 
     interface IPresenter{
         void onPreparePlayersListEventCompleted(Result<List<Player>> result);
         void preparePlayersOfTeams(int hostId, int guestId);
+
+        void preparePlayersOfTeams();
+
         void addPlayer(Player player);
         void removePlayer(Player player);
         void removeAdditionalMember(String name, int teamId, int memberId);
@@ -43,6 +47,7 @@ public interface IMatchSettingsMVP{
                                     String sLine2, String sLine3, String sLine4, boolean isMan);
         void onDiscardClicked();
         MatchSettings getMatchSettings();
+        void updateTeamName(String name, int teamId);
     }
 
     interface IFragmentView extends IOnPlayerTouchCallback{
