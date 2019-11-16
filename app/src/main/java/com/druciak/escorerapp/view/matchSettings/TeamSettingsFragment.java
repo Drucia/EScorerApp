@@ -22,8 +22,10 @@ import com.druciak.escorerapp.entities.Team;
 import com.druciak.escorerapp.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.interfaces.ISaveData;
+import com.druciak.escorerapp.interfaces.ITeamCallback;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
@@ -31,11 +33,12 @@ import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.IFragmentView,
-        ISaveData {
+        ISaveData, ITeamCallback {
     private static final int MAX_NUMBER_OF_COACH = 3;
     private static final int MAX_NUMBER_OF_MEDICINE = 2;
     private static final int MAX_NUMBER_OF_LIBERO = 2;
@@ -57,12 +60,18 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     private Team team;
     private TextView captainShirtNumber;
 
+    private HashMap<Team, List<Player>> teamsWithPlayers = new HashMap<>();
+    private View teamsPopUpLayout;
+    private AlertDialog teamsDialog;
+    private boolean isFirstShow;
+
     public TeamSettingsFragment(IMatchSettingsMVP.IView mContext, Team team,
-                                List<Player> playersOfHost) {
+                                List<Player> playersOfHost, boolean isSimplyMatch) {
         matchSettingsView = mContext;
         this.team = team;
         players = new ArrayList<>(playersOfHost);
         playersAdapter = new PlayersAdapter(this, players);
+        isFirstShow = isSimplyMatch;
     }
 
     @Override
@@ -124,7 +133,28 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         LinearLayout captainLayout = root.findViewById(R.id.captainLayout);
         liberoLayout.setOnClickListener(view -> showFunctionsPopUp(false));
         captainLayout.setOnClickListener(view -> showFunctionsPopUp(true));
+
+        if (isFirstShow)
+        {
+            showPopUpWithChooseTeam();
+            isFirstShow = false;
+        }
+
         return root;
+    }
+
+    private void showPopUpWithChooseTeam() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        teamsPopUpLayout = getLayoutInflater().inflate(R.layout.pop_up_teams, null);
+        RecyclerView recyclerView = teamsPopUpLayout.findViewById(R.id.teamsRecycler);
+        recyclerView.setAdapter(new TeamsAdapter(this));
+        ExtendedFloatingActionButton fab = teamsPopUpLayout.findViewById(R.id.buttonNew);
+        builder.setTitle("Wybierz swoją drużynę");
+        builder.setCancelable(false);
+        builder.setView(teamsPopUpLayout);
+        teamsDialog = builder.create();
+        fab.setOnClickListener(view -> teamsDialog.dismiss());
+        teamsDialog.show();
     }
 
     private void showFunctionsPopUp(boolean isCaptainPopUp)
@@ -408,7 +438,8 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                 final AlertDialog.Builder db = new AlertDialog.Builder(getActivity());
                 db.setTitle("Usuwanie");
                 db.setMessage("Jesteś pewny?");
-                db.setNegativeButton("NIE", (dialogInterface1, i1) -> {dialogInterface1.cancel(); showPopUpForPlayer(player, adapterPosition);});
+                db.setNegativeButton("NIE", (dialogInterface1, i1) -> {dialogInterface1.cancel();
+                showPopUpForPlayer(player, adapterPosition);});
                 db.setPositiveButton("TAK", (dialogInterface1, i1) -> {
                     players.remove(adapterPosition);
                     if (player.isLibero())
@@ -434,5 +465,12 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     @Override
     public void save() {
         // do nothing
+    }
+
+    @Override
+    public void onTeamClicked(Team team) {
+        this.team = team;
+        updatePlayersAdapter(teamsWithPlayers.get(team));
+        teamsDialog.dismiss();
     }
 }

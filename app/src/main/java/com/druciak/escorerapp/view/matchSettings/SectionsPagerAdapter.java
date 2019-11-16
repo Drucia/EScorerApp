@@ -32,6 +32,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private Match match;
     private MatchSettings matchSettings;
     private Fragment currentFragment;
+    private boolean isSimplyMatch = false;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm, Match match,
                                 MatchSettings matchSettings) {
@@ -52,6 +53,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 R.string.tab_text_rest, R.string.tab_text_different};
         players = new ArrayList<>();
         this.matchSettings = matchSettings;
+        isSimplyMatch = true;
     }
 
     @Override
@@ -70,14 +72,14 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                         .filter(player -> player.getTeam().getId() == match.getHostTeam().getId())
                         .collect(Collectors.toList());
                 currentFragment = new TeamSettingsFragment((IMatchSettingsMVP.IView) mContext,
-                        match.getHostTeam(), playersOfHost);
+                        match.getHostTeam(), playersOfHost, isSimplyMatch);
                 return currentFragment;
             case 1:
                 List<Player> playersOfGuest = players.stream()
                         .filter(player -> player.getTeam().getId() == match.getGuestTeam().getId())
                         .collect(Collectors.toList());
                 currentFragment = new TeamSettingsFragment((IMatchSettingsMVP.IView) mContext,
-                        match.getGuestTeam(), playersOfGuest);
+                        match.getGuestTeam(), playersOfGuest, isSimplyMatch);
                 return currentFragment;
             case 2:
                 currentFragment = new MatchSettingsFragment((IMatchSettingsMVP.IView) mContext,
