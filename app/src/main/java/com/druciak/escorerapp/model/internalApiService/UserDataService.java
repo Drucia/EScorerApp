@@ -1,12 +1,15 @@
 package com.druciak.escorerapp.model.internalApiService;
 
+import com.druciak.escorerapp.entities.Pair;
 import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.entities.Team;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface UserDataService {
@@ -15,4 +18,7 @@ public interface UserDataService {
 
     @GET("users/{id}/teams/{teamId}/players")
     Call<List<Player>> getUserSpecificTeamPlayers(@Path("id") String id, @Path("teamId") int teamId);
+
+    @POST("users/{id}/teams")
+    Call<Pair<Team, Player>> saveTeam(@Path("id") String userId, @Body Pair<Team, Player> teamPlayerPair);
 }

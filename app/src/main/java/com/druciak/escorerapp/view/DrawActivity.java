@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.druciak.escorerapp.R;
@@ -17,6 +18,7 @@ import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.entities.MatchSettings;
 import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.entities.Team;
+import com.druciak.escorerapp.view.mainPanel.MainPanelActivity;
 import com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity;
 import com.druciak.escorerapp.view.runningMatch.RunningMatchActivity;
 import com.google.android.material.button.MaterialButton;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.USER_ADDITIONAL_INFO_ID;
 import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.IS_REQ_ID;
 
 public class DrawActivity extends AppCompatActivity {
@@ -50,6 +53,7 @@ public class DrawActivity extends AppCompatActivity {
     private int leftTeamChoice = NO_CHOICE_MADE_ID;
     private int rightTeamChoice = NO_CHOICE_MADE_ID;
     private MatchSettings matchSettings;
+    private LoggedInUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,7 @@ public class DrawActivity extends AppCompatActivity {
         Intent intent = getIntent();
         boolean isRequest = intent.getBooleanExtra(IS_REQ_ID, false);
         matchSettings = intent.getParcelableExtra(MatchSettingsActivity.MACH_SETTINGS_ID);
-        LoggedInUser user = intent.getParcelableExtra(LOGGED_IN_USER_ID);
+        user = intent.getParcelableExtra(LOGGED_IN_USER_ID);
         leftTeam = findViewById(R.id.leftTeamSpinner);
         rightTeam = findViewById(R.id.rightTeamSpinner);
         startMatchButton = findViewById(R.id.startMatch);
@@ -203,5 +207,24 @@ public class DrawActivity extends AppCompatActivity {
         params.height = size;
         params.width = size;
         toResize.setLayoutParams(params);
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.label_attention));
+        builder.setMessage(getString(R.string.msg_attention));
+        builder.setPositiveButton(getString(R.string.yes), (dialogInterface, i) ->
+                goToMainPanel());
+        builder.setNegativeButton(getString(R.string.no), (dialogInterface, i) -> {});
+        builder.create().show();
+    }
+
+    private void goToMainPanel() {
+        Intent intent = new Intent(this, MainPanelActivity.class);
+        intent.putExtra(USER_ADDITIONAL_INFO_ID, true);
+        intent.putExtra(LOGGED_IN_USER_ID, user);
+        startActivity(intent);
+        finish();
     }
 }

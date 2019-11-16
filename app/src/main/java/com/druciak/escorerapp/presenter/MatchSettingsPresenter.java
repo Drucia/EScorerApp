@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     private static final int MIN_COUNT_OF_PLAYERS = 6;
@@ -28,8 +29,9 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     private List<Player> players;
     private List<TeamAdditionalMember> members;
     private MatchSettings matchSettings;
+    private boolean isSimplyMatch;
 
-    public MatchSettingsPresenter(IMatchSettingsMVP.IView view, Match match, LoggedInUser user) {
+    public MatchSettingsPresenter(IMatchSettingsMVP.IView view, Match match, LoggedInUser user, boolean isSimplyMatch) {
         this.externalManager = new ExternalApiManager(this);
         this.view = view;
         this.match = match;
@@ -39,6 +41,7 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
         players = new ArrayList<>();
         members = new ArrayList<>();
         teams = new ArrayList<>();
+        this.isSimplyMatch = isSimplyMatch;
     }
 
     @Override
@@ -124,7 +127,10 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
             matchSettings.setMatch(match);
             matchSettings.setPlayers(players);
             matchSettings.setMembers(members);
-            view.startMatch(matchSettings, loggedInUser);
+            if (isSimplyMatch)
+                view.startMatchWithSaveDataOnServer(matchSettings, loggedInUser);
+            else
+                view.startMatch(matchSettings, loggedInUser);
         }
         else
             view.showPopUpWithErrorMatchSettings(error);
@@ -160,7 +166,8 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
 
     @Override
     public void updateTeamName(String name, int teamId) {
-        Team team = match.getHostTeam().getId() == teamId ? match.getHostTeam() : match.getGuestTeam();
+        Team team = match.getHostTeam().getId() == teamId
+                ? match.getHostTeam() : match.getGuestTeam();
         team.setFullName(name);
         team.setShortName(name);
     }
@@ -198,6 +205,32 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
         if (result instanceof Result.Success) {
             players = (((Result.Success<List<Player>>) result).getData());
             view.onPreparePlayerListsEventSucceeded(players);
+        }
+    }
+
+    @Override
+    public void saveDataOnServer(boolean home, boolean guest, boolean conf) {
+        if (home)
+        {
+            Team homeTeam = match.getHostTeam();
+            List<Player> hostPlayers = players.stream()
+                    .filter(player -> player.getTeam().getId() == homeTeam.getId())
+                    .collect(Collectors.toList());
+            model.saveTeam(homeTeam, hostPlayers, loggedInUser.getUserId());
+        }
+
+        if (guest)
+        {
+            Team guestTeam = match.getGuestTeam();
+            List<Player> guestPlayers = players.stream()
+                    .filter(player -> player.getTeam().getId() == guestTeam.getId())
+                    .collect(Collectors.toList());
+            model.saveTeam(guestTeam, guestPlayers, loggedInUser.getUserId());
+        }
+
+        if (conf)
+        {
+            // todo
         }
     }
 }

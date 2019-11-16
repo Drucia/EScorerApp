@@ -18,6 +18,7 @@ public interface IMatchSettingsMVP{
     interface IInternalModel{
         void getAllTeamsOfUser(String userId);
         void getAllPlayersOfTeam(String userId, int id);
+        void saveTeam(Team team, List<Player> players, String userId);
     }
 
     interface IView{
@@ -37,6 +38,7 @@ public interface IMatchSettingsMVP{
         void goToMainPanel(LoggedInUser user);
         void updateTeamName(String name, int teamId);
         void updateTeamsInPopUp(ArrayList<Team> teams);
+        void startMatchWithSaveDataOnServer(MatchSettings matchSettings, LoggedInUser loggedInUser);
     }
 
     interface IPresenter{
@@ -59,6 +61,7 @@ public interface IMatchSettingsMVP{
         Optional<ArrayList<Team>> getTeamsList();
         void preparePlayersOfTeams(Team team, boolean isHostTeam);
         void onGetPlayersOfTeamCompleted(Result<List<Player>> result);
+        void saveDataOnServer(boolean home, boolean guest, boolean conf);
     }
 
     interface IFragmentView extends IOnPlayerTouchCallback{

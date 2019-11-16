@@ -11,6 +11,7 @@ import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.entities.Match;
 import com.druciak.escorerapp.entities.MatchSettings;
 import com.druciak.escorerapp.entities.Player;
+import com.druciak.escorerapp.entities.Team;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
 import com.druciak.escorerapp.interfaces.ISaveData;
 
@@ -23,7 +24,6 @@ import java.util.stream.Collectors;
  * one of the sections/tabs/pages.
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
     @StringRes
     private int[] tabTitles;
     private final Context mContext;
@@ -107,5 +107,12 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         if (fragments.get(fromPos) != null)
             ((ISaveData) fragments.get(currentFragment)).save();
         currentFragment = fromPos++;
+    }
+
+    public void setTeam(Team team, boolean isHostTeam) {
+        if (isHostTeam)
+            ((TeamSettingsFragment) fragments.get(0)).setTeam(team);
+        else
+            ((TeamSettingsFragment) fragments.get(1)).setTeam(team);
     }
 }

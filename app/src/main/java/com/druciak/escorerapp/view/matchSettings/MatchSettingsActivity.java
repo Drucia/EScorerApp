@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,21 +64,21 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         LoggedInUser loggedInUser = intent.getParcelableExtra(LOGGED_IN_USER_ID);
 
         if (matchKind == GameTypesRepository.DZPS_VOLLEYBALL_ID) {
-            presenter = new MatchSettingsPresenter(this, match, loggedInUser);
+            presenter = new MatchSettingsPresenter(this, match, loggedInUser, false);
             sectionsPagerAdapter = new SectionsPagerAdapter(this,
                     getSupportFragmentManager(), match, presenter.getMatchSettings());
             presenter.preparePlayersOfTeams(match.getHostTeam().getId(),
                     match.getGuestTeam().getId());
         }
         else {
-            Match newMatch = new Match(new Team(1), new Team(2));
-            presenter = new MatchSettingsPresenter(this, newMatch, loggedInUser);
+            Match newMatch = new Match(new Team(-1), new Team(-2));
+            presenter = new MatchSettingsPresenter(this, newMatch, loggedInUser, true);
             sectionsPagerAdapter = new SectionsPagerAdapter(this,
                     getSupportFragmentManager(), newMatch, matchKind,
                     presenter.getMatchSettings());
             firstShowGuest = true;
             presenter.prepareTeams();
-            showPopUpWithChooseTeam(false);
+            showPopUpWithChooseTeam(true);
         }
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -91,7 +92,7 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
                 highLightCurrentTab(position);
                 if (position == 1 && firstShowGuest)
                 {
-                    showPopUpWithChooseTeam(true);
+                    showPopUpWithChooseTeam(false);
                     firstShowGuest = false;
                 }
                 sectionsPagerAdapter.saveData(position);
@@ -192,10 +193,9 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     @Override
     public void startMatch(MatchSettings matchSettings, LoggedInUser loggedInUser) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Przejście do losowania");
-        builder.setMessage("Wprowadzone dane nie będą mogły ulec zmianie," +
-                " czy chcesz kontynuować?");
-        builder.setPositiveButton("TAK", (dialogInterface, i) -> {
+        builder.setTitle(getString(R.string.label_go_to_draw));
+        builder.setMessage(getString(R.string.msg_no_more_change));
+        builder.setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
             Intent intent = new Intent(this, DrawActivity.class);
             intent.putExtra(MACH_SETTINGS_ID, matchSettings);
             intent.putExtra(LOGGED_IN_USER_ID, loggedInUser);
@@ -263,6 +263,28 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         }
     }
 
+    @Override
+    public void startMatchWithSaveDataOnServer(MatchSettings matchSettings, LoggedInUser loggedInUser) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.label_go_to_draw));
+        View root = getLayoutInflater().inflate(R.layout.pop_up_save_data_on_server, null);
+        ((TextView) root.findViewById(R.id.msg)).setText(getString(R.string.msg_no_more_change));
+        CheckBox home = root.findViewById(R.id.checkBoxHome);
+        CheckBox guest = root.findViewById(R.id.checkBoxGuest);
+        CheckBox conf = root.findViewById(R.id.checkBoxConf);
+        builder.setView(root);
+        builder.setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
+            presenter.saveDataOnServer(home.isChecked(), guest.isChecked(), conf.isChecked());
+            Intent intent = new Intent(this, DrawActivity.class);
+            intent.putExtra(MACH_SETTINGS_ID, matchSettings);
+            intent.putExtra(LOGGED_IN_USER_ID, loggedInUser);
+            MatchSettingsActivity.this.startActivity(intent);
+            MatchSettingsActivity.this.finish();
+        });
+        builder.setNegativeButton("NIE", (dialogInterface, i) -> dialogInterface.dismiss());
+        builder.create().show();
+    }
+
     private void showConfirmBack()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -277,6 +299,7 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     @Override
     public void onTeamClicked(Team team, boolean isHostTeam) {
         presenter.preparePlayersOfTeams(team, isHostTeam);
+        sectionsPagerAdapter.setTeam(team, isHostTeam);
         teamsDialog.dismiss();
     }
 }

@@ -449,5 +449,6 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
 
     public void setTeam(Team team) {
         this.team = team;
+        teamName.getEditText().setText(team.getFullName());
     }
 }

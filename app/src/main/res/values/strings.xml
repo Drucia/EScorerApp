@@ -122,4 +122,10 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="label_go_to_draw">Przejście do losowania</string>
+    <string name="msg_no_more_change">Wprowadzone dane nie będą mogły ulec zmianie, czy chcesz kontynuować?</string>
+    <string name="label_choose_data_to_save">Wybierz co chcesz zapisać:</string>
+    <string name="label_home_team">Drużynę gospodarzy</string>
+    <string name="label_guest_team">Drużynę gości</string>
+    <string name="label_configuration">Konfigurację meczu</string>
 </resources>

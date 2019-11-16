@@ -1,5 +1,6 @@
 package com.druciak.escorerapp.model;
 
+import com.druciak.escorerapp.entities.Pair;
 import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.entities.Team;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
@@ -55,6 +56,21 @@ public class MatchSettingsModel implements IMatchSettingsMVP.IInternalModel {
             @Override
             public void onFailure(Call<List<Player>> call, Throwable t) {
 
+            }
+        });
+    }
+
+    @Override
+    public void saveTeam(Team team, List<Player> players, String userId) {
+        manager.getUserDataService().saveTeam(userId, new Pair<>(team, players)).enqueue(new Callback<Pair<Team, Player>>() {
+            @Override
+            public void onResponse(Call<Pair<Team, Player>> call, Response<Pair<Team, Player>> response) {
+                // do sth todo
+            }
+
+            @Override
+            public void onFailure(Call<Pair<Team, Player>> call, Throwable t) {
+                // do sth todo
             }
         });
     }
