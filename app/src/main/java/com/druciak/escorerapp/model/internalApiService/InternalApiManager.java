@@ -1,11 +1,12 @@
 package com.druciak.escorerapp.model.internalApiService;
 
-import com.druciak.escorerapp.interfaces.ICreateAccountMVP;
-import com.druciak.escorerapp.interfaces.IMainPanelMVP;
-import com.druciak.escorerapp.interfaces.IUserInfo;
 import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.NewUser;
 import com.druciak.escorerapp.entities.RefereeUser;
+import com.druciak.escorerapp.interfaces.ICreateAccountMVP;
+import com.druciak.escorerapp.interfaces.IMainPanelMVP;
+import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
+import com.druciak.escorerapp.interfaces.IUserInfo;
 import com.druciak.escorerapp.model.firebaseService.Result;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
@@ -19,7 +20,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelMVP.ILoggedInUserModel, IUserInfo.IModel {
+public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelMVP.ILoggedInUserModel,
+        IUserInfo.IModel, IMatchSettingsMVP {
 //    private static final String BASE_APP_SERVER_URL = "https://e-scorer-service.herokuapp.com/";
     private static final String BASE_APP_SERVER_URL = "http://192.168.1.3:8080/";
 
@@ -27,6 +29,7 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
     private ICreateAccountMVP.IPresenter createAccountPresenter;
     private IMainPanelMVP.IPresenter mainPanelPresenter;
     private IUserInfo.IPresenter userInfoPresenter;
+    private IMatchSettingsMVP.IInternalModel matchSettingsModel;
 
     public InternalApiManager(ICreateAccountMVP.IPresenter createAccountPresenter)
     {
@@ -39,6 +42,10 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
 
     public InternalApiManager(IUserInfo.IPresenter userInfoPresenter) {
         this.userInfoPresenter = userInfoPresenter;
+    }
+
+    public InternalApiManager(IMatchSettingsMVP.IInternalModel matchSettingsModel) {
+        this.matchSettingsModel = matchSettingsModel;
     }
 
     private void initializeRetrofit()
@@ -59,6 +66,12 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
     {
         initializeRetrofit();
         return retrofit.create(LoginService.class);
+    }
+
+    public UserDataService getUserDataService()
+    {
+        initializeRetrofit();
+        return retrofit.create(UserDataService.class);
     }
 
     @Override

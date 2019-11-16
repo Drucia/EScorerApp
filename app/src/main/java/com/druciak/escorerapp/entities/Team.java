@@ -11,7 +11,7 @@ public class Team implements Parcelable {
     @Expose
     protected int id;
 
-    @SerializedName("fullName")
+    @SerializedName("name")
     @Expose
     protected String fullName;
 

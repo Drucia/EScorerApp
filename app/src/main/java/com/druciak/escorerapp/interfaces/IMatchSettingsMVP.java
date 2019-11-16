@@ -3,13 +3,21 @@ package com.druciak.escorerapp.interfaces;
 import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.MatchSettings;
 import com.druciak.escorerapp.entities.Player;
+import com.druciak.escorerapp.entities.Team;
 import com.druciak.escorerapp.model.firebaseService.Result;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public interface IMatchSettingsMVP{
-    interface IModel{
+    interface IExternalModel{
         void getAllPlayersOfTeams(int hostId, int guestId);
+    }
+
+    interface IInternalModel{
+        void getAllTeamsOfUser(String userId);
+        void getAllPlayersOfTeam(String userId, int id);
     }
 
     interface IView{
@@ -28,14 +36,12 @@ public interface IMatchSettingsMVP{
                                     boolean isMan);
         void goToMainPanel(LoggedInUser user);
         void updateTeamName(String name, int teamId);
+        void updateTeamsInPopUp(ArrayList<Team> teams);
     }
 
     interface IPresenter{
         void onPreparePlayersListEventCompleted(Result<List<Player>> result);
         void preparePlayersOfTeams(int hostId, int guestId);
-
-        void preparePlayersOfTeams();
-
         void addPlayer(Player player);
         void removePlayer(Player player);
         void removeAdditionalMember(String name, int teamId, int memberId);
@@ -48,6 +54,11 @@ public interface IMatchSettingsMVP{
         void onDiscardClicked();
         MatchSettings getMatchSettings();
         void updateTeamName(String name, int teamId);
+        void onGetUserTeamsCompleted(Result<List<Team>> result);
+        void prepareTeams();
+        Optional<ArrayList<Team>> getTeamsList();
+        void preparePlayersOfTeams(Team team, boolean isHostTeam);
+        void onGetPlayersOfTeamCompleted(Result<List<Player>> result);
     }
 
     interface IFragmentView extends IOnPlayerTouchCallback{

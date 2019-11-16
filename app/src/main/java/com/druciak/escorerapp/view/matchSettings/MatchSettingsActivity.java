@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -26,7 +27,9 @@ import com.druciak.escorerapp.view.mainPanel.MainPanelActivity;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.MATCH_ID;
@@ -44,7 +47,11 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     private SectionsPagerAdapter sectionsPagerAdapter;
 
     private boolean firstShowGuest;
+    private TextView noItems;
     private AlertDialog teamsDialog;
+    private RecyclerView teamsRecyclerView;
+    private TeamsAdapter teamsAdapter;
+    private boolean isHomeTeam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +76,8 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
                     getSupportFragmentManager(), newMatch, matchKind,
                     presenter.getMatchSettings());
             firstShowGuest = true;
-            presenter.preparePlayersOfTeams();
+            presenter.prepareTeams();
+            showPopUpWithChooseTeam(false);
         }
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -83,7 +91,7 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
                 highLightCurrentTab(position);
                 if (position == 1 && firstShowGuest)
                 {
-                    showPopUpWithChooseTeam();
+                    showPopUpWithChooseTeam(true);
                     firstShowGuest = false;
                 }
                 sectionsPagerAdapter.saveData(position);
@@ -120,11 +128,22 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         tab.setCustomView(tabLayoutAdapter.getSelectedTabView(position));
     }
 
-    private void showPopUpWithChooseTeam() {
+    private void showPopUpWithChooseTeam(boolean isHomeTeam) {
+        this.isHomeTeam = isHomeTeam;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View teamsPopUpLayout = getLayoutInflater().inflate(R.layout.pop_up_teams, null);
-        RecyclerView recyclerView = teamsPopUpLayout.findViewById(R.id.teamsRecycler);
-        recyclerView.setAdapter(new TeamsAdapter(this));
+        teamsRecyclerView = teamsPopUpLayout.findViewById(R.id.teamsRecycler);
+        noItems = teamsPopUpLayout.findViewById(R.id.noItems);
+        Optional<ArrayList<Team>> teams = presenter.getTeamsList();
+        if (teams.isPresent()){
+            teamsAdapter = new TeamsAdapter(this, teams.get(), isHomeTeam);
+            teamsRecyclerView.setAdapter(teamsAdapter);
+            if (teams.get().isEmpty())
+                noItems.setVisibility(View.VISIBLE);
+            else
+                noItems.setVisibility(View.GONE);
+        }
+        teamsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         ExtendedFloatingActionButton fab = teamsPopUpLayout.findViewById(R.id.buttonNew);
         builder.setTitle("Wybierz swoją drużynę");
         builder.setCancelable(false);
@@ -232,6 +251,18 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         presenter.updateTeamName(name, teamId);
     }
 
+    @Override
+    public void updateTeamsInPopUp(ArrayList<Team> teams) {
+        if (teamsDialog != null && teamsDialog.isShowing()){
+            teamsAdapter = new TeamsAdapter(this, teams, isHomeTeam);
+            teamsRecyclerView.setAdapter(teamsAdapter);
+            if (teams.isEmpty())
+                noItems.setVisibility(View.VISIBLE);
+            else
+                noItems.setVisibility(View.GONE);
+        }
+    }
+
     private void showConfirmBack()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -244,8 +275,8 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     }
 
     @Override
-    public void onTeamClicked(Team team) {
-        // on team clicked todo
+    public void onTeamClicked(Team team, boolean isHostTeam) {
+        presenter.preparePlayersOfTeams(team, isHostTeam);
         teamsDialog.dismiss();
     }
 }

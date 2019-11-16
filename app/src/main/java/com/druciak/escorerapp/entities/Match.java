@@ -70,6 +70,14 @@ public class Match implements Parcelable {
         }
     };
 
+    public void setHostTeam(Team hostTeam) {
+        this.hostTeam = hostTeam;
+    }
+
+    public void setGuestTeam(Team guestTeam) {
+        this.guestTeam = guestTeam;
+    }
+
     public String getName() {
         return hostTeam.getFullName() + " vs " + guestTeam.getFullName();
     }

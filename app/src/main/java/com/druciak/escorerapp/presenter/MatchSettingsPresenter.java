@@ -7,20 +7,24 @@ import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.entities.Team;
 import com.druciak.escorerapp.entities.TeamAdditionalMember;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
+import com.druciak.escorerapp.model.MatchSettingsModel;
 import com.druciak.escorerapp.model.externalApiService.ExternalApiManager;
 import com.druciak.escorerapp.model.firebaseService.Result;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     private static final int MIN_COUNT_OF_PLAYERS = 6;
 
-    private IMatchSettingsMVP.IModel externalManager;
+    private IMatchSettingsMVP.IExternalModel externalManager;
     private IMatchSettingsMVP.IView view;
+    private IMatchSettingsMVP.IInternalModel model;
     private Match match;
     private LoggedInUser loggedInUser;
+    private ArrayList<Team> teams;
     private List<Player> players;
     private List<TeamAdditionalMember> members;
     private MatchSettings matchSettings;
@@ -30,9 +34,11 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
         this.view = view;
         this.match = match;
         this.loggedInUser = user;
+        this.model = new MatchSettingsModel(this);
         matchSettings = new MatchSettings();
         players = new ArrayList<>();
         members = new ArrayList<>();
+        teams = new ArrayList<>();
     }
 
     @Override
@@ -48,11 +54,6 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     @Override
     public void preparePlayersOfTeams(int hostId, int guestId) {
         externalManager.getAllPlayersOfTeams(hostId, guestId);
-    }
-
-    @Override
-    public void preparePlayersOfTeams() {
-        view.onPreparePlayerListsEventSucceeded(players);
     }
 
     @Override
@@ -162,5 +163,41 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
         Team team = match.getHostTeam().getId() == teamId ? match.getHostTeam() : match.getGuestTeam();
         team.setFullName(name);
         team.setShortName(name);
+    }
+
+    @Override
+    public void onGetUserTeamsCompleted(Result<List<Team>> result) {
+        if (result instanceof Result.Success) {
+            teams.addAll(((Result.Success<List<Team>>) result).getData());
+            view.updateTeamsInPopUp(teams);
+        }
+    }
+
+    @Override
+    public void prepareTeams() {
+        view.onPreparePlayerListsEventSucceeded(players);
+        model.getAllTeamsOfUser(loggedInUser.getUserId());
+    }
+
+    @Override
+    public Optional<ArrayList<Team>> getTeamsList() {
+        return teams == null ? Optional.empty() : Optional.of(teams);
+    }
+
+    @Override
+    public void preparePlayersOfTeams(Team team, boolean isHostTeam) {
+        if (isHostTeam)
+            match.setHostTeam(team);
+        else
+            match.setGuestTeam(team);
+        model.getAllPlayersOfTeam(loggedInUser.getUserId(), team.getId());
+    }
+
+    @Override
+    public void onGetPlayersOfTeamCompleted(Result<List<Player>> result) {
+        if (result instanceof Result.Success) {
+            players = (((Result.Success<List<Player>>) result).getData());
+            view.onPreparePlayerListsEventSucceeded(players);
+        }
     }
 }

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import retrofit2.Retrofit;
 
-public class ExternalApiManager implements IMatchSettingsMVP.IModel, IMainPanelMVP.IMatchModel {
+public class ExternalApiManager implements IMatchSettingsMVP.IExternalModel, IMainPanelMVP.IMatchModel {
     private static final String BASE_DZPS_SERVER_URL = "";
     private static ArrayList<Team> teams = new ArrayList<>();
     private static Map<Integer, List<Player>> playersOfTeams = new HashMap<>();

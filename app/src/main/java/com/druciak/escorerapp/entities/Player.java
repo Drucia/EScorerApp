@@ -19,8 +19,6 @@ public class Player implements Parcelable {
     @Expose
     protected String surname;
 
-    @SerializedName("sex")
-    @Expose
     protected char sex;
 
     @SerializedName("team")

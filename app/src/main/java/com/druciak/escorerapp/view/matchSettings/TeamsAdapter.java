@@ -17,16 +17,18 @@ import java.util.ArrayList;
 class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> {
     private ITeamCallback callback;
     private ArrayList<Team> teams;
+    private boolean isHomeTeam;
 
-    public TeamsAdapter(ITeamCallback callback) {
+    public TeamsAdapter(ITeamCallback callback, ArrayList<Team> teams, boolean isHomeTeam) {
         this.callback = callback;
-        teams = new ArrayList<>();
+        this.teams = teams;
+        this.isHomeTeam = isHomeTeam;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_simply_player,
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_team,
                 parent, false);
         return new ViewHolder(view);
     }
@@ -34,6 +36,8 @@ class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.name.setText(teams.get(position).getFullName());
+        if (position == 0)
+            holder.divider.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -43,13 +47,14 @@ class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
+        public View divider;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.playerName);
+            name = itemView.findViewById(R.id.teamName);
+            divider = itemView.findViewById(R.id.divider);
             name.setOnClickListener(view -> callback.onTeamClicked(
-                    teams.get(getAdapterPosition())
-            ));
+                    teams.get(getAdapterPosition()), isHomeTeam));
         }
     }
 }
