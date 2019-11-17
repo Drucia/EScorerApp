@@ -61,7 +61,7 @@
     <string name="tab_text_host">Gospodarz</string>
     <string name="tab_text_guest">Gość</string>
     <string name="tab_text_rest">Opis</string>
-    <string name="tab_text_different">Ustawienia</string>
+    <string name="tab_text_rules">Zasady</string>
 
     <!-- ERRORS  -->
     <string name="get_user_info_error">Nie udało się pobrać danych użytkownika</string>

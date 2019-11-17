@@ -15,6 +15,7 @@
         <item>Juniorzy</item>
         <item>Seniorzy</item>
     </string-array>
+
     <!-- Reply Preference -->
     <string-array name="reply_entries">
         <item>Reply</item>

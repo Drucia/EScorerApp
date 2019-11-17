@@ -50,7 +50,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         mContext = context;
         this.match = match;
         tabTitles = new int[]{R.string.tab_text_host, R.string.tab_text_guest,
-                R.string.tab_text_rest, R.string.tab_text_different};
+                R.string.tab_text_rest, R.string.tab_text_rules};
         this.matchSettings = matchSettings;
         isSimplyMatch = true;
     }

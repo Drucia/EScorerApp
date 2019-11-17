@@ -1,7 +1,6 @@
 package com.druciak.escorerapp.view.matchSettings;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,19 +13,19 @@ public class TabLayoutAdapter {
             R.drawable.home_dark,
             R.drawable.person,
             R.drawable.edit_dark,
-            R.drawable.circle_settings_dark
+            R.drawable.rules_dark
     };
     private static final int[] navLabels = {
             R.string.tab_text_host,
             R.string.tab_text_guest,
             R.string.tab_text_rest,
-            R.string.tab_text_different
+            R.string.tab_text_rules
     };
     private static final int[] navIconsActive = {
-            R.drawable.home_light,
-            R.drawable.person_light,
-            R.drawable.edit_light,
-            R.drawable.circle_settings_light
+            R.drawable.home_yellow,
+            R.drawable.person_yellow,
+            R.drawable.edit_yellow,
+            R.drawable.rules_yellow
     };
 
     private Context context;
@@ -48,7 +47,8 @@ public class TabLayoutAdapter {
         View view = LayoutInflater.from(context).inflate(R.layout.nav_bar, null);
         TextView tabTextView = view.findViewById(R.id.nav_label);
         tabTextView.setText(navLabels[position]);
-        tabTextView.setTextColor(Color.WHITE);
+        tabTextView.setTextColor(context.getColor(R.color.colorAccent));
+        tabTextView.setVisibility(View.VISIBLE);
         ImageView tabImageView = view.findViewById(R.id.nav_icon);
         tabImageView.setImageResource(navIconsActive[position]);
         return view;
