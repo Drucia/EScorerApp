@@ -25,4 +25,7 @@ public interface UserDataService {
 
     @POST("users/{id}/matches")
     Call<MatchSummary> saveSummary(@Path("id") String userId, @Body MatchSummary matchSummary);
+
+    @GET("users/{id}/matches")
+    Call<List<MatchSummary>> getAllSummary(@Path("id") String userId);
 }

@@ -83,4 +83,9 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
     public void clickOnVolleyballMatch() {
         view.goToMatchSettings(loggedInUser);
     }
+
+    @Override
+    public String getUserId() {
+        return user.getUid();
+    }
 }

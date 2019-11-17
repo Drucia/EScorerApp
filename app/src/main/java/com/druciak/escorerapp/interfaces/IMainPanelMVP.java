@@ -20,6 +20,7 @@ public interface IMainPanelMVP {
         void setLoggedInUser(LoggedInUser user);
         boolean isRefereeUser();
         void clickOnVolleyballMatch();
+        String getUserId();
     }
 
     interface IView{
@@ -29,6 +30,7 @@ public interface IMainPanelMVP {
         void setLoggedInUserFields(String fullName, String email);
         void showPopUpWithMatchToChoose(List<Match> matches, LoggedInUser user);
         boolean isRefereeUser();
+        String getUserId();
         void goToMatchSettings(LoggedInUser loggedInUser);
     }
 

@@ -7,6 +7,7 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/home"
+            android:iconTintMode="screen"
             android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_user_data"
@@ -15,7 +16,14 @@
         <item
             android:id="@+id/nav_matches"
             android:icon="@drawable/menu_matches"
+            android:iconTint="@color/black"
             android:title="@string/menu_matches" />
+        <item
+            android:id="@+id/nav_teams"
+            android:icon="@drawable/teams"
+            android:iconTint="@color/black"
+            android:iconTintMode="screen"
+            android:title="@string/menu_teams" />
     </group>
 
     <item android:title="@string/menu_title">

@@ -50,4 +50,5 @@ dependencies {
     implementation 'com.itextpdf:kernel:7.1.8'
     implementation 'com.itextpdf:layout:7.1.8'
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 }

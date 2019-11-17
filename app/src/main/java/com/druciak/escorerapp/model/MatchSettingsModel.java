@@ -19,7 +19,7 @@ public class MatchSettingsModel implements IMatchSettingsMVP.IInternalModel {
 
     public MatchSettingsModel(IMatchSettingsMVP.IPresenter presenter) {
         this.presenter = presenter;
-        manager = new InternalApiManager(this);
+        manager = new InternalApiManager();
     }
 
     @Override

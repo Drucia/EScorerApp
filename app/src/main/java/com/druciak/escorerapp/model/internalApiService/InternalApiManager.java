@@ -6,7 +6,6 @@ import com.druciak.escorerapp.entities.RefereeUser;
 import com.druciak.escorerapp.interfaces.ICreateAccountMVP;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.interfaces.IMatchSettingsMVP;
-import com.druciak.escorerapp.interfaces.ISummaryMVP;
 import com.druciak.escorerapp.interfaces.IUserInfo;
 import com.druciak.escorerapp.model.firebaseService.Result;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,8 +29,6 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
     private ICreateAccountMVP.IPresenter createAccountPresenter;
     private IMainPanelMVP.IPresenter mainPanelPresenter;
     private IUserInfo.IPresenter userInfoPresenter;
-    private IMatchSettingsMVP.IInternalModel matchSettingsModel;
-    private ISummaryMVP.IModel summaryModel;
 
     public InternalApiManager(ICreateAccountMVP.IPresenter createAccountPresenter)
     {
@@ -46,12 +43,7 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
         this.userInfoPresenter = userInfoPresenter;
     }
 
-    public InternalApiManager(IMatchSettingsMVP.IInternalModel matchSettingsModel) {
-        this.matchSettingsModel = matchSettingsModel;
-    }
-
-    public InternalApiManager(ISummaryMVP.IModel summaryModel) {
-        this.summaryModel = summaryModel;
+    public InternalApiManager() {
     }
 
     private void initializeRetrofit()

@@ -43,6 +43,7 @@
     <string name="menu_home">Panel Główny</string>
     <string name="menu_user_data">Moje dane</string>
     <string name="menu_matches">Moje mecze</string>
+    <string name="menu_teams">Moje drużyny</string>
     <string name="menu_tools">Ustawienia</string>
     <string name="menu_logout">Wyloguj</string>
     <string name="menu_exit">Wyjście</string>
@@ -104,7 +105,8 @@
     <string name="save_button">Zapisz</string>
     <string name="label_error">Błąd</string>
     <string name="ok">OK</string>
-    <string name="label_no_items">Nie masz jeszcze drużyn.\n Utwórz nową.</string>
+    <string name="label_no_teams">Nie masz jeszcze drużyn.\n Utwórz nową.</string>
+    <string name="label_no_matches">Nie masz jeszcze przeprowadzonych meczy.</string>
     <string name="label_new">Nowa</string>
     <string name="title_activity_settings">Settings</string>
 

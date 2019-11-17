@@ -17,13 +17,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.entities.LoggedInUser;
-import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.entities.Match;
+import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.presenter.GameTypesRepository;
 import com.druciak.escorerapp.presenter.MainPanelPresenter;
 import com.druciak.escorerapp.view.GoodbyeActivity;
@@ -59,7 +60,7 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_user_data, R.id.nav_matches,
-                R.id.nav_tools)
+                R.id.nav_teams, R.id.nav_tools)
                 .setDrawerLayout(drawer)
                 .build();
         fullName = headerView.findViewById(R.id.userName);
@@ -75,6 +76,10 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
             showPopUpWithSetUserFields();
         else
             presenter.setLoggedInUser(intent.getParcelableExtra(LOGGED_IN_USER_ID));
+
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", presenter.getUserId());
+        NavHostFragment.create(R.navigation.mobile_navigation, bundle);
     }
 
     @Override
@@ -217,6 +222,11 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
     @Override
     public boolean isRefereeUser() {
         return presenter.isRefereeUser();
+    }
+
+    @Override
+    public String getUserId() {
+        return presenter.getUserId();
     }
 
     @Override

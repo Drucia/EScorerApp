@@ -305,5 +305,9 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         presenter.preparePlayersOfTeams(team, isHostTeam);
         sectionsPagerAdapter.setTeam(team, isHostTeam);
         teamsDialog.dismiss();
+        if (isHostTeam)
+            viewPager.setCurrentItem(0);
+        else
+            viewPager.setCurrentItem(1);
     }
 }

@@ -34,7 +34,7 @@ public class SummaryModel implements ISummaryMVP.IModel {
         this.presenter = presenter;
         this.matchInfo = matchInfo;
         this.user = user;
-        this.manager = new InternalApiManager(this);
+        this.manager = new InternalApiManager();
     }
 
     @Override
