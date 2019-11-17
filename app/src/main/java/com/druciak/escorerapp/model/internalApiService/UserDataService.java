@@ -1,5 +1,6 @@
 package com.druciak.escorerapp.model.internalApiService;
 
+import com.druciak.escorerapp.entities.MatchSummary;
 import com.druciak.escorerapp.entities.Pair;
 import com.druciak.escorerapp.entities.Player;
 import com.druciak.escorerapp.entities.Team;
@@ -21,4 +22,7 @@ public interface UserDataService {
 
     @POST("users/{id}/teams")
     Call<Pair<Team, Player>> saveTeam(@Path("id") String userId, @Body Pair<Team, Player> teamPlayerPair);
+
+    @POST("users/{id}/matches")
+    Call<MatchSummary> saveSummary(@Path("id") String userId, @Body MatchSummary matchSummary);
 }

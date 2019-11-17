@@ -3,18 +3,28 @@ package com.druciak.escorerapp.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Match implements Parcelable {
-    private static int counter;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+public class Match implements Parcelable {
+    @SerializedName("id")
+    @Expose
     private int id;
+    @SerializedName("hostTeam")
+    @Expose
     private Team hostTeam;
+    @SerializedName("guestTeam")
+    @Expose
     private Team guestTeam;
+    @SerializedName("name")
+    @Expose
     private String name;
+    @SerializedName("userId")
+    @Expose
     private String refereeId;
 
     public Match(Team hostTeam, Team guestTeam, String refereeId) {
-        counter++;
-        this.id = counter;
+        this.id = -1;
         this.hostTeam = hostTeam;
         this.guestTeam = guestTeam;
         this.refereeId = refereeId;
@@ -22,8 +32,7 @@ public class Match implements Parcelable {
     }
 
     public Match(int id, Team hostTeam, Team guestTeam, String refereeId) {
-        counter++;
-        this.id = counter;
+        this.id = id;
         this.hostTeam = hostTeam;
         this.guestTeam = guestTeam;
         this.refereeId = refereeId;
@@ -36,12 +45,6 @@ public class Match implements Parcelable {
         guestTeam = in.readParcelable(Team.class.getClassLoader());
         name = in.readString();
         refereeId = in.readString();
-    }
-
-    public Match(Team hostTeam, Team guestTeam) {
-        this.id = -1;
-        this.hostTeam = hostTeam;
-        this.guestTeam = guestTeam;
     }
 
     @Override

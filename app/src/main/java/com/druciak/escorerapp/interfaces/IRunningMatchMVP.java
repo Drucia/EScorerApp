@@ -36,7 +36,7 @@ public interface IRunningMatchMVP {
         void setInfoFields(MatchTeam teamA, MatchTeam teamB);
         void showTeamsInfo();
         void showDrawActivity(MatchSettings settings);
-        void moveToSummary(MatchInfo matchInfo, LoggedInUser user);
+        void moveToSummary(MatchInfo matchInfo, LoggedInUser user, boolean isSimplyMatch);
         void goToMainPanel(LoggedInUser user);
     }
 

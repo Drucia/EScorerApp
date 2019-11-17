@@ -435,9 +435,12 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     }
 
     public void updatePlayersAdapter(List<Player> players) {
+        List<Player> playersOfTeam = players.stream()
+                .filter(player -> player.getTeam().getId() == team.getId())
+                .collect(Collectors.toList());
         int size = playersAdapter.getItemCount();
-        this.players.addAll(players);
-        playersAdapter.notifyItemRangeChanged(size, players.size());
+        this.players.addAll(playersOfTeam);
+        playersAdapter.notifyItemRangeChanged(size, playersOfTeam.size());
     }
 
     @Override

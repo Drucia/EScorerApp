@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import java.util.Map;
 
 import static com.druciak.escorerapp.view.DrawActivity.MATCH_INFO_ID;
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.MATCH_KIND_ID;
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.USER_ADDITIONAL_INFO_ID;
 
 public class SummaryActivity extends AppCompatActivity implements ISummaryMVP.IView {
@@ -46,6 +48,8 @@ public class SummaryActivity extends AppCompatActivity implements ISummaryMVP.IV
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         Intent intent = getIntent();
+        boolean isSimplyMatch = intent.getBooleanExtra(MATCH_KIND_ID, false);
+
         MatchInfo matchInfo = intent.getParcelableExtra(MATCH_INFO_ID);
         LoggedInUser user = intent.getParcelableExtra(LOGGED_IN_USER_ID);
 
@@ -59,7 +63,18 @@ public class SummaryActivity extends AppCompatActivity implements ISummaryMVP.IV
         ExtendedFloatingActionButton attentions = findViewById(R.id.attentions);
         ExtendedFloatingActionButton generate = findViewById(R.id.generate);
         attentions.setOnClickListener(view -> presenter.onAttentionsClicked());
-        generate.setOnClickListener(view -> presenter.onGenerateClicked());
+        generate.setOnClickListener(view -> {
+            if (isSimplyMatch)
+                presenter.onSaveClicked();
+            else
+                presenter.onGenerateClicked();
+        });
+
+        if (isSimplyMatch)
+        {
+            attentions.setVisibility(View.GONE);
+            generate.setText(R.string.save_button);
+        }
 
         presenter.onActivityCreated();
     }
@@ -95,8 +110,8 @@ public class SummaryActivity extends AppCompatActivity implements ISummaryMVP.IV
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.label_generate_sheet));
         builder.setMessage("Czy jesteś pewny? Nie będzie już możliwości zmiany danych.");
-        builder.setPositiveButton("TAK", (dialogInterface, i) -> presenter.onGenerateConfirm());
-        builder.setNegativeButton("NIE", (dialogInterface, i) -> {});
+        builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> presenter.onGenerateConfirm());
+        builder.setNegativeButton(R.string.no, (dialogInterface, i) -> {});
         builder.create().show();
     }
 
@@ -116,6 +131,11 @@ public class SummaryActivity extends AppCompatActivity implements ISummaryMVP.IV
         intent.putExtra(LOGGED_IN_USER_ID, user);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void showToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -47,7 +47,7 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     @Override
     public void onPreparePlayersListEventCompleted(Result<List<Player>> result) {
         if (result instanceof Result.Success) {
-            players = ((Result.Success<List<Player>>) result).getData();
+            players.addAll(((Result.Success<List<Player>>) result).getData());
             view.onPreparePlayerListsEventSucceeded(players);
         }
         else
@@ -128,9 +128,9 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
             matchSettings.setPlayers(players);
             matchSettings.setMembers(members);
             if (isSimplyMatch)
-                view.startMatchWithSaveDataOnServer(matchSettings, loggedInUser);
+                view.startMatchWithSaveDataOnServer(matchSettings, loggedInUser, true);
             else
-                view.startMatch(matchSettings, loggedInUser);
+                view.startMatch(matchSettings, loggedInUser, false);
         }
         else
             view.showPopUpWithErrorMatchSettings(error);
@@ -203,7 +203,7 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
     @Override
     public void onGetPlayersOfTeamCompleted(Result<List<Player>> result) {
         if (result instanceof Result.Success) {
-            players = (((Result.Success<List<Player>>) result).getData());
+            players.addAll(((Result.Success<List<Player>>) result).getData());
             view.onPreparePlayerListsEventSucceeded(players);
         }
     }

@@ -5,6 +5,7 @@ import com.druciak.escorerapp.entities.MatchInfo;
 import com.druciak.escorerapp.entities.SetInfo;
 import com.druciak.escorerapp.interfaces.ISummaryMVP;
 import com.druciak.escorerapp.model.SummaryModel;
+import com.druciak.escorerapp.model.firebaseService.Result;
 
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,20 @@ public class SummaryPresenter implements ISummaryMVP.IPresenter {
 
     @Override
     public void discardMatch() {
+        view.goToMainPanel(model.getUser());
+    }
+
+    @Override
+    public void onSaveClicked() {
+        model.saveSummaryOnServer();
+    }
+
+    @Override
+    public void onSaveSummaryCompleted(Result<String> result) {
+        if (result instanceof Result.Success)
+            view.showToast(((Result.Success<String>) result).getData());
+        else
+            view.showToast(((Result.Error) result).getError().getMessage());
         view.goToMainPanel(model.getUser());
     }
 }

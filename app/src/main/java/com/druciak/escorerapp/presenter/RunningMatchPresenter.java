@@ -50,8 +50,10 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     private boolean isTiebreak;
     private boolean isAfterShift;
     private double timeOfStartSet;
+    private boolean isSimplyMatch;
 
-    public RunningMatchPresenter(IRunningMatchMVP.IView view, MatchInfo matchInfo, LoggedInUser user) {
+    public RunningMatchPresenter(IRunningMatchMVP.IView view, MatchInfo matchInfo, LoggedInUser user,
+                                 boolean isSimplyMatch) {
         this.view = view;
         this.user = user;
         this.matchInfo = matchInfo;
@@ -63,6 +65,7 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
         this.isTiebreak = false;
         this.isAfterShift = false;
         this.timeOfStartSet = 0;
+        this.isSimplyMatch = isSimplyMatch;
     }
 
     @Override
@@ -224,7 +227,8 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     public void onNextSetClicked() {
         if (checkIfIsEndOfMatch()){
             getWinner().addSet();
-            view.moveToSummary(matchInfo, user);
+            matchInfo.setWinner(getWinner());
+            view.moveToSummary(matchInfo, user, isSimplyMatch);
         } else {
             isTiebreak = matchInfo.isTiebreak(++actualSet);
             if (isTiebreak) {

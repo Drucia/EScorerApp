@@ -1,13 +1,32 @@
 package com.druciak.escorerapp.entities;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class SetInfo {
+    @SerializedName("shiftsHome")
+    @Expose
     private int shiftsA;
+    @SerializedName("shiftsGuest")
+    @Expose
     private int shiftsB;
+    @SerializedName("timesHome")
+    @Expose
     private int timesA;
+    @SerializedName("timesGuest")
+    @Expose
     private int timesB;
+    @SerializedName("pointsHome")
+    @Expose
     private int pointsA;
+    @SerializedName("pointsGuest")
+    @Expose
     private int pointsB;
+    @SerializedName("set")
+    @Expose
     private int set;
+    @SerializedName("time")
+    @Expose
     private int time;
 
     public SetInfo(int shiftsA, int shiftsB, int timesA, int timesB, int pointsA, int pointsB,

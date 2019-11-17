@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.MATCH_KIND_ID;
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.USER_ADDITIONAL_INFO_ID;
 import static com.druciak.escorerapp.view.runningMatch.RunningMatchActivity.IS_REQ_ID;
 
@@ -64,6 +65,7 @@ public class DrawActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         boolean isRequest = intent.getBooleanExtra(IS_REQ_ID, false);
+        boolean isSimplyMatch = intent.getBooleanExtra(MATCH_KIND_ID, false);
         matchSettings = intent.getParcelableExtra(MatchSettingsActivity.MACH_SETTINGS_ID);
         user = intent.getParcelableExtra(LOGGED_IN_USER_ID);
         leftTeam = findViewById(R.id.leftTeamSpinner);
@@ -82,6 +84,7 @@ public class DrawActivity extends AppCompatActivity {
             } else
             {
                 Intent i = new Intent(this, RunningMatchActivity.class);
+                i.putExtra(MATCH_KIND_ID, isSimplyMatch);
                 i.putExtra(MATCH_INFO_ID, generateMatchInfo(leftTeamId, serveTeam));
                 i.putExtra(LOGGED_IN_USER_ID, user);
                 startActivity(i);

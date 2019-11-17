@@ -29,7 +29,7 @@ public interface IMatchSettingsMVP{
         void removeAdditionalMember(String name, int teamId, int memberId);
         void addAdditionalMember(String name, int teamId, int memberId);
         void onMatchStartClicked();
-        void startMatch(MatchSettings matchSettings, LoggedInUser user);
+        void startMatch(MatchSettings matchSettings, LoggedInUser user, boolean isSimplyMatch);
         void showPopUpWithErrorMatchSettings(String error);
         void setMatchSettingsParams(String sTournamentName, String sType, boolean isZas, String
                 sTown, String sStreet, String sHall, String sRefereeFirst, String sRefereeSnd,
@@ -38,7 +38,8 @@ public interface IMatchSettingsMVP{
         void goToMainPanel(LoggedInUser user);
         void updateTeamName(String name, int teamId);
         void updateTeamsInPopUp(ArrayList<Team> teams);
-        void startMatchWithSaveDataOnServer(MatchSettings matchSettings, LoggedInUser loggedInUser);
+        void startMatchWithSaveDataOnServer(MatchSettings matchSettings, LoggedInUser loggedInUser,
+                                            boolean isSimplyMatch);
     }
 
     interface IPresenter{

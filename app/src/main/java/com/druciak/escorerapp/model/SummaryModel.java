@@ -3,33 +3,44 @@ package com.druciak.escorerapp.model;
 import com.druciak.escorerapp.entities.Action;
 import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.MatchInfo;
+import com.druciak.escorerapp.entities.MatchSummary;
 import com.druciak.escorerapp.entities.MatchTeam;
 import com.druciak.escorerapp.entities.SetInfo;
 import com.druciak.escorerapp.entities.Shift;
 import com.druciak.escorerapp.entities.Time;
 import com.druciak.escorerapp.interfaces.ISummaryMVP;
+import com.druciak.escorerapp.model.firebaseService.Result;
+import com.druciak.escorerapp.model.internalApiService.InternalApiManager;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SummaryModel implements ISummaryMVP.IModel {
     private ISummaryMVP.IPresenter presenter;
     private MatchInfo matchInfo;
     private LoggedInUser user;
+    private InternalApiManager manager;
 
     public SummaryModel(ISummaryMVP.IPresenter presenter, MatchInfo matchInfo, LoggedInUser user) {
         this.presenter = presenter;
         this.matchInfo = matchInfo;
         this.user = user;
+        this.manager = new InternalApiManager(this);
     }
 
     @Override
     public List<String> getTeamsNames() {
-        return new ArrayList<>(Arrays.asList(matchInfo.getTeamA().getFullName(),
-                matchInfo.getTeamB().getFullName()));
+        return new ArrayList<>(Arrays.asList(matchInfo.getSettings().getMatch().getHostTeam().getFullName(),
+                matchInfo.getSettings().getMatch().getGuestTeam().getFullName()));
     }
 
     @Override
@@ -37,28 +48,29 @@ public class SummaryModel implements ISummaryMVP.IModel {
         Map<Integer, Integer> times = matchInfo.getTimesOfSets();
         Map<Integer, SetInfo> result = new HashMap<>();
         Map<Integer, ArrayList<Action>> actionsOfSets = matchInfo.getActionsOfSets();
-        MatchTeam teamA = matchInfo.getTeamA();
-        MatchTeam teamB = matchInfo.getTeamB();
+        int hostTeamId = matchInfo.getSettings().getMatch().getHostTeam().getId();
+        int guestTeamId = matchInfo.getSettings().getMatch().getGuestTeam().getId();
+
         for (Integer set : actionsOfSets.keySet())
         {
             ArrayList<Action> actions = actionsOfSets.get(set);
             if (!actions.isEmpty()) {
-                int shiftsOfTeamA = (int) actions.stream().filter(action -> action instanceof Shift
-                        && action.getTeamMadeActionId() == teamA.getTeamId()).count();
-                int shiftsOfTeamB = (int) actions.stream().filter(action -> action instanceof Shift
-                        && action.getTeamMadeActionId() == teamB.getTeamId()).count();
-                int timesOfTeamA = (int) actions.stream().filter(action -> action instanceof Time
-                        && action.getTeamMadeActionId() == teamA.getTeamId()).count();
-                int timesOfTeamB = (int) actions.stream().filter(action -> action instanceof Time
-                        && action.getTeamMadeActionId() == teamB.getTeamId()).count();
+                int shiftsOfHomeTeam = (int) actions.stream().filter(action -> action instanceof Shift
+                        && action.getTeamMadeActionId() == hostTeamId).count();
+                int shiftsOfGuestTeam = (int) actions.stream().filter(action -> action instanceof Shift
+                        && action.getTeamMadeActionId() == guestTeamId).count();
+                int timesOfHomeTeam = (int) actions.stream().filter(action -> action instanceof Time
+                        && action.getTeamMadeActionId() == hostTeamId).count();
+                int timesOfGuestTeam = (int) actions.stream().filter(action -> action instanceof Time
+                        && action.getTeamMadeActionId() == guestTeamId).count();
                 Action lastAction = actions.get(actions.size() - 1);
-                int pointsOfA = lastAction.getTeamMadeActionId() == teamA.getTeamId() ?
+                int pointsOfHomeTeam = lastAction.getTeamMadeActionId() == hostTeamId ?
                         lastAction.getTeamMadeActionPoints() : lastAction.getSndTeamPoints();
-                int pointsOfB = lastAction.getTeamMadeActionId() == teamB.getTeamId() ?
+                int pointsOfGuestTeam = lastAction.getTeamMadeActionId() == guestTeamId ?
                         lastAction.getTeamMadeActionPoints() : lastAction.getSndTeamPoints();
 
-                SetInfo setInfo = new SetInfo(shiftsOfTeamA, shiftsOfTeamB, timesOfTeamA, timesOfTeamB,
-                        pointsOfA, pointsOfB, set, times.get(set));
+                SetInfo setInfo = new SetInfo(shiftsOfHomeTeam, shiftsOfGuestTeam, timesOfHomeTeam,
+                        timesOfGuestTeam, pointsOfHomeTeam, pointsOfGuestTeam, set, times.get(set));
                 result.put(set, setInfo);
             }
         }
@@ -67,7 +79,11 @@ public class SummaryModel implements ISummaryMVP.IModel {
 
     @Override
     public List<Integer> getSetsScores() {
-        return new ArrayList<>(Arrays.asList(matchInfo.getTeamA().getSets(), matchInfo.getTeamB().getSets()));
+        MatchTeam teamHome = matchInfo.getTeamA().getId() == matchInfo.getSettings().getMatch()
+                .getHostTeam().getId() ? matchInfo.getTeamA() : matchInfo.getTeamB();
+        MatchTeam teamGuest = matchInfo.getTeamA().getId() == matchInfo.getSettings().getMatch()
+                .getGuestTeam().getId() ? matchInfo.getTeamA() : matchInfo.getTeamB();
+        return new ArrayList<>(Arrays.asList(teamHome.getSets(), teamGuest.getSets()));
     }
 
     @Override
@@ -86,5 +102,39 @@ public class SummaryModel implements ISummaryMVP.IModel {
     }
 
     @Override
-    public LoggedInUser getUser() { return user; };
+    public LoggedInUser getUser() { return user; }
+
+    @Override
+    public void saveSummaryOnServer() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        String time = dtf.format(now) + matchInfo.getSettings().getStartTime();
+        List<Integer> sets = getSetsScores();
+        MatchSummary matchSummary = new MatchSummary(
+                time,
+                matchInfo.getSettings().getMatch(),
+                matchInfo.getWinner(),
+                sets.get(0),
+                sets.get(1),
+                getSetsInfo()
+        );
+        manager.getUserDataService().saveSummary(user.getUserId(), matchSummary).enqueue(new Callback<MatchSummary>() {
+            @Override
+            public void onResponse(Call<MatchSummary> call, Response<MatchSummary> response) {
+                MatchSummary summaryResponse = response.body();
+                if (summaryResponse != null)
+                {
+                    presenter.onSaveSummaryCompleted(new Result.Success<String>("Zapisano na serwerze"));
+                } else
+                {
+                    presenter.onSaveSummaryCompleted(new Result.Error(new Exception(response.errorBody().toString())));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MatchSummary> call, Throwable t) {
+                presenter.onSaveSummaryCompleted(new Result.Error(new Exception(t.getMessage())));
+            }
+        });
+    }
 }

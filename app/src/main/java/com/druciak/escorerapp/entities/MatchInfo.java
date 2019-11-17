@@ -43,6 +43,7 @@ public class MatchInfo implements Parcelable {
     private MatchTeam serveTeam;
     private MatchSettings settings;
     private String attentions;
+    private MatchTeam winner;
     private Map<Integer, ArrayList<Action>> actionsOfSets;
     private Map<Integer, Integer> timesOfSets;
     private Map<Integer, Integer> servesOfSets;
@@ -71,6 +72,7 @@ public class MatchInfo implements Parcelable {
         serveTeam = in.readParcelable(MatchTeam.class.getClassLoader());
         settings = in.readParcelable(MatchSettings.class.getClassLoader());
         attentions = in.readString();
+        winner = in.readParcelable(MatchTeam.class.getClassLoader());
         int size = in.readInt();
         actionsOfSets = new HashMap<>();
         actionsOfSets.put(1, new ArrayList<>());
@@ -141,6 +143,7 @@ public class MatchInfo implements Parcelable {
         dest.writeParcelable(serveTeam, flags);
         dest.writeParcelable(settings, flags);
         dest.writeString(attentions);
+        dest.writeParcelable(winner, flags);
         dest.writeInt(actionsOfSets.size());
         for (Integer key : actionsOfSets.keySet())
         {
@@ -270,5 +273,13 @@ public class MatchInfo implements Parcelable {
 
     public Map<Integer, Integer> getTimesOfSets() {
         return timesOfSets;
+    }
+
+    public MatchTeam getWinner() {
+        return winner;
+    }
+
+    public void setWinner(MatchTeam winner) {
+        this.winner = winner;
     }
 }

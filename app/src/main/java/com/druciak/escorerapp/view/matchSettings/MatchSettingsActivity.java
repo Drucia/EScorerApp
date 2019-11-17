@@ -71,7 +71,7 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
                     match.getGuestTeam().getId());
         }
         else {
-            Match newMatch = new Match(new Team(-1), new Team(-2));
+            Match newMatch = new Match(new Team(-1), new Team(-2), loggedInUser.getUserId());
             presenter = new MatchSettingsPresenter(this, newMatch, loggedInUser, true);
             sectionsPagerAdapter = new SectionsPagerAdapter(this,
                     getSupportFragmentManager(), newMatch, matchKind,
@@ -191,12 +191,14 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     }
 
     @Override
-    public void startMatch(MatchSettings matchSettings, LoggedInUser loggedInUser) {
+    public void startMatch(MatchSettings matchSettings, LoggedInUser loggedInUser,
+                           boolean isSimplyMatch) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.label_go_to_draw));
         builder.setMessage(getString(R.string.msg_no_more_change));
         builder.setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
             Intent intent = new Intent(this, DrawActivity.class);
+            intent.putExtra(MATCH_KIND_ID, isSimplyMatch);
             intent.putExtra(MACH_SETTINGS_ID, matchSettings);
             intent.putExtra(LOGGED_IN_USER_ID, loggedInUser);
             MatchSettingsActivity.this.startActivity(intent);
@@ -264,7 +266,8 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     }
 
     @Override
-    public void startMatchWithSaveDataOnServer(MatchSettings matchSettings, LoggedInUser loggedInUser) {
+    public void startMatchWithSaveDataOnServer(MatchSettings matchSettings, LoggedInUser loggedInUser,
+                                               boolean isSimplyMatch) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.label_go_to_draw));
         View root = getLayoutInflater().inflate(R.layout.pop_up_save_data_on_server, null);
@@ -276,6 +279,7 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
         builder.setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
             presenter.saveDataOnServer(home.isChecked(), guest.isChecked(), conf.isChecked());
             Intent intent = new Intent(this, DrawActivity.class);
+            intent.putExtra(MATCH_KIND_ID, isSimplyMatch);
             intent.putExtra(MACH_SETTINGS_ID, matchSettings);
             intent.putExtra(LOGGED_IN_USER_ID, loggedInUser);
             MatchSettingsActivity.this.startActivity(intent);

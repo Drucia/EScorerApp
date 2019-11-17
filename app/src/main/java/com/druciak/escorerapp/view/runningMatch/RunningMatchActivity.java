@@ -70,6 +70,7 @@ import static com.druciak.escorerapp.entities.TeamAdditionalMember.MEDICINE_MEMB
 import static com.druciak.escorerapp.view.DrawActivity.MATCH_INFO_ID;
 import static com.druciak.escorerapp.view.DrawActivity.SERVE_TEAM_ID;
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.LOGGED_IN_USER_ID;
+import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.MATCH_KIND_ID;
 import static com.druciak.escorerapp.view.mainPanel.MainPanelActivity.USER_ADDITIONAL_INFO_ID;
 import static com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity.MACH_SETTINGS_ID;
 
@@ -147,12 +148,9 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         Intent intent = getIntent();
+        boolean isSimplyMatch = intent.getBooleanExtra(MATCH_KIND_ID, false);
         LoggedInUser user = intent.getParcelableExtra(LOGGED_IN_USER_ID);
         MatchInfo matchInfo = intent.getParcelableExtra(MATCH_INFO_ID);
-
-        // mocked
-//        MatchInfo matchInfo = mockMatchInfo();
-//        LoggedInUser user = mockLoggedInUser();
 
         recyclerViewLeft = findViewById(R.id.leftPlayersRecyclerView);
         recyclerViewRight = findViewById(R.id.rightPlayersRecyclerView);
@@ -284,7 +282,7 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
                 cardsLayout.setVisibility(View.GONE);
         });
 
-        presenter = new RunningMatchPresenter(this, matchInfo, user);
+        presenter = new RunningMatchPresenter(this, matchInfo, user, isSimplyMatch);
         presenter.onActivityCreated();
     }
 
@@ -499,8 +497,9 @@ public class RunningMatchActivity extends AppCompatActivity implements IRunningM
     }
 
     @Override
-    public void moveToSummary(MatchInfo matchInfo, LoggedInUser user) {
+    public void moveToSummary(MatchInfo matchInfo, LoggedInUser user, boolean isSimplyMatch) {
         Intent intent = new Intent(this, SummaryActivity.class);
+        intent.putExtra(MATCH_KIND_ID, isSimplyMatch);
         intent.putExtra(MATCH_INFO_ID, matchInfo);
         intent.putExtra(LOGGED_IN_USER_ID, user);
         startActivity(intent);
