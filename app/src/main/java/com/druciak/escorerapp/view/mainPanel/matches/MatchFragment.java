@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.entities.MatchSummary;
@@ -20,11 +21,11 @@ import com.druciak.escorerapp.interfaces.IMatchFragmentMVP;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MatchesFragment extends Fragment implements IMatchFragmentMVP.IView {
+public class MatchFragment extends Fragment implements IMatchFragmentMVP.IView {
     private ArrayList<MatchSummary> summaries;
     private TextView noMatches;
     private IMainPanelMVP.IView view;
-    private MatchesAdapter adapter;
+    private MatchAdapter adapter;
     private IMatchFragmentMVP.IPresenter presenter;
     private RecyclerView matches;
     private Context context;
@@ -35,11 +36,17 @@ public class MatchesFragment extends Fragment implements IMatchFragmentMVP.IView
         view = ((IMainPanelMVP.IView) getActivity());
         matches = root.findViewById(R.id.matchesRecycler);
         summaries = new ArrayList<>();
-        adapter = new MatchesAdapter(context, summaries);
-        matches.setLayoutManager(new LinearLayoutManager(context));
+        adapter = new MatchAdapter(context, summaries);
+        matches.setLayoutManager(new LinearLayoutManager(getContext()));
+        matches.setAdapter(adapter);
         noMatches = root.findViewById(R.id.noMatches);
-        presenter = new MatchesFragmentPresenter(view.getUserId(), this);
-        presenter.onFragmentCreated();
+        SwipeRefreshLayout refresh = root.findViewById(R.id.pullToRefresh);
+        refresh.setOnRefreshListener(() -> {
+            presenter.onRefresh();
+            refresh.setRefreshing(false);
+        });
+        presenter = new MatchFragmentPresenter(view.getUserId(), this);
+        presenter.onRefresh();
 
         return root;
     }
@@ -52,11 +59,12 @@ public class MatchesFragment extends Fragment implements IMatchFragmentMVP.IView
     }
 
     @Override
-    public void onPrepareMatchListEventSuccess(List<MatchSummary> summaries) {
-        if (!summaries.isEmpty())
+    public void onPrepareMatchListEventSuccess(List<MatchSummary> summ) {
+        if (!summ.isEmpty())
             noMatches.setVisibility(View.GONE);
+        summaries.clear();
         int size = adapter.getItemCount();
-        this.summaries.addAll(summaries);
-        adapter.notifyItemRangeChanged(size, summaries.size());
+        summaries.addAll(summ);
+        adapter.notifyItemRangeChanged(size, summ.size());
     }
 }

@@ -14,7 +14,7 @@ import com.druciak.escorerapp.interfaces.ITeamCallback;
 
 import java.util.ArrayList;
 
-class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> {
+public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> {
     private ITeamCallback callback;
     private ArrayList<Team> teams;
     private boolean isHomeTeam;

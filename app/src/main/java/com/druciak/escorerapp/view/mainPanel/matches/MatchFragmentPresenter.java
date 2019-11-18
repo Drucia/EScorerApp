@@ -6,13 +6,13 @@ import com.druciak.escorerapp.model.firebaseService.Result;
 
 import java.util.List;
 
-public class MatchesFragmentPresenter implements IMatchFragmentMVP.IPresenter {
+public class MatchFragmentPresenter implements IMatchFragmentMVP.IPresenter {
     private IMatchFragmentMVP.IModel model;
     private IMatchFragmentMVP.IView view;
 
-    public MatchesFragmentPresenter(String userId, IMatchFragmentMVP.IView view) {
+    public MatchFragmentPresenter(String userId, IMatchFragmentMVP.IView view) {
         this.view = view;
-        this.model = new MatchesFragmentModel(userId, this);
+        this.model = new MatchFragmentModel(userId, this);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class MatchesFragmentPresenter implements IMatchFragmentMVP.IPresenter {
     }
 
     @Override
-    public void onFragmentCreated() {
+    public void onRefresh() {
         model.prepareAllMatchesOfUser();
     }
 }

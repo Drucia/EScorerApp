@@ -15,11 +15,11 @@ import com.druciak.escorerapp.entities.Team;
 
 import java.util.ArrayList;
 
-class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.ViewHolder> {
+class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
     private ArrayList<MatchSummary> items;
     private Context context;
 
-    public MatchesAdapter(Context context, ArrayList<MatchSummary> items) {
+    public MatchAdapter(Context context, ArrayList<MatchSummary> items) {
         this.items = items;
         this.context = context;
     }
@@ -29,7 +29,7 @@ class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_summary_card,
                 parent, false);
-        return new MatchesAdapter.ViewHolder(view);
+        return new MatchAdapter.ViewHolder(view);
     }
 
     @Override

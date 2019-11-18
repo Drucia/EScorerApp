@@ -16,6 +16,6 @@ public interface IMatchFragmentMVP {
 
     interface IPresenter {
         void onPrepareMatchListEventCompleted(Result<List<MatchSummary>> result);
-        void onFragmentCreated();
+        void onRefresh();
     }
 }

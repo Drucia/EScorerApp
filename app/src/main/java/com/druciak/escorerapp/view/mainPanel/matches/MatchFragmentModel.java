@@ -11,12 +11,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MatchesFragmentModel implements IMatchFragmentMVP.IModel {
+public class MatchFragmentModel implements IMatchFragmentMVP.IModel {
     private String userId;
     private IMatchFragmentMVP.IPresenter presenter;
     private InternalApiManager manager;
 
-    public MatchesFragmentModel(String userId, IMatchFragmentMVP.IPresenter presenter) {
+    public MatchFragmentModel(String userId, IMatchFragmentMVP.IPresenter presenter) {
         this.userId = userId;
         this.presenter = presenter;
         manager = new InternalApiManager();
