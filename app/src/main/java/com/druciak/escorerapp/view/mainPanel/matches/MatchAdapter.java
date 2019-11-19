@@ -40,8 +40,8 @@ class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
         holder.hostName.setTextColor(context.getColor(hostTeam.getId() == summary.getWinner().getId()
                 ? R.color.light_green : R.color.red));
         Team guestTeam = summary.getMatch().getGuestTeam();
-        holder.hostName.setText(guestTeam.getFullName());
-        holder.hostName.setTextColor(context.getColor(guestTeam.getId() == summary.getWinner().getId()
+        holder.guestName.setText(guestTeam.getFullName());
+        holder.guestName.setTextColor(context.getColor(guestTeam.getId() == summary.getWinner().getId()
                 ? R.color.light_green : R.color.red));
         holder.score.setText(summary.getHostSets() + " : " + summary.getGuestSets());
         holder.date.setText(summary.getDate());
