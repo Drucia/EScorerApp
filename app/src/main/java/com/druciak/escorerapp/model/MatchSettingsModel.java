@@ -24,7 +24,7 @@ public class MatchSettingsModel implements IMatchSettingsMVP.IInternalModel {
 
     @Override
     public void getAllTeamsOfUser(String userId) {
-        manager.getUserDataService().getUserTeams(userId).enqueue(new Callback<List<Team>>() {
+        manager.getTeamService().getTeamsOfUser(userId).enqueue(new Callback<List<Team>>() {
             @Override
             public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
                 List<Team> responseTeams = response.body();
@@ -42,8 +42,8 @@ public class MatchSettingsModel implements IMatchSettingsMVP.IInternalModel {
     }
 
     @Override
-    public void getAllPlayersOfTeam(String userId, int teamId) {
-        manager.getUserDataService().getUserSpecificTeamPlayers(userId, teamId).enqueue(new Callback<List<Player>>() {
+    public void getAllPlayersOfTeam(int teamId) {
+        manager.getPlayerService().getAllPlayersOfTeam(teamId).enqueue(new Callback<List<Player>>() {
             @Override
             public void onResponse(Call<List<Player>> call, Response<List<Player>> response) {
                 List<Player> responsePlayers = response.body();
@@ -62,7 +62,8 @@ public class MatchSettingsModel implements IMatchSettingsMVP.IInternalModel {
 
     @Override
     public void saveTeam(Team team, List<Player> players, String userId) {
-        manager.getUserDataService().saveTeam(userId, new Pair<>(team, players)).enqueue(new Callback<Pair<Team, Player>>() {
+        manager.getPlayerService().saveWholeTeamWithPlayers(userId, new Pair<>(team, players))
+                .enqueue(new Callback<Pair<Team, Player>>() {
             @Override
             public void onResponse(Call<Pair<Team, Player>> call, Response<Pair<Team, Player>> response) {
                 // do sth todo

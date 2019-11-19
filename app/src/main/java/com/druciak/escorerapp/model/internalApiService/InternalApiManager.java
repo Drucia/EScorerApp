@@ -60,21 +60,33 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
         }
     }
 
-    private LoginService getLoginService()
+    private UserService getUserService()
     {
         initializeRetrofit();
-        return retrofit.create(LoginService.class);
+        return retrofit.create(UserService.class);
     }
 
-    public UserDataService getUserDataService()
+    public TeamService getTeamService()
     {
         initializeRetrofit();
-        return retrofit.create(UserDataService.class);
+        return retrofit.create(TeamService.class);
+    }
+
+    public PlayerService getPlayerService()
+    {
+        initializeRetrofit();
+        return retrofit.create(PlayerService.class);
+    }
+
+    public SummaryService getSummaryService()
+    {
+        initializeRetrofit();
+        return retrofit.create(SummaryService.class);
     }
 
     @Override
     public void createUser(NewUser user, final String email) {
-        getLoginService().updateUser(user).enqueue(new Callback<NewUser>() {
+        getUserService().updateUser(user).enqueue(new Callback<NewUser>() {
             @Override
             public void onResponse(Call<NewUser> call, Response<NewUser> response) {
                 NewUser responseUser = response.body();
@@ -104,7 +116,7 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
 
 //    @Override
 //    public void getUserInformation(final FirebaseUser firebaseUser) {
-////        getLoginService().getUser(firebaseUser.getUid()).enqueue(new Callback<NewUser>() {
+////        getUserService().getUser(firebaseUser.getUid()).enqueue(new Callback<NewUser>() {
 ////            @Override
 ////            public void onResponse(Call<NewUser> call, Response<NewUser> response) {
 ////                NewUser userInfo = response.body();
@@ -133,7 +145,7 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
 
     @Override
     public void setUserInformation(final FirebaseUser firebaseUser, NewUser user) {
-        getLoginService().updateUser(user).enqueue(new Callback<NewUser>() {
+        getUserService().updateUser(user).enqueue(new Callback<NewUser>() {
             @Override
             public void onResponse(Call<NewUser> call, Response<NewUser> response) {
                 NewUser userInfo = response.body();
@@ -162,7 +174,7 @@ public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelM
 
     @Override
     public void getUserAdditionalInfo(FirebaseUser firebaseUser) {
-        getLoginService().getUser(firebaseUser.getUid()).enqueue(new Callback<NewUser>() {
+        getUserService().getUser(firebaseUser.getUid()).enqueue(new Callback<NewUser>() {
             @Override
             public void onResponse(Call<NewUser> call, Response<NewUser> response) {
                 NewUser userInfo = response.body();

@@ -24,7 +24,7 @@ public class MatchFragmentModel implements IMatchFragmentMVP.IModel {
 
     @Override
     public void prepareAllMatchesOfUser() {
-        manager.getUserDataService().getAllSummary(userId).enqueue(new Callback<List<MatchSummary>>() {
+        manager.getSummaryService().getAllSummaries(userId).enqueue(new Callback<List<MatchSummary>>() {
             @Override
             public void onResponse(Call<List<MatchSummary>> call, Response<List<MatchSummary>> response) {
                 List<MatchSummary> summaries = response.body();

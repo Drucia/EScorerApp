@@ -24,7 +24,7 @@ public class TeamFragmentModel implements ITeamFragmentMVP.IModel {
 
     @Override
     public void prepareAllTeamsOfUser() {
-        manager.getUserDataService().getUserTeams(userId).enqueue(new Callback<List<Team>>() {
+        manager.getTeamService().getTeamsOfUser(userId).enqueue(new Callback<List<Team>>() {
             @Override
             public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
                 List<Team> teamsResponse = response.body();

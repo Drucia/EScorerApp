@@ -197,7 +197,7 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
             match.setHostTeam(team);
         else
             match.setGuestTeam(team);
-        model.getAllPlayersOfTeam(loggedInUser.getUserId(), team.getId());
+        model.getAllPlayersOfTeam(team.getId());
     }
 
     @Override

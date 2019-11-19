@@ -6,6 +6,9 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Match implements Parcelable {
     @SerializedName("id")
     @Expose
@@ -22,6 +25,9 @@ public class Match implements Parcelable {
     @SerializedName("userId")
     @Expose
     private String refereeId;
+    @SerializedName("date")
+    @Expose
+    private String date;
 
     public Match(Team hostTeam, Team guestTeam, String refereeId) {
         this.id = -1;
@@ -29,6 +35,7 @@ public class Match implements Parcelable {
         this.guestTeam = guestTeam;
         this.refereeId = refereeId;
         this.name = hostTeam.getShortName() + " vs " + guestTeam.getShortName();
+        this.date = getCurrDate();
     }
 
     public Match(int id, Team hostTeam, Team guestTeam, String refereeId) {
@@ -37,6 +44,13 @@ public class Match implements Parcelable {
         this.guestTeam = guestTeam;
         this.refereeId = refereeId;
         this.name = hostTeam.getShortName() + " vs " + guestTeam.getShortName();
+        this.date = getCurrDate();
+    }
+
+    private String getCurrDate() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+        return dtf.format(now);
     }
 
     protected Match(Parcel in) {
@@ -45,6 +59,7 @@ public class Match implements Parcelable {
         guestTeam = in.readParcelable(Team.class.getClassLoader());
         name = in.readString();
         refereeId = in.readString();
+        date = in.readString();
     }
 
     @Override
@@ -54,6 +69,15 @@ public class Match implements Parcelable {
         dest.writeParcelable(guestTeam, flags);
         dest.writeString(name);
         dest.writeString(refereeId);
+        dest.writeString(date);
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     @Override

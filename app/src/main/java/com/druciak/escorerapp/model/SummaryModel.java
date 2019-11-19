@@ -118,7 +118,7 @@ public class SummaryModel implements ISummaryMVP.IModel {
                 sets.get(1),
                 getSetsInfo()
         );
-        manager.getUserDataService().saveSummary(user.getUserId(), matchSummary).enqueue(new Callback<MatchSummary>() {
+        manager.getSummaryService().saveSummary(user.getUserId(), matchSummary).enqueue(new Callback<MatchSummary>() {
             @Override
             public void onResponse(Call<MatchSummary> call, Response<MatchSummary> response) {
                 MatchSummary summaryResponse = response.body();

@@ -17,7 +17,7 @@ public interface IMatchSettingsMVP{
 
     interface IInternalModel{
         void getAllTeamsOfUser(String userId);
-        void getAllPlayersOfTeam(String userId, int id);
+        void getAllPlayersOfTeam(int teamId);
         void saveTeam(Team team, List<Player> players, String userId);
     }
 
