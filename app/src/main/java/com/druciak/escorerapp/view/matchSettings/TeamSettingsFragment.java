@@ -32,7 +32,9 @@ import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.IFragmentView,
@@ -60,6 +62,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     private TextView captainShirtNumber;
     private TextInputLayout teamName;
     private boolean isSimplyMatch;
+    private Set<Integer> numbers;
 
     public TeamSettingsFragment(Context context, Team team,
                                 List<Player> playersOfHost, boolean isSimplyMatch) {
@@ -69,6 +72,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         players = new ArrayList<>(playersOfHost);
         playersAdapter = new PlayersAdapter(this, players);
         this.isSimplyMatch = isSimplyMatch;
+        this.numbers = new HashSet<>();
     }
 
     @Override
@@ -385,27 +389,40 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
             boolean bCaptain = captain.isChecked();
             String sNumber = number.getEditText().getText().toString();
             int iNumber = sNumber.equals("") ? 0 : Integer.valueOf(sNumber);
-
             // todo make check for empty values
 
             Player p;
 
             if (isNew)
             {
-                p = new Player(sName, sSurname, team, bLibero, bCaptain, iNumber);
-                int position = players.size();
-                players.add(p);
-                playersAdapter.notifyItemInserted(position);
-                matchSettingsView.addPlayer(p);
+                if (checkIfNumberIsOk(iNumber)) {
+                    p = new Player(sName, sSurname, team, bLibero, bCaptain, iNumber);
+                    int position = players.size();
+                    players.add(p);
+                    playersAdapter.notifyItemInserted(position);
+                    matchSettingsView.addPlayer(p);
+                    numbers.add(iNumber);
+                } else
+                    Toast.makeText(getContext(),
+                            "Wprowadzony numer już istnieje lub wychodzi poza zakres",
+                            Toast.LENGTH_LONG).show();
             } else
             {
                 p = players.get(adapterPosition);
-                p.setName(sName);
-                p.setSurname(sSurname);
-                p.setLibero(bLibero);
-                p.setCaptain(bCaptain);
-                p.setNumber(iNumber);
-                playersAdapter.notifyItemChanged(adapterPosition);
+                int old = p.getNumber();
+                numbers.remove(old);
+                if (checkIfNumberIsOk(iNumber)) {
+                    p.setName(sName);
+                    p.setSurname(sSurname);
+                    p.setLibero(bLibero);
+                    p.setCaptain(bCaptain);
+                    p.setNumber(iNumber);
+                    playersAdapter.notifyItemChanged(adapterPosition);
+                    numbers.add(iNumber);
+                } else
+                    Toast.makeText(getContext(),
+                            "Wprowadzony numer już istnieje lub wychodzi poza zakres",
+                            Toast.LENGTH_LONG).show();
             }
             dialogInterface.dismiss();
         });
@@ -432,6 +449,10 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
             });
         }
         dialogBuilder.create().show();
+    }
+
+    private boolean checkIfNumberIsOk(int iNumber) {
+        return !numbers.contains(iNumber) && iNumber > 0 && iNumber < 100;
     }
 
     public void updatePlayersAdapter(List<Player> players) {
