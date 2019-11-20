@@ -49,24 +49,28 @@ public class SummaryModel implements ISummaryMVP.IModel {
         Map<Integer, SetInfo> result = new HashMap<>();
         Map<Integer, ArrayList<Action>> actionsOfSets = matchInfo.getActionsOfSets();
         int hostTeamId = matchInfo.getSettings().getMatch().getHostTeam().getId();
+        MatchTeam teamHost = matchInfo.getTeamA().getId() == hostTeamId ? matchInfo.getTeamA() :
+                matchInfo.getTeamB();
         int guestTeamId = matchInfo.getSettings().getMatch().getGuestTeam().getId();
+        MatchTeam teamGuest = matchInfo.getTeamA().getId() == guestTeamId ? matchInfo.getTeamA() :
+                matchInfo.getTeamB();
 
         for (Integer set : actionsOfSets.keySet())
         {
             ArrayList<Action> actions = actionsOfSets.get(set);
             if (!actions.isEmpty()) {
                 int shiftsOfHomeTeam = (int) actions.stream().filter(action -> action instanceof Shift
-                        && action.getTeamMadeActionId() == hostTeamId).count();
+                        && action.getTeamMadeActionId() == teamHost.getTeamId()).count();
                 int shiftsOfGuestTeam = (int) actions.stream().filter(action -> action instanceof Shift
-                        && action.getTeamMadeActionId() == guestTeamId).count();
+                        && action.getTeamMadeActionId() == teamGuest.getTeamId()).count();
                 int timesOfHomeTeam = (int) actions.stream().filter(action -> action instanceof Time
-                        && action.getTeamMadeActionId() == hostTeamId).count();
+                        && action.getTeamMadeActionId() == teamHost.getTeamId()).count();
                 int timesOfGuestTeam = (int) actions.stream().filter(action -> action instanceof Time
-                        && action.getTeamMadeActionId() == guestTeamId).count();
+                        && action.getTeamMadeActionId() == teamGuest.getTeamId()).count();
                 Action lastAction = actions.get(actions.size() - 1);
-                int pointsOfHomeTeam = lastAction.getTeamMadeActionId() == hostTeamId ?
+                int pointsOfHomeTeam = lastAction.getTeamMadeActionId() == teamHost.getTeamId() ?
                         lastAction.getTeamMadeActionPoints() : lastAction.getSndTeamPoints();
-                int pointsOfGuestTeam = lastAction.getTeamMadeActionId() == guestTeamId ?
+                int pointsOfGuestTeam = lastAction.getTeamMadeActionId() == teamGuest.getTeamId() ?
                         lastAction.getTeamMadeActionPoints() : lastAction.getSndTeamPoints();
 
                 SetInfo setInfo = new SetInfo(shiftsOfHomeTeam, shiftsOfGuestTeam, timesOfHomeTeam,

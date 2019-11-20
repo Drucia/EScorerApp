@@ -22,8 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class InternalApiManager implements ICreateAccountMVP.IModel, IMainPanelMVP.ILoggedInUserModel,
         IUserInfo.IModel, IMatchSettingsMVP {
-//    private static final String BASE_APP_SERVER_URL = "https://e-scorer-service.herokuapp.com/";
-    private static final String BASE_APP_SERVER_URL = "http://192.168.1.3:8080/";
+    private static final String BASE_APP_SERVER_URL = "https://e-scorer-service.herokuapp.com/";
 
     private Retrofit retrofit;
     private ICreateAccountMVP.IPresenter createAccountPresenter;
