@@ -164,8 +164,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/fakeServe"
             android:layout_alignStart="@id/court"
-            android:layout_alignParentBottom="true"
             android:layout_marginLeft="-33dp"
+            android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:visibility="gone">
@@ -222,7 +222,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/rightServe"
             android:layout_alignEnd="@+id/court"
-            android:layout_alignParentBottom="true"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="-33dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -302,31 +302,16 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/fakeServe"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
+            android:layout_marginTop="25dp"
             android:layout_toStartOf="@+id/court"
             android:gravity="center"
             android:orientation="vertical">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/pointLeft"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingLeft="2dp"
-                android:paddingTop="2dp"
-                android:paddingRight="2dp"
-                android:paddingBottom="2dp"
-                android:text="Punkt"
-                android:textAllCaps="false"
-                android:textSize="18sp" />
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -360,28 +345,17 @@
                     android:id="@+id/cardsLeft"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:layout_weight="1"
                     app:srcCompat="@drawable/cards" />
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/court"
-            android:gravity="center"
-            android:orientation="vertical">
-
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/pointRight"
+                android:id="@+id/pointLeft"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:paddingLeft="2dp"
                 android:paddingTop="2dp"
                 android:paddingRight="2dp"
@@ -389,6 +363,18 @@
                 android:text="Punkt"
                 android:textAllCaps="false"
                 android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rightServe"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="25dp"
+            android:layout_toEndOf="@+id/court"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -398,7 +384,6 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -406,7 +391,6 @@
                         android:id="@+id/cardsRight"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:layout_weight="1"
                         app:srcCompat="@drawable/cards" />
 
                     <ImageView
@@ -438,6 +422,20 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/pointRight"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="2dp"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="2dp"
+                android:text="Punkt"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
