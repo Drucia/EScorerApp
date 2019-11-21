@@ -80,10 +80,10 @@ public class ExternalApiManager implements IMatchSettingsMVP.IExternalModel, IMa
             // prepare matches
             // 5YAYc3t7jWea1SnDXYyQEH3gQ1p1 - Tomasz
 
-            matches.add(new Match(teams.get(0), teams.get(1), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
-            matches.add(new Match(teams.get(1), teams.get(2), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
-            matches.add(new Match(teams.get(0), teams.get(2), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
-            matches.add(new Match(teams.get(1), teams.get(0), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+            matches.add(new Match(1,teams.get(0), teams.get(1), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+            matches.add(new Match(2, teams.get(1), teams.get(2), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+            matches.add(new Match(3, teams.get(0), teams.get(2), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
+            matches.add(new Match(4, teams.get(1), teams.get(0), "5YAYc3t7jWea1SnDXYyQEH3gQ1p1"));
         }
     }
 

@@ -418,7 +418,8 @@ public class SheetGenerator {
 
         // 1 row
         table.addCell(new Cell(1, 1).add(new Paragraph("Nazwa")));
-        table.addCell(new Cell(1, 5).add(new Paragraph(matchInfo.getSettings().getMatch().getName())));
+        table.addCell(new Cell(1, 5).add(new Paragraph(matchInfo.getSettings()
+                .getTournamentName())));
 
         // 2 row
         table.addCell(new Cell(1, 1).add(new Paragraph("Miasto")));

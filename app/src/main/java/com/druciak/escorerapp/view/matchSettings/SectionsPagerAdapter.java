@@ -66,33 +66,27 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch(position)
-        {
-            case 0:
-                List<Player> playersOfHost = players.stream()
-                        .filter(player -> player.getTeam().getId() == match.getHostTeam().getId())
-                        .collect(Collectors.toList());
-                fragments.add(new TeamSettingsFragment(mContext,
-                        match.getHostTeam(), playersOfHost, isSimplyMatch));
-                break;
-            case 1:
-                List<Player> playersOfGuest = players.stream()
-                        .filter(player -> player.getTeam().getId() == match.getGuestTeam().getId())
-                        .collect(Collectors.toList());
-                fragments.add(new TeamSettingsFragment(mContext,
-                        match.getGuestTeam(), playersOfGuest, isSimplyMatch));
-                break;
-            case 2:
-                fragments.add(new MatchSettingsFragment((IMatchSettingsMVP.IView) mContext,
-                        matchSettings));
-                break;
-            case 3:
-                fragments.add(new MatchConfigsFragment((IMatchSettingsMVP.IView) mContext));
-                break;
-        }
-
+        addAllFragments();
         return fragments.get(position);
     }
+
+    private void addAllFragments()
+    {
+        List<Player> playersOfHost = players.stream()
+                .filter(player -> player.getTeam().getId() == match.getHostTeam().getId())
+                .collect(Collectors.toList());
+        fragments.add(new TeamSettingsFragment(mContext,
+                match.getHostTeam(), playersOfHost, isSimplyMatch));
+        List<Player> playersOfGuest = players.stream()
+                .filter(player -> player.getTeam().getId() == match.getGuestTeam().getId())
+                .collect(Collectors.toList());
+        fragments.add(new TeamSettingsFragment(mContext,
+                match.getGuestTeam(), playersOfGuest, isSimplyMatch));
+        fragments.add(new MatchSettingsFragment((IMatchSettingsMVP.IView) mContext,
+                matchSettings));
+        fragments.add(new MatchConfigsFragment((IMatchSettingsMVP.IView) mContext));
+    }
+
 
     @Override
     public int getCount() {
