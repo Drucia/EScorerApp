@@ -1,7 +1,9 @@
 package com.druciak.escorerapp.view.mainPanel;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,12 +14,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -37,6 +41,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainPanelActivity extends AppCompatActivity implements IMainPanelMVP.IView {
+    private static final int STORAGE_PERMISSION_CODE = 100;
+
     public static final String MATCH_KIND_ID = "kind";
     public static final String MATCH_ID = "match";
     public static final String LOGGED_IN_USER_ID = "user";
@@ -69,6 +75,13 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                    STORAGE_PERMISSION_CODE);
+        }
+
         presenter = new MainPanelPresenter(this);
         Intent intent = getIntent();
         boolean isAdditionalInfo = intent.getBooleanExtra(USER_ADDITIONAL_INFO_ID, false);
@@ -76,10 +89,23 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
             showPopUpWithSetUserFields();
         else
             presenter.setLoggedInUser(intent.getParcelableExtra(LOGGED_IN_USER_ID));
+    }
 
-        Bundle bundle = new Bundle();
-        bundle.putString("userId", presenter.getUserId());
-        NavHostFragment.create(R.navigation.mobile_navigation, bundle);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            }
+            else {
+                Toast.makeText(this,
+                        "Storage Permission Denied",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
     }
 
     @Override
