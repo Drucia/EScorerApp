@@ -83,9 +83,12 @@ public class SheetGenerator {
             Table infoTable = new Table(UnitValue.createPercentArray(new float[]{1, 1, 1}))
                     .setBorder(Border.NO_BORDER)
                     .useAllAvailableWidth();
-            infoTable.addCell(new Cell(4, 1).add(generateMatchInfoTable().useAllAvailableWidth()));
-            infoTable.addCell(new Cell(4, 1).add(generateTeamsTable().useAllAvailableWidth()));
-            infoTable.addCell(new Cell(4, 1).add(generateMatchInfoTimeTable().useAllAvailableWidth()));
+            infoTable.addCell(new Cell(4, 1).add(generateMatchInfoTable()
+                    .useAllAvailableWidth()));
+            infoTable.addCell(new Cell(4, 1).add(generateTeamsTable()
+                    .useAllAvailableWidth()));
+            infoTable.addCell(new Cell(4, 1).add(generateMatchInfoTimeTable()
+                    .useAllAvailableWidth()));
             doc.add(infoTable);
             Table setsTable = new Table(UnitValue.createPercentArray(new float[]{1, 1}))
                     .setTextAlignment(TextAlignment.CENTER).setBorder(Border.NO_BORDER);
@@ -318,18 +321,22 @@ public class SheetGenerator {
     private void generateLineUp(Table table, List<Action> leftLineUp, List<Action> rightLineUp) {
         // ----- LEFT SIDE ----- //
         table.addCell(String.valueOf(getLineUpForArea(1, leftLineUp)));
-        table.addCell(new Cell(1, 2).add(new Paragraph(String.valueOf(getLineUpForArea(2, leftLineUp)))));
+        table.addCell(new Cell(1, 2).add(new Paragraph(String.valueOf(
+                getLineUpForArea(2, leftLineUp)))));
         table.addCell(String.valueOf(getLineUpForArea(3, leftLineUp)));
         table.addCell(String.valueOf(getLineUpForArea(4, leftLineUp)));
         table.addCell(String.valueOf(getLineUpForArea(4, leftLineUp)));
-        table.addCell(new Cell(1, 2).add(new Paragraph(String.valueOf(getLineUpForArea(6, leftLineUp)))));
+        table.addCell(new Cell(1, 2).add(new Paragraph(String.valueOf(
+                getLineUpForArea(6, leftLineUp)))));
 
         // ----- RIGHT SIDE ----- //
-        table.addCell(new Cell(1, 2).add(new Paragraph(String.valueOf(getLineUpForArea(1, rightLineUp)))));
+        table.addCell(new Cell(1, 2).add(new Paragraph(String.valueOf(
+                getLineUpForArea(1, rightLineUp)))));
         table.addCell(String.valueOf(getLineUpForArea(2, rightLineUp)));
         table.addCell(String.valueOf(getLineUpForArea(3, rightLineUp)));
         table.addCell(String.valueOf(getLineUpForArea(4, rightLineUp)));
-        table.addCell(new Cell(1, 2).add(new Paragraph(String.valueOf(getLineUpForArea(5, rightLineUp)))));
+        table.addCell(new Cell(1, 2).add(new Paragraph(String.valueOf(
+                getLineUpForArea(5, rightLineUp)))));
         table.addCell(String.valueOf(getLineUpForArea(6, rightLineUp)));
     }
 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/preferences_cat_general">
+        <EditTextPreference
+            android:key="preference_name"
+            android:title="@string/preferences_new_name"
+            app:useSimpleSummaryProvider="true"
+            android:dialogTitle="@string/preferences_new_name_title"
+            android:summary="@string/preferences_new_name_des"/>
+        <EditTextPreference
+            android:key="sets"
+            android:title="@string/preferences_sets"
+            android:summary="@string/preferences_sets_des"/>
+
+        <EditTextPreference
+            android:key="points_in_set"
+            android:title="@string/preferences_points"
+            android:summary="@string/preferences_points_des"/>
+
+        <SwitchPreference
+            android:key="punishments"
+            android:title="@string/preferences_punishments"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/preferences_cat_tiebreak">
+
+        <SwitchPreferenceCompat
+            app:key="tiebreak"
+            app:title="@string/preferences_tiebreak" />
+
+        <EditTextPreference
+            app:dependency="tiebreak"
+            android:key="points_in_tiebreak"
+            android:title="@string/preferences_tiebreak_points"
+            android:summary="@string/preferences_tiebreak_des_off"
+            android:enabled="false"/>
+
+        <SwitchPreferenceCompat
+            android:dependency="tiebreak"
+            app:key="tiebreak_shift"
+            app:title="@string/preferences_tiebreak_shift"
+            android:summaryOff="@string/preferences_tiebreak_des_off"
+            android:summaryOn="@string/preferences_tiebreak_shift_on"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/preferences_cat_times"/>
+    <SwitchPreferenceCompat
+        app:key="time"
+        app:title="@string/preferences_time" />
+
+    <EditTextPreference
+        android:dependency="time"
+        app:key="time_count"
+        app:title="@string/preferences_time_count"
+        android:enabled="false"/>
+
+    <EditTextPreference
+        android:dependency="time"
+        app:key="time_duration"
+        app:title="@string/preferences_time_duration"
+        android:enabled="false"/>
+</PreferenceScreen>

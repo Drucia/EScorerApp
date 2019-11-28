@@ -23,6 +23,6 @@ public class MatchFragmentPresenter implements IMatchFragmentMVP.IPresenter {
 
     @Override
     public void onRefresh() {
-        model.prepareAllMatchesOfUser();
+        model.prepareAllSummariesOfUserMatches();
     }
 }

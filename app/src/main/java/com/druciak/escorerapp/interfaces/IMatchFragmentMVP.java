@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IMatchFragmentMVP {
     interface IModel {
-        void prepareAllMatchesOfUser();
+        void prepareAllSummariesOfUserMatches();
     }
 
     interface IView {

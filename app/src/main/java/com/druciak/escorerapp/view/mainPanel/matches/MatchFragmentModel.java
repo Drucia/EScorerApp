@@ -23,18 +23,20 @@ public class MatchFragmentModel implements IMatchFragmentMVP.IModel {
     }
 
     @Override
-    public void prepareAllMatchesOfUser() {
+    public void prepareAllSummariesOfUserMatches() {
         manager.getSummaryService().getAllSummaries(userId).enqueue(new Callback<List<MatchSummary>>() {
             @Override
             public void onResponse(Call<List<MatchSummary>> call, Response<List<MatchSummary>> response) {
                 List<MatchSummary> summaries = response.body();
                 if (summaries != null && !summaries.isEmpty())
                     presenter.onPrepareMatchListEventCompleted(new Result.Success<>(summaries));
+                else
+                    presenter.onPrepareMatchListEventCompleted(new Result.Error(new Exception(response.message())));
             }
 
             @Override
             public void onFailure(Call<List<MatchSummary>> call, Throwable t) {
-                // do sth todo
+                presenter.onPrepareMatchListEventCompleted(new Result.Error(new Exception(t.getMessage())));
             }
         });
     }

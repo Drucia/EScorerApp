@@ -111,8 +111,7 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <string name="preferences_theme">Ciemny styl</string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
@@ -130,4 +129,26 @@
     <string name="label_home_team">Drużynę gospodarzy</string>
     <string name="label_guest_team">Drużynę gości</string>
     <string name="label_configuration">Konfigurację meczu</string>
+    <string name="preferences_new_name">Nazwa zasad</string>
+    <string name="preferences_new_name_title">Wprowadź swoją nazwę</string>
+    <string name="preferences_new_name_des">Własna nazwa dla wprowadzonych zasad</string>
+    <string name="preferences_sets">Sety</string>
+    <string name="preferences_points">Punkty</string>
+    <string name="preferences_cat_general">Ogólne</string>
+    <string name="preferences_cat_tiebreak">Tiebreak</string>
+    <string name="preferences_tiebreak">Tiebreak w ostatnim secie</string>
+    <string name="preferences_tiebreak_des_off">Nie można ustawić, ponieważ funkcja tiebreak jest wyłączona</string>
+    <string name="preferences_tiebreak_des_on">Ilość potrzebnych punktów do wygrania tiebreaka</string>
+    <string name="preferences_tiebreak_points">Punkty w tiebreaku</string>
+    <string name="preferences_tiebreak_shift">Zmiana stron</string>
+    <string name="preferences_tiebreak_shift_on">Zmiana stron drużyn w połowie seta</string>
+    <string name="preferences_cat_times">Czas</string>
+    <string name="preferences_punishments">Sankcje</string>
+    <string name="preferences_sets_des">Ilość potrzebnych setów do wygrania meczu</string>
+    <string name="preferences_points_des">Ilość potrzebnych punktów do wygrania seta</string>
+    <string name="preferences_time">Przerwa na żądanie</string>
+    <string name="preferences_time_duration">Długość przerwy</string>
+    <string name="preferences_time_des_off">Nie można ustwić, ponieważ funkcja Przerwa na żądanie jest wyłączona</string>
+    <string name="preferences_time_count">Ilość czasów w meczu</string>
+    <string name="preferences_cat_theme">Wyświetlacz</string>
 </resources>
