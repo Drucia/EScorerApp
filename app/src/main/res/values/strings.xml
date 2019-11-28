@@ -111,7 +111,7 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->
-    <string name="preferences_theme">Ciemny styl</string>
+    <string name="preferences_theme">Styl ciemny</string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
