@@ -25,7 +25,7 @@ public class ToolsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.settings, new com.druciak.escorerapp.view.matchSettings.MatchConfigsFragment.SettingsFragment())
+                .replace(R.id.settings, new SettingsFragment())
                 .commit();
     }
 
