@@ -15,10 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -33,6 +35,11 @@ import com.druciak.escorerapp.presenter.GameTypesRepository;
 import com.druciak.escorerapp.presenter.MainPanelPresenter;
 import com.druciak.escorerapp.view.GoodbyeActivity;
 import com.druciak.escorerapp.view.login.LoginActivity;
+import com.druciak.escorerapp.view.mainPanel.home.HomeFragment;
+import com.druciak.escorerapp.view.mainPanel.matches.MatchFragment;
+import com.druciak.escorerapp.view.mainPanel.teams.TeamFragment;
+import com.druciak.escorerapp.view.mainPanel.tools.ToolsFragment;
+import com.druciak.escorerapp.view.mainPanel.userData.UserDataFragment;
 import com.druciak.escorerapp.view.matchSettings.MatchSettingsActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -50,8 +57,28 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
 
     private AppBarConfiguration mAppBarConfiguration;
     private IMainPanelMVP.IPresenter presenter;
+    private DrawerLayout drawer;
     private TextView fullName;
     private TextView email;
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START))
+        {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            showConfirmDialog();
+        }
+    }
+
+    private void showConfirmDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.label_attention);
+        builder.setMessage(R.string.out_confirm);
+        builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> super.onBackPressed());
+        builder.setNegativeButton(R.string.no, (dialogInterface, i) -> dialogInterface.cancel());
+        builder.create().show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,21 +86,61 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         setContentView(R.layout.activity_main_panel);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_user_data, R.id.nav_matches,
-                R.id.nav_teams, R.id.nav_tools)
-                .setDrawerLayout(drawer)
-                .build();
+//        mAppBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.nav_home, R.id.nav_user_data, R.id.nav_matches,
+//                R.id.nav_teams, R.id.nav_tools)
+//                .setDrawerLayout(drawer)
+//                .build();
         fullName = headerView.findViewById(R.id.userName);
         email = headerView.findViewById(R.id.userEmail);
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+//        NavigationUI.setupWithNavController(navigationView, navController);
+        ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.nav_app_bar_open_drawer_description,
+                R.string.nav_app_bar_navigate_up_description);
+        drawer.addDrawerListener(toogle);
+        toogle.syncState();
+
+        if (savedInstanceState == null)
+        {
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                    new HomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId())
+            {
+                case R.id.nav_home:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                            new HomeFragment()).commit();
+                    break;
+                case R.id.nav_matches:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                            new MatchFragment()).commit();
+                    break;
+                case R.id.nav_teams:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                            new TeamFragment()).commit();
+                    break;
+                case R.id.nav_tools:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                            new ToolsFragment()).commit();
+                    break;
+                case R.id.nav_user_data:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                            new UserDataFragment()).commit();
+                    break;
+            }
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        });
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

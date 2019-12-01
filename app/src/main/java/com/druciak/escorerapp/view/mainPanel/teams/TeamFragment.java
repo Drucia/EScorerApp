@@ -34,6 +34,7 @@ public class TeamFragment extends Fragment implements ITeamFragmentMVP.IView, IT
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_teams, container, false);
+        getActivity().setTitle(R.string.title_fragment_teams);
         view = ((IMainPanelMVP.IView) getActivity());
         matches = root.findViewById(R.id.teamsRecycler);
         teams = new ArrayList<>();

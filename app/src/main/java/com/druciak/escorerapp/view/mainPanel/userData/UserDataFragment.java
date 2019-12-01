@@ -15,6 +15,7 @@ public class UserDataFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_user_data, container, false);
+        getActivity().setTitle(R.string.title_fragment_user_data);
         return root;
     }
 }

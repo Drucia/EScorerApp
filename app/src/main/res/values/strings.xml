@@ -1,10 +1,16 @@
 <resources>
     <!-- app and activities names -->
     <string name="app_name">E-Scorer</string>
-    <string name="title_activity_main_panel">MainPanelActivity</string>
+    <string name="title_activity_main_panel">Panel Główny</string>
     <string name="title_activity_goodbye">GoodbyeActivity</string>
     <string name="title_activity_create_account">Rejestracja</string>
     <string name="title_activity_match_settings">Ustawienia przedmeczowe</string>
+
+    <!-- fragments names -->
+    <string name="title_fragment_matches">Moje mecze</string>
+    <string name="title_fragment_teams">Moje drużyny</string>
+    <string name="title_fragment_tools">Ustawienia</string>
+    <string name="title_fragment_user_data">Moje dane</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -151,4 +157,6 @@
     <string name="preferences_time_des_off">Nie można ustwić, ponieważ funkcja Przerwa na żądanie jest wyłączona</string>
     <string name="preferences_time_count">Ilość czasów w meczu</string>
     <string name="preferences_cat_theme">Wyświetlacz</string>
+    <string name="out_confirm">Czy chcesz wyjść z aplikacji?</string>
+    <string name="label_delete">USUŃ</string>
 </resources>

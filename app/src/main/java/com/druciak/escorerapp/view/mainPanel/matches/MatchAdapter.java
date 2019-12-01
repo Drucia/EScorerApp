@@ -24,6 +24,10 @@ class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
         this.context = context;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,6 +49,19 @@ class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
                 ? R.color.light_green : R.color.red));
         holder.score.setText(summary.getHostSets() + " : " + summary.getGuestSets());
         holder.date.setText(summary.getDate());
+        holder.matchNb.setText("Mecz " + (position+1));
+    }
+
+    public void removeItem(int position) {
+        items.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, getItemCount() - position);
+    }
+
+    public void restoreItem(MatchSummary item, int position) {
+        items.add(position, item);
+        notifyItemInserted(position);
+        notifyItemRangeChanged(position, getItemCount() - position);
     }
 
     @Override
@@ -57,6 +74,9 @@ class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
         public TextView guestName;
         public TextView score;
         public TextView date;
+        public TextView matchNb;
+        public View foreground;
+        public View background;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +84,9 @@ class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
             guestName = itemView.findViewById(R.id.guestTeam);
             score = itemView.findViewById(R.id.score);
             date = itemView.findViewById(R.id.date);
+            matchNb = itemView.findViewById(R.id.matchNb);
+            foreground = itemView.findViewById(R.id.foreground);
+            background = itemView.findViewById(R.id.background);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.druciak.escorerapp.view.mainPanel.matches;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -17,6 +19,7 @@ import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.entities.MatchSummary;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.interfaces.IMatchFragmentMVP;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,18 +30,43 @@ public class MatchFragment extends Fragment implements IMatchFragmentMVP.IView {
     private IMainPanelMVP.IView view;
     private MatchAdapter adapter;
     private IMatchFragmentMVP.IPresenter presenter;
-    private RecyclerView matches;
     private Context context;
+    private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_matches, container, false);
+        root = inflater.inflate(R.layout.fragment_matches, container, false);
+        getActivity().setTitle(R.string.title_fragment_matches);
         view = ((IMainPanelMVP.IView) getActivity());
-        matches = root.findViewById(R.id.matchesRecycler);
+        RecyclerView matches = root.findViewById(R.id.matchesRecycler);
         summaries = new ArrayList<>();
         adapter = new MatchAdapter(context, summaries);
         matches.setLayoutManager(new LinearLayoutManager(getContext()));
         matches.setAdapter(adapter);
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getContext()) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+
+                final int position = viewHolder.getAdapterPosition();
+                final MatchSummary item = summaries.get(position);
+
+                adapter.removeItem(position);
+
+
+                Snackbar snackbar = Snackbar
+                        .make(root, "Mecz został usunięty.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("COFNIJ", view -> {
+                    adapter.restoreItem(item, position);
+                    matches.scrollToPosition(position);
+                });
+
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+            }
+        };
+
+        new ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(matches);
         noMatches = root.findViewById(R.id.noMatches);
         SwipeRefreshLayout refresh = root.findViewById(R.id.pullToRefresh);
         refresh.setOnRefreshListener(() -> {

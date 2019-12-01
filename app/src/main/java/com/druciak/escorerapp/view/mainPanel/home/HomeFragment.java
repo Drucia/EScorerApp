@@ -20,6 +20,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        getActivity().setTitle(R.string.title_activity_main_panel);
         RecyclerView recyclerView = root.findViewById(R.id.recyclerCardView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         IMainPanelMVP.IView view = ((IMainPanelMVP.IView) getActivity());

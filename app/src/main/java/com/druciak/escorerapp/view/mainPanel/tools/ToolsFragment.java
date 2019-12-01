@@ -27,6 +27,7 @@ public class ToolsFragment extends Fragment {
                 .beginTransaction()
                 .replace(R.id.settings, new SettingsFragment())
                 .commit();
+        getActivity().setTitle(R.string.title_fragment_tools);
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
