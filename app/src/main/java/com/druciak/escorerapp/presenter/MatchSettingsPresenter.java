@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
-    private static final int MIN_COUNT_OF_PLAYERS = 6;
+    public static final int MIN_COUNT_OF_PLAYERS = 6;
 
     private IMatchSettingsMVP.IExternalModel externalManager;
     private IMatchSettingsMVP.IView view;
@@ -93,6 +93,12 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
         int teamGuestCountMembers = (int) players.stream().filter(player -> player.getTeam().getId()
                 == match.getGuestTeam().getId()).count();
 
+        int teamHostCountLibero = (int) players.stream().filter(player -> player.getTeam().getId()
+                == match.getHostTeam().getId() && player.isLibero()).count();
+
+        int teamGuestCountLibero = (int) players.stream().filter(player -> player.getTeam().getId()
+                == match.getGuestTeam().getId() && player.isLibero()).count();
+
         boolean isHostCaptain = players.stream().anyMatch(player -> player.isCaptain()
                 && player.getTeam().getId() == match.getHostTeam().getId());
         boolean isGuestCaptain = players.stream().anyMatch(player -> player.isCaptain()
@@ -105,10 +111,14 @@ public class MatchSettingsPresenter implements IMatchSettingsMVP.IPresenter {
                 .allMatch(player -> player.getNumber() != 0);
 
         StringBuilder msgError = new StringBuilder();
-        if (teamHostCountMembers < MIN_COUNT_OF_PLAYERS)
+        if (teamHostCountMembers - teamHostCountLibero < MIN_COUNT_OF_PLAYERS)
             msgError.append("Za mało zawodników w drużynie gospodarzy.\n\n");
-        if (teamGuestCountMembers < MIN_COUNT_OF_PLAYERS)
+        if (teamGuestCountMembers - teamGuestCountLibero < MIN_COUNT_OF_PLAYERS)
             msgError.append("Za mało zawodników w drużynie gości.\n\n");
+        if (teamHostCountMembers > 12 && teamHostCountLibero != 2)
+            msgError.append("Za mało libero w drużynie gospodarzy.\n\n");
+        if (teamGuestCountMembers > 12 && teamGuestCountLibero != 2)
+            msgError.append("Za mało libero w drużynie gości.\n\n");
         if (!isHostCaptain)
             msgError.append("Nie wybrano kapitana w drużynie gospodarzy.\n\n");
         if (!isGuestCaptain)

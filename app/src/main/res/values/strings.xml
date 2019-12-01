@@ -159,4 +159,6 @@
     <string name="preferences_cat_theme">Wyświetlacz</string>
     <string name="out_confirm">Czy chcesz wyjść z aplikacji?</string>
     <string name="label_delete">USUŃ</string>
+    <string name="players_label_counter">Zawodnicy:</string>
+    <string name="liber_label_counter">W tym libero:</string>
 </resources>

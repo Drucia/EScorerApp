@@ -8,6 +8,7 @@ import java.util.List;
 public interface IMatchFragmentMVP {
     interface IModel {
         void prepareAllSummariesOfUserMatches();
+        void deleteSummary(MatchSummary item);
     }
 
     interface IView {
@@ -17,5 +18,6 @@ public interface IMatchFragmentMVP {
     interface IPresenter {
         void onPrepareMatchListEventCompleted(Result<List<MatchSummary>> result);
         void onRefresh();
+        void onMadeDelete(MatchSummary item);
     }
 }

@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.druciak.escorerapp.presenter.MatchSettingsPresenter.MIN_COUNT_OF_PLAYERS;
+
 public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.IFragmentView,
         ISaveData {
     private static final int MAX_NUMBER_OF_COACH = 3;
@@ -44,7 +46,6 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     private static final int MAX_NUMBER_OF_LIBERO = 2;
     private static final int MAX_NUMBER_OF_PLAYERS = 14;
     private static final int MAX_NUMBER_OF_PLAYERS_WITH_ONE_LIBERO = 12;
-    private static final int MIN_NUMBER_OF_PLAYERS_FOR_LIBERO = 6;
     private static final int NO_CAPTAIN_CHOSEN = -1;
 
     private int chipCoachCounter = 0;
@@ -60,6 +61,8 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
     private ChipGroup medicineChipGroup;
     private Team team;
     private TextView captainShirtNumber;
+    private TextView playersCounter;
+    private TextView liberoCounter;
     private TextInputLayout teamName;
     private boolean isSimplyMatch;
     private Set<Integer> numbers;
@@ -87,6 +90,8 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         coachChipGroup = root.findViewById(R.id.coachChips);
         medicineChipGroup = root.findViewById(R.id.medicineChips);
         captainShirtNumber = root.findViewById(R.id.capitanNumber);
+        playersCounter = root.findViewById(R.id.playersCounter);
+        liberoCounter = root.findViewById(R.id.liberoCounter);
         speedDialView.addActionItem(
                 new SpeedDialActionItem.Builder(R.id.medicineFab, R.drawable.medicine)
                         .setLabel("Masażysta")
@@ -105,7 +110,14 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         speedDialView.setOnActionSelectedListener(actionItem -> {
             switch (actionItem.getId()){
                 case R.id.playerFab:
-                    showPopUpForPlayer(null, -1);
+                    if (players.size() < MAX_NUMBER_OF_PLAYERS) {
+                        showPopUpForPlayer(null, -1);
+                    }
+                    else
+                    {
+                        Toast.makeText(getActivity(), "Maksymalna liczba zawodników",
+                                Toast.LENGTH_SHORT).show();
+                    }
                     break;
                 case R.id.coachFab:
                     if (chipCoachCounter < MAX_NUMBER_OF_COACH)
@@ -129,6 +141,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
 
         teamName = root.findViewById(R.id.teamName);
         teamName.getEditText().setText(team.getFullName());
+        checkCounters();
         ImageView playerShirtImage = root.findViewById(R.id.playerShirtImage);
         playerShirtImage.setOnClickListener(view -> showPopUpWithColors());
 
@@ -424,18 +437,18 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                             "Wprowadzony numer już istnieje lub wychodzi poza zakres",
                             Toast.LENGTH_LONG).show();
             }
-            dialogInterface.dismiss();
+            checkCounters();
         });
 
         if (!isNew)
         {
-            dialogBuilder.setNegativeButton("Usuń", (dialogInterface, i) -> {
+            dialogBuilder.setNegativeButton(R.string.label_delete, (dialogInterface, i) -> {
                 final AlertDialog.Builder db = new AlertDialog.Builder(getActivity());
                 db.setTitle("Usuwanie");
                 db.setMessage("Jesteś pewny?");
-                db.setNegativeButton("NIE", (dialogInterface1, i1) -> {dialogInterface1.cancel();
+                db.setNegativeButton(R.string.no, (dialogInterface1, i1) -> {dialogInterface1.cancel();
                 showPopUpForPlayer(player, adapterPosition);});
-                db.setPositiveButton("TAK", (dialogInterface1, i1) -> {
+                db.setPositiveButton(R.string.yes, (dialogInterface1, i1) -> {
                     players.remove(adapterPosition);
                     if (player.isLibero())
                         liberoNumbers.remove(player.getNumber());
@@ -443,7 +456,7 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
                         captainNumber = NO_CAPTAIN_CHOSEN;
                     playersAdapter.notifyItemRemoved(adapterPosition);
                     matchSettingsView.removePlayer(player);
-                    dialogInterface1.dismiss();
+                    checkCounters();
                 });
                 db.create().show();
             });
@@ -455,13 +468,37 @@ public class TeamSettingsFragment extends Fragment implements IMatchSettingsMVP.
         return !numbers.contains(iNumber) && iNumber > 0 && iNumber < 100;
     }
 
-    public void updatePlayersAdapter(List<Player> players) {
+    void updatePlayersAdapter(List<Player> players) {
         List<Player> playersOfTeam = players.stream()
                 .filter(player -> player.getTeam().getId() == team.getId())
                 .collect(Collectors.toList());
         int size = playersAdapter.getItemCount();
         this.players.addAll(playersOfTeam);
         playersAdapter.notifyItemRangeChanged(size, playersOfTeam.size());
+        checkCounters();
+    }
+
+    private void checkCounters() {
+        int iPlayersCounter = players.size();
+        int iLiberoCounter = liberoNumbers.size();
+
+        if (iPlayersCounter - iLiberoCounter < MIN_COUNT_OF_PLAYERS)
+            this.playersCounter.setTextColor(getResources().getColor(R.color.red,
+                    context.getTheme()));
+        else if (iPlayersCounter > MAX_NUMBER_OF_PLAYERS_WITH_ONE_LIBERO
+                && iLiberoCounter != MAX_NUMBER_OF_LIBERO)
+            this.liberoCounter.setTextColor(getResources().getColor(R.color.red,
+                    context.getTheme()));
+        else
+        {
+            this.playersCounter.setTextColor(getResources().getColor(
+                    R.color.secondary_text_material_light, context.getTheme()));
+            this.liberoCounter.setTextColor(getResources().getColor(
+                    R.color.secondary_text_material_light, context.getTheme()));
+        }
+
+        this.playersCounter.setText(getString(R.string.players_label_counter) + " " + iPlayersCounter);
+        this.liberoCounter.setText(getString(R.string.liber_label_counter) + " " + iLiberoCounter);
     }
 
     @Override

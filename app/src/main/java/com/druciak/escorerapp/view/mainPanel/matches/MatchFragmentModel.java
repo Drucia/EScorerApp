@@ -40,4 +40,19 @@ public class MatchFragmentModel implements IMatchFragmentMVP.IModel {
             }
         });
     }
+
+    @Override
+    public void deleteSummary(MatchSummary item) {
+        manager.getSummaryService().deleteSummary(item.getSummaryId()).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                // todo do sth
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                // todo do sth
+            }
+        });
+    }
 }

@@ -55,7 +55,21 @@ public class MatchFragment extends Fragment implements IMatchFragmentMVP.IView {
 
 
                 Snackbar snackbar = Snackbar
-                        .make(root, "Mecz został usunięty.", Snackbar.LENGTH_LONG);
+                        .make(root, "Mecz " + (position+1) + " został usunięty.", Snackbar.LENGTH_LONG)
+                        .addCallback(new Snackbar.Callback() {
+
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                                    presenter.onMadeDelete(item);
+                                }
+                            }
+
+                            @Override
+                            public void onShown(Snackbar snackbar) {
+                                super.onShown(snackbar);
+                            }
+                        });
                 snackbar.setAction("COFNIJ", view -> {
                     adapter.restoreItem(item, position);
                     matches.scrollToPosition(position);

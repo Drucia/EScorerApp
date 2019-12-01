@@ -6,6 +6,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -16,4 +17,7 @@ public interface SummaryService {
 
     @GET("summaries/user/{userId}")
     Call<List<MatchSummary>> getAllSummaries(@Path("userId") String userId);
+
+    @DELETE("summaries/{summaryId}")
+    Call<Boolean> deleteSummary(@Path("summaryId") int summaryId);
 }

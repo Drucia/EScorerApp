@@ -25,4 +25,9 @@ public class MatchFragmentPresenter implements IMatchFragmentMVP.IPresenter {
     public void onRefresh() {
         model.prepareAllSummariesOfUserMatches();
     }
+
+    @Override
+    public void onMadeDelete(MatchSummary item) {
+        model.deleteSummary(item);
+    }
 }

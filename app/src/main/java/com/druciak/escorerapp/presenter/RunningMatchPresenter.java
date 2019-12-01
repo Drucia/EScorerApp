@@ -96,17 +96,18 @@ public class RunningMatchPresenter implements IRunningMatchMVP.IPresenter {
     @Override
     public void onAddPointClicked(int teamSideId) {
         if (canPlay) {
-            Action action = new Point(teamSideId == RIGHT_TEAM_ID ? rightTeam : leftTeam,
-                    teamSideId == RIGHT_TEAM_ID ? leftTeam.getPoints() : rightTeam.getPoints());
-            Log.d(ACTION_TAG, action.toString());
-            updateMatchState(action);
-            if (isTiebreak && !isAfterShift && (leftTeam.getPoints() == TIEBREAK_POINTS_TO_SHIFT ||
-                    rightTeam.getPoints() == TIEBREAK_POINTS_TO_SHIFT))
-            {
-                changeTeamSides();
-                setFieldsAfterFinishSet();
-                changeLineUpAndTimesAfterChangeTeamSides();
-                this.isAfterShift = true;
+            if (!checkIfIsEndOfSet()) {
+                Action action = new Point(teamSideId == RIGHT_TEAM_ID ? rightTeam : leftTeam,
+                        teamSideId == RIGHT_TEAM_ID ? leftTeam.getPoints() : rightTeam.getPoints());
+                Log.d(ACTION_TAG, action.toString());
+                updateMatchState(action);
+                if (isTiebreak && !isAfterShift && (leftTeam.getPoints() == TIEBREAK_POINTS_TO_SHIFT ||
+                        rightTeam.getPoints() == TIEBREAK_POINTS_TO_SHIFT)) {
+                    changeTeamSides();
+                    setFieldsAfterFinishSet();
+                    changeLineUpAndTimesAfterChangeTeamSides();
+                    this.isAfterShift = true;
+                }
             }
         } else
         {

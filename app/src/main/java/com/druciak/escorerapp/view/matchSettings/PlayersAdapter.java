@@ -70,8 +70,10 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
             if (player.isLibero())
                 holder.shirt.setImageResource(R.drawable.libero_shirt);
             else {
-                holder.shirt.setBackgroundResource(R.drawable.player_shirt);
+                holder.shirt.setImageResource(android.R.color.transparent);
             }
+
+            holder.shirt.setBackgroundResource(R.drawable.player_shirt);
         } else {
             Map<Integer, Pair<Integer, String>> conversion = teamSideId == LEFT_TEAM_ID ?
                     leftLineUpConversion : rightLineUpConversion;
