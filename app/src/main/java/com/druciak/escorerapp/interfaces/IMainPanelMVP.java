@@ -1,7 +1,11 @@
 package com.druciak.escorerapp.interfaces;
 
+import android.content.Intent;
+import android.view.View;
+
 import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.Match;
+import com.druciak.escorerapp.entities.MatchSummary;
 import com.druciak.escorerapp.entities.NewUser;
 import com.druciak.escorerapp.model.firebaseService.Result;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +25,7 @@ public interface IMainPanelMVP {
         boolean isRefereeUser();
         void clickOnVolleyballMatch();
         String getUserId();
+        LoggedInUser getLoggedInUser();
     }
 
     interface IView{
@@ -32,6 +37,10 @@ public interface IMainPanelMVP {
         boolean isRefereeUser();
         String getUserId();
         void goToMatchSettings(LoggedInUser loggedInUser);
+        void changeMode();
+        void goToDetails(String transitionName, MatchSummary matchSummary, View foreground);
+
+        void goToDetails(Intent intent);
     }
 
     interface ILoggedInUserModel{

@@ -1,6 +1,7 @@
 package com.druciak.escorerapp.view.login;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -45,6 +46,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginMVP.IView 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         presenter = new LoginPresenter(this);
 

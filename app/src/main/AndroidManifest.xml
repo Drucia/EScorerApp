@@ -14,6 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".view.mainPanel.MatchDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".view.generateSheet.GenerateSheetActivity"
             android:configChanges="orientation|screenSize"
@@ -36,15 +38,18 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.matchSettings.MatchSettingsActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_match_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -52,24 +57,27 @@
         <activity
             android:name=".view.GoodbyeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_goodbye"
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".view.mainPanel.MainPanelActivity"
             android:label="@string/title_activity_main_panel"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.createAccount.CreateAccountActivity"
             android:label="@string/title_activity_create_account"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:parentActivityName=".view.login.LoginActivity" />
         <activity
             android:name=".view.login.LoginActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </activity>
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

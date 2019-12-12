@@ -5,7 +5,8 @@
 
         <SwitchPreferenceCompat
             app:key="theme"
-            app:title="@string/preferences_theme" />
+            app:title="@string/preferences_theme"
+            app:enabled="false"/>
 
     </PreferenceCategory>
 

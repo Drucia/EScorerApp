@@ -2,6 +2,7 @@ package com.druciak.escorerapp.view.matchSettings;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -58,6 +59,9 @@ public class MatchSettingsActivity extends AppCompatActivity implements IMatchSe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_settings);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         Intent intent = getIntent();
         int matchKind = intent.getIntExtra(MATCH_KIND_ID, -1);
         Match match = intent.getParcelableExtra(MATCH_ID);

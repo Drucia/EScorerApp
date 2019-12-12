@@ -88,4 +88,9 @@ public class MainPanelPresenter implements IMainPanelMVP.IPresenter {
     public String getUserId() {
         return user.getUid();
     }
+
+    @Override
+    public LoggedInUser getLoggedInUser() {
+        return loggedInUser;
+    }
 }

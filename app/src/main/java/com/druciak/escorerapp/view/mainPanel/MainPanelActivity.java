@@ -3,6 +3,7 @@ package com.druciak.escorerapp.view.mainPanel;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.entities.LoggedInUser;
 import com.druciak.escorerapp.entities.Match;
+import com.druciak.escorerapp.entities.MatchSummary;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.presenter.GameTypesRepository;
 import com.druciak.escorerapp.presenter.MainPanelPresenter;
@@ -82,25 +84,22 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//        else
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_panel);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.nav_home, R.id.nav_user_data, R.id.nav_matches,
-//                R.id.nav_teams, R.id.nav_tools)
-//                .setDrawerLayout(drawer)
-//                .build();
         fullName = headerView.findViewById(R.id.userName);
         email = headerView.findViewById(R.id.userEmail);
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-//        NavigationUI.setupWithNavController(navigationView, navController);
         ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.nav_app_bar_open_drawer_description,
                 R.string.nav_app_bar_navigate_up_description);
@@ -154,8 +153,10 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         boolean isAdditionalInfo = intent.getBooleanExtra(USER_ADDITIONAL_INFO_ID, false);
         if (!isAdditionalInfo)
             showPopUpWithSetUserFields();
-        else
-            presenter.setLoggedInUser(intent.getParcelableExtra(LOGGED_IN_USER_ID));
+        else {
+            LoggedInUser user = intent.getParcelableExtra(LOGGED_IN_USER_ID);
+            presenter.setLoggedInUser(user);
+        }
     }
 
     @Override
@@ -165,6 +166,7 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // todo
             }
             else {
                 Toast.makeText(this,
@@ -329,5 +331,33 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         intent.putExtra(LOGGED_IN_USER_ID, loggedInUser);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void changeMode() {
+//        recreate();
+    }
+
+    @Override
+    public void goToDetails(String transitionName, MatchSummary matchSummary, View foreground) {
+//        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                this,
+//                foreground,
+//                ViewCompat.getTransitionName(foreground)
+//        );
+//        startActivity(intent, optionsCompat.toBundle());
+//        Fragment matchDetailFragment = MatchDetailsFragment.newInstance(matchSummary, transitionName);
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .addSharedElement(foreground, ViewCompat.getTransitionName(foreground))
+//                .addToBackStack("dupa")
+//                .replace(R.id.nav_host_fragment, matchDetailFragment)
+//                .commit();
+    }
+
+    @Override
+    public void goToDetails(Intent intent)
+    {
+        startActivity(intent);
     }
 }

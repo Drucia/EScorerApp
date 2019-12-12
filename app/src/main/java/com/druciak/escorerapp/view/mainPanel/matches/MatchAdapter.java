@@ -7,21 +7,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.entities.MatchSummary;
 import com.druciak.escorerapp.entities.Team;
+import com.druciak.escorerapp.interfaces.IMatchFragmentMVP;
 
 import java.util.ArrayList;
 
 class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
     private ArrayList<MatchSummary> items;
     private Context context;
+    private IMatchFragmentMVP.IView callback;
 
-    public MatchAdapter(Context context, ArrayList<MatchSummary> items) {
+    public MatchAdapter(Context context, IMatchFragmentMVP.IView callback, ArrayList<MatchSummary> items) {
         this.items = items;
         this.context = context;
+        this.callback = callback;
     }
 
     public Context getContext() {
@@ -50,6 +54,9 @@ class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
         holder.score.setText(summary.getHostSets() + " : " + summary.getGuestSets());
         holder.date.setText(summary.getDate());
         holder.matchNb.setText("Mecz " + (position+1));
+        ViewCompat.setTransitionName(holder.foreground, summary.getMatch().getName());
+        holder.itemView.setOnClickListener(view -> callback.onMatchClicked(position, summary,
+                holder.foreground));
     }
 
     public void removeItem(int position) {
@@ -76,7 +83,6 @@ class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
         public TextView date;
         public TextView matchNb;
         public View foreground;
-        public View background;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,7 +92,6 @@ class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
             date = itemView.findViewById(R.id.date);
             matchNb = itemView.findViewById(R.id.matchNb);
             foreground = itemView.findViewById(R.id.foreground);
-            background = itemView.findViewById(R.id.background);
         }
     }
 }

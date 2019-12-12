@@ -1,6 +1,7 @@
 package com.druciak.escorerapp.view;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -84,6 +85,8 @@ public class GoodbyeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_goodbye);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mImageView = findViewById(R.id.fullscreen_image);
         mTextView = findViewById(R.id.fullscreen_goodbye);

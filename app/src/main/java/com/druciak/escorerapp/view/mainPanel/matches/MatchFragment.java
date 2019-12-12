@@ -1,6 +1,7 @@
 package com.druciak.escorerapp.view.mainPanel.matches;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,12 +20,17 @@ import com.druciak.escorerapp.R;
 import com.druciak.escorerapp.entities.MatchSummary;
 import com.druciak.escorerapp.interfaces.IMainPanelMVP;
 import com.druciak.escorerapp.interfaces.IMatchFragmentMVP;
+import com.druciak.escorerapp.view.mainPanel.MatchDetailsActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MatchFragment extends Fragment implements IMatchFragmentMVP.IView {
+    public static final String EXTRA_MATCH_SUMMARY_ITEM = "match_item";
+    public static final String EXTRA_TRANSITION_NAME = "transition_name";
+    public static final String EXTRA_MATCH_POSITION = "position";
+
     private ArrayList<MatchSummary> summaries;
     private TextView noMatches;
     private IMainPanelMVP.IView view;
@@ -40,7 +46,7 @@ public class MatchFragment extends Fragment implements IMatchFragmentMVP.IView {
         view = ((IMainPanelMVP.IView) getActivity());
         RecyclerView matches = root.findViewById(R.id.matchesRecycler);
         summaries = new ArrayList<>();
-        adapter = new MatchAdapter(context, summaries);
+        adapter = new MatchAdapter(context, this, summaries);
         matches.setLayoutManager(new LinearLayoutManager(getContext()));
         matches.setAdapter(adapter);
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getContext()) {
@@ -108,5 +114,15 @@ public class MatchFragment extends Fragment implements IMatchFragmentMVP.IView {
         int size = adapter.getItemCount();
         summaries.addAll(summ);
         adapter.notifyItemRangeChanged(size, summ.size());
+    }
+
+    @Override
+    public void onMatchClicked(int adapterPosition, MatchSummary summary, View foreground) {
+        Intent intent = new Intent(getContext(), MatchDetailsActivity.class);
+        intent.putExtra(EXTRA_MATCH_SUMMARY_ITEM, summary);
+        intent.putExtra(EXTRA_TRANSITION_NAME, summary.getMatch().getName());
+        intent.putExtra(EXTRA_MATCH_POSITION, String.valueOf(adapterPosition));
+        view.goToDetails(intent);
+//        view.goToDetails(summary.getMatch().getName(), summary, foreground);
     }
 }

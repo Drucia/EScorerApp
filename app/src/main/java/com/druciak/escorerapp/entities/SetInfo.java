@@ -1,9 +1,12 @@
 package com.druciak.escorerapp.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SetInfo {
+public class SetInfo implements Parcelable {
     @SerializedName("shiftsHome")
     @Expose
     private int shiftsA;
@@ -40,6 +43,46 @@ public class SetInfo {
         this.set = set;
         this.time = time;
     }
+
+    protected SetInfo(Parcel in) {
+        shiftsA = in.readInt();
+        shiftsB = in.readInt();
+        timesA = in.readInt();
+        timesB = in.readInt();
+        pointsA = in.readInt();
+        pointsB = in.readInt();
+        set = in.readInt();
+        time = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(shiftsA);
+        dest.writeInt(shiftsB);
+        dest.writeInt(timesA);
+        dest.writeInt(timesB);
+        dest.writeInt(pointsA);
+        dest.writeInt(pointsB);
+        dest.writeInt(set);
+        dest.writeInt(time);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<SetInfo> CREATOR = new Creator<SetInfo>() {
+        @Override
+        public SetInfo createFromParcel(Parcel in) {
+            return new SetInfo(in);
+        }
+
+        @Override
+        public SetInfo[] newArray(int size) {
+            return new SetInfo[size];
+        }
+    };
 
     public int getShiftsA() {
         return shiftsA;
