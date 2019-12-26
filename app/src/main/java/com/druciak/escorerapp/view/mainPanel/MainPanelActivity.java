@@ -20,6 +20,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -330,25 +331,12 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
     }
 
     @Override
-    public void goToDetails(String transitionName, MatchSummary matchSummary, View foreground) {
-//        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                this,
-//                foreground,
-//                ViewCompat.getTransitionName(foreground)
-//        );
-//        startActivity(intent, optionsCompat.toBundle());
-//        Fragment matchDetailFragment = MatchDetailsFragment.newInstance(matchSummary, transitionName);
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .addSharedElement(foreground, ViewCompat.getTransitionName(foreground))
-//                .addToBackStack("dupa")
-//                .replace(R.id.nav_host_fragment, matchDetailFragment)
-//                .commit();
-    }
-
-    @Override
-    public void goToDetails(Intent intent)
-    {
-        startActivity(intent);
+    public void goToDetails(Intent intent, String transitionName, MatchSummary matchSummary, View foreground) {
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                foreground,
+                getString(R.string.transition)
+        );
+        startActivity(intent, optionsCompat.toBundle());
     }
 }

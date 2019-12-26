@@ -120,9 +120,8 @@ public class MatchFragment extends Fragment implements IMatchFragmentMVP.IView {
     public void onMatchClicked(int adapterPosition, MatchSummary summary, View foreground) {
         Intent intent = new Intent(getContext(), MatchDetailsActivity.class);
         intent.putExtra(EXTRA_MATCH_SUMMARY_ITEM, summary);
-        intent.putExtra(EXTRA_TRANSITION_NAME, summary.getMatch().getName());
-        intent.putExtra(EXTRA_MATCH_POSITION, String.valueOf(adapterPosition));
-        view.goToDetails(intent);
-//        view.goToDetails(summary.getMatch().getName(), summary, foreground);
+        intent.putExtra(EXTRA_TRANSITION_NAME, getString(R.string.transition));
+        intent.putExtra(EXTRA_MATCH_POSITION, String.valueOf(adapterPosition+1));
+        view.goToDetails(intent, summary.getMatch().getName(), summary, foreground);
     }
 }
