@@ -7,4 +7,5 @@
     <attr name="AppTheme_AppBarOverlay" format="reference"/>
     <attr name="AppTheme_PopupOverlay" format="reference"/>
     <attr name="mobile_navigation" format="reference"/>
+    <attr name="app_background" format="reference"/>
 </resources>

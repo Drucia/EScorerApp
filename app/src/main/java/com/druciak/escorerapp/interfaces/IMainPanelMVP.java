@@ -37,7 +37,6 @@ public interface IMainPanelMVP {
         boolean isRefereeUser();
         String getUserId();
         void goToMatchSettings(LoggedInUser loggedInUser);
-        void changeMode();
         void goToDetails(String transitionName, MatchSummary matchSummary, View foreground);
 
         void goToDetails(Intent intent);

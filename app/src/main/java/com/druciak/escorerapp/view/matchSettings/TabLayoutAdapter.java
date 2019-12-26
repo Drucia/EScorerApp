@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.druciak.escorerapp.R;
 
 public class TabLayoutAdapter {
@@ -15,6 +17,14 @@ public class TabLayoutAdapter {
             R.drawable.edit_dark,
             R.drawable.rules_dark
     };
+
+    private static final int[] navIconsDark = {
+            R.drawable.home_light,
+            R.drawable.person_light,
+            R.drawable.edit_light,
+            R.drawable.rules_light
+    };
+
     private static final int[] navLabels = {
             R.string.tab_text_host,
             R.string.tab_text_guest,
@@ -35,11 +45,12 @@ public class TabLayoutAdapter {
     }
 
     public View getTabView(int position) {
+        boolean isDarkMode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
         View view = LayoutInflater.from(context).inflate(R.layout.nav_bar, null);
         TextView tabTextView = view.findViewById(R.id.nav_label);
         ImageView tabImageView = view.findViewById(R.id.nav_icon);
         tabTextView.setText(navLabels[position]);
-        tabImageView.setImageResource(navIcons[position]);
+        tabImageView.setImageResource(isDarkMode ? navIconsDark[position] : navIcons[position]);
         return view;
     }
 

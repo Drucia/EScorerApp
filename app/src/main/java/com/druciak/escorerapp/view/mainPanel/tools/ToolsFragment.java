@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -47,11 +48,10 @@ public class ToolsFragment extends Fragment {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             Preference darkMode = findPreference("theme");
             darkMode.setOnPreferenceChangeListener((preference, isDarkThemeEnabled) -> {
-//                if ((boolean) isDarkThemeEnabled)
-//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//                else
-//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                activity.changeMode();
+                if ((boolean) isDarkThemeEnabled)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                else
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 return true;
             });
         }

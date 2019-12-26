@@ -84,10 +84,6 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//        else
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_panel);
 
@@ -331,11 +327,6 @@ public class MainPanelActivity extends AppCompatActivity implements IMainPanelMV
         intent.putExtra(LOGGED_IN_USER_ID, loggedInUser);
         startActivity(intent);
         finish();
-    }
-
-    @Override
-    public void changeMode() {
-//        recreate();
     }
 
     @Override

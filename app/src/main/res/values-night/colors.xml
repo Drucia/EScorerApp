@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffd900</color>
+    <color name="colorPrimaryDark">#E7D538</color>
+    <color name="colorAccent">#b29700</color>
+    <color name="colorActionBar">#8F141414</color>
+
+    <color name="defaultColor">#00ACC1</color>
+    <color name="light_green">#8BC34A</color>
+    <color name="lime">#CDDC39</color>
+    <color name="brown">#795548</color>
+    <color name="chipColor">#4DFFD900</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="line_light">#E6FFFFFF</color>
+    <color name="line_dark">#66000000</color>
+    <color name="black">#B7000000</color>
+    <color name="secondary_text_material_light">#8a000000</color>
+    <color name="red">#D32F2F</color>
+    <color name="orange">#F57C00</color>
+    <color name="orange_overlay">#80F57C00</color>
+    <color name="app_background">#3A3535</color>
+</resources>
